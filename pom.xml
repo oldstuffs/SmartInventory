@@ -35,7 +35,7 @@
     <scm>
         <connection>scm:git:git://github.com/portlek/SmartInventory.git</connection>
         <developerConnection>scm:git:ssh://github.com/portlek/SmartInventory.git</developerConnection>
-        <url>https://github.com/BaharMC/BaharAPI</url>
+        <url>https://github.com/portlek/SmartInventory</url>
     </scm>
 
     <distributionManagement>
