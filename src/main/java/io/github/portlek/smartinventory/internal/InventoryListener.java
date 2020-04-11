@@ -61,8 +61,7 @@ public final class InventoryListener<T> {
      * Will insert type-casting if necessary and will provide type-checking at compile time. This
      * will ensure that no new classes are created for parameterized types. This feature is called
      *
-     * @param handle Replaces the bounded type parameter T with hte first bound interface.
-     * @see "<a href="https://docs.oracle.com/javase/tutorial/java/generics/erasure.html" target="_top">Type Erasure</a>".
+     * @param handle Replaces the bounded type parameter T with the first bound interface.
      */
     public void accept(final T handle) {
         this.consumer.accept(handle);

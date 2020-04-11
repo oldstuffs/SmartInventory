@@ -463,7 +463,7 @@ public final class SmartInventory {
          * Set a specific SmartInvs unique id.
          *
          * @param id set SmartInvs id
-         * @return the unique set id
+         * @return The builder chain.
          */
         public SmartInventory.Builder id(final String id) {
             this.id = id;
@@ -474,7 +474,7 @@ public final class SmartInventory {
          * Set a specific SmartInvs title.
          *
          * @param title set SmartInvs title
-         * @return the unique set title
+         * @return The builder chain.
          */
         public SmartInventory.Builder title(final String title) {
             this.title = title;
@@ -485,7 +485,7 @@ public final class SmartInventory {
          * Set a specific inventory type.
          *
          * @param type set inventory type
-         * @return the type of inventory
+         * @return The builder chain.
          */
         public SmartInventory.Builder type(final InventoryType type) {
             this.type = type;
@@ -497,7 +497,7 @@ public final class SmartInventory {
          *
          * @param rows set row amount
          * @param columns set column amount
-         * @return the row amount and column amount
+         * @return The builder chain.
          */
         public SmartInventory.Builder size(final int rows, final int columns) {
             this.rows = Optional.of(rows);
@@ -510,7 +510,7 @@ public final class SmartInventory {
          *
          * @param closeable false indicates that the inventory is not closeable, true by default
          * from closeable field indicates that the inventory is closeable
-         * @return the boolean state for closeable inventory
+         * @return The builder chain.
          */
         public SmartInventory.Builder closeable(final boolean closeable) {
             this.closeable = closeable;
@@ -523,6 +523,7 @@ public final class SmartInventory {
          *
          * @param frequency The inventory update frequency, in ticks
          * @throws IllegalArgumentException If frequency is smaller than 1.
+         * @return The builder chain.
          */
         public SmartInventory.Builder updateFrequency(final long frequency) {
             Preconditions.checkArgument(frequency > 0L, "frequency must be > 0");
@@ -534,7 +535,7 @@ public final class SmartInventory {
          * Method to get all the contents from inside the SmartInvs inventory.
          *
          * @param provider update inventory with all contents inside
-         * @return all contents from inventory
+         * @return The builder chain.
          */
         public SmartInventory.Builder provider(final InventoryProvider provider) {
             this.provider = provider;
@@ -546,7 +547,7 @@ public final class SmartInventory {
          * allow you to create a hierarchy of inventories.
          *
          * @param parent get parent inventory
-         * @return the inventory associated with the parent inventory
+         * @return The builder chain.
          */
         public SmartInventory.Builder parent(final SmartInventory parent) {
             this.parent = parent;
@@ -557,13 +558,19 @@ public final class SmartInventory {
          * Listens for custom events. This method extends {@link Event} with the generics lower bounded wildcard.
          *
          * @param listener listen for events within SmartInvs
-         * @return the listener event
+         * @return The builder chain.
          */
         public SmartInventory.Builder listener(final InventoryListener<? extends Event> listener) {
             this.listeners.add(listener);
             return this;
         }
 
+        /**
+         * Listens for button inventory events. This method extends {@link Event} with the generics lower bounded wildcard.
+         *
+         * @param listener listen for events within SmartInventory
+         * @return The builder chain.
+         */
         public SmartInventory.Builder bottomListener(final InventoryListener<? extends Event> listener) {
             this.bottomListeners.add(listener);
             return this;
@@ -574,7 +581,7 @@ public final class SmartInventory {
          * a custom inventory using SmartInvs.
          *
          * @param manager manage the custom actions of an inventory
-         * @return the action for the inventory
+         * @return The builder chain.
          */
         public SmartInventory.Builder manager(final InventoryManager manager) {
             this.manager = manager;
