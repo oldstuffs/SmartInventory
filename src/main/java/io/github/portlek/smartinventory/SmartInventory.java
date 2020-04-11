@@ -251,7 +251,8 @@ public final class SmartInventory {
      *
      * @param row Slot row (starts at 0)
      * @param col Slot column (starts at 0)
-     * @return 
+     * @return Returns false if row or col less than 0 or
+     * row and col less than {@link #rows} and {@link #columns}
      */
     public boolean checkBounds(final int row, final int col) {
         if (row < 0 || col < 0) {
@@ -523,8 +524,8 @@ public final class SmartInventory {
          * method is called. Defaults to 1
          *
          * @param frequency The inventory update frequency, in ticks
-         * @throws IllegalArgumentException If frequency is smaller than 1.
          * @return The builder chain.
+         * @throws IllegalArgumentException If frequency is smaller than 1.
          */
         public SmartInventory.Builder updateFrequency(final long frequency) {
             Preconditions.checkArgument(frequency > 0L, "frequency must be > 0");
