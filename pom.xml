@@ -159,43 +159,8 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>com.qulice</groupId>-->
-<!--                <artifactId>qulice-maven-plugin</artifactId>-->
-<!--                <version>0.18.19</version>-->
-<!--                <configuration>-->
-<!--                    <license>file:${basedir}/LICENSE.txt</license>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>check</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>qulice</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.qulice</groupId>
-                        <artifactId>qulice-maven-plugin</artifactId>
-                        <version>0.18.19</version>
-                        <configuration>
-                            <excludes combine.children="append">
-                                <exclude>duplicatefinder:.*</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <repositories>
         <repository>
