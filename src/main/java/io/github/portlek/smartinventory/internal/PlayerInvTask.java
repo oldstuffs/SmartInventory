@@ -21,11 +21,6 @@ import io.github.portlek.smartinventory.content.InventoryProvider;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-/**
- * TODO: Write well javadoc.
- *
- * @since 1.0
- */
 public final class PlayerInvTask extends BukkitRunnable {
 
     private final Player player;
