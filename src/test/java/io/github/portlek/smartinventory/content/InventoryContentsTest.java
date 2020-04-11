@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 
-public class InventoryContentsTest {
+public final class InventoryContentsTest {
 
     private static final ItemStack TEST_ITEM = new ItemStack(Material.DIRT);
 

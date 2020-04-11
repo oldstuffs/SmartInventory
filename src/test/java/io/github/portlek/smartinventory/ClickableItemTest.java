@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 
-public class ClickableItemTest {
+public final class ClickableItemTest {
 
     @Test
     public void testNone() {

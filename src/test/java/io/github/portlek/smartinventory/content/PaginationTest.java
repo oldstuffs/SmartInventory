@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 
-public class PaginationTest {
+public final class PaginationTest {
 
     @Test
     public void test() {

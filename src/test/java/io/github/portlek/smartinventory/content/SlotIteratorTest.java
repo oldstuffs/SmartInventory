@@ -7,7 +7,7 @@ import io.github.portlek.smartinventory.InventoryManager;
 import io.github.portlek.smartinventory.SmartInventory;
 import org.junit.Test;
 
-public class SlotIteratorTest {
+public final class SlotIteratorTest {
 
     // TODO: Improve the SlotIterator tests and add some more tests
 

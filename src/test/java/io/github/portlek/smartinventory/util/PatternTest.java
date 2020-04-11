@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import io.github.portlek.smartinventory.content.SlotPos;
 import org.junit.Test;
 
-public class PatternTest {
+public final class PatternTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyPattern() {

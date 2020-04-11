@@ -7,7 +7,7 @@ import java.util.Map;
 import org.bukkit.event.inventory.InventoryType;
 import org.junit.Test;
 
-public class InventoryOpenerTest {
+public final class InventoryOpenerTest {
 
     @Test
     public void testDefaultSize() {
