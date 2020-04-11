@@ -199,10 +199,6 @@
 
     <repositories>
         <repository>
-            <id>portlek</id>
-            <url>https://dl.bintray.com/portlek/maven</url>
-        </repository>
-        <repository>
             <id>spigot</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
