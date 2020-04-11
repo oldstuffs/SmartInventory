@@ -247,10 +247,11 @@ public final class SmartInventory {
     }
 
     /**
-     * Checks if this inventory has a slot at the specified position
+     * Checks if this inventory has a slot at the specified position.
      *
      * @param row Slot row (starts at 0)
      * @param col Slot column (starts at 0)
+     * @return 
      */
     public boolean checkBounds(final int row, final int col) {
         if (row < 0 || col < 0) {
