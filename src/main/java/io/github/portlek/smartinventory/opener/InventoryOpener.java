@@ -60,7 +60,7 @@ public interface InventoryOpener {
      *
      * @param type inventory type
      * @return The desired default dimensions, this default implementation returns
-     * (3x9) for type (ender)chest, (3x3) for dispenser & dropper and
+     * (3x9) for type (ender)chest, (3x3) for dispenser && dropper and
      * (1x_sizeOfInventoryType_) for everything else.
      */
     default SlotPos defaultSize(final InventoryType type) {
