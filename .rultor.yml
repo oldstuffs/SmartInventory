@@ -1,0 +1,23 @@
+docker:
+  image: yegor256/rultor-image
+assets:
+  settings.xml: "portlek/secret-repo#inv/settings.xml"
+  pubring.gpg: "portlek/secret-repo#inv/pubring.gpg"
+  secring.gpg: "portlek/secret-repo#inv/secring.gpg"
+env:
+  MAVEN_OPTS: -Xmx1g
+  JAVA_OPTS: -Xmx1g
+architect:
+  - portlek
+merge:
+  script: |
+    mvn clean install -Pqulice --errors --settings /home/r/settings.xml
+deploy:
+  script: |
+    mvn clean deploy -Pqulice --errors --settings /home/r/settings.xml
+release:
+  script: |-
+    [[ "${tag}" =~ ^[0-9]+(\.[0-9]+)*$ ]] || exit -1
+    mvn versions:set "-DnewVersion=${tag}" --settings /home/r/settings.xml
+    git commit -am "${tag}"
+    mvn clean deploy -Pqulice --errors --settings /home/r/settings.xml
