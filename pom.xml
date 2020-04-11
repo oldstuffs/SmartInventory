@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.jcabi</groupId>
         <artifactId>parent</artifactId>
-        <version>0.49.4</version>
+        <version>0.49.9</version>
     </parent>
     <groupId>io.github.portlek</groupId>
     <artifactId>SmartInventory</artifactId>
