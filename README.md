@@ -6,7 +6,7 @@ Advanced Inventory API for your Minecraft Bukkit plugins.
     <dependency>
         <groupId>io.github.portlek</groupId>
         <artifactId>SmartInvnetory</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.1</version>
     </dependency>
 </dependencies>
 ```
