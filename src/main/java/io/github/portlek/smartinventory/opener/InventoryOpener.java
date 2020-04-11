@@ -24,11 +24,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
-/**
- * Write well javadoc
- *
- * @since 1.0
- */
 public interface InventoryOpener {
 
     Inventory open(SmartInventory inv, Player player);
