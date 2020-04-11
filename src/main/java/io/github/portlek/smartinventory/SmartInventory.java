@@ -560,7 +560,6 @@ public final class SmartInventory {
             return this;
         }
 
-
         /**
          * Manages the custom inventory. This method handles all the actions that can be performs within
          * a custom inventory using SmartInvs.
