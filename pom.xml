@@ -7,7 +7,7 @@
     <artifactId>SmartInventory</artifactId>
     <version>1.3.0</version>
     <name>SmartInventory</name>
-    <description>An API for creating unique inveotories for Bukkit servers.</description>
+    <description>An API for creating unique inventories for Bukkit servers.</description>
     <url>https://github.com/portlek/SmartInventory</url>
 
     <licenses>
