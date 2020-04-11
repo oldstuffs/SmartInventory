@@ -211,6 +211,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.github.portlek</groupId>
+            <artifactId>BukkitItemBuilder</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <artifactId>annotations</artifactId>
             <groupId>org.jetbrains</groupId>
             <version>19.0.0</version>

@@ -29,11 +29,6 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 
-/**
- * TODO: Write well javadoc.
- *
- * @since 1.3.0
- */
 @SuppressWarnings("unchecked")
 public final class GeneralListener implements Listener {
 
