@@ -3,11 +3,6 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.jcabi</groupId>
-        <artifactId>parent</artifactId>
-        <version>0.49.9</version>
-    </parent>
     <groupId>io.github.portlek</groupId>
     <artifactId>SmartInventory</artifactId>
     <version>1.3.0</version>
@@ -47,6 +42,17 @@
         <java.version>1.8</java.version>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>oss.sonatype.org</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <snapshotRepository>
+            <id>oss.sonatype.org</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
@@ -57,6 +63,31 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -75,43 +106,74 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-source-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>oss.sonatype.org</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <stagingDescription>${project.version}</stagingDescription>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>package-sources</id>
+                        <id>deploy-to-sonatype</id>
+                        <phase>deploy</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>deploy</goal>
+                            <goal>release</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-javadoc-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
                 <executions>
                     <execution>
-                        <id>package-javadoc</id>
-                        <phase>package</phase>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>sign</goal>
                         </goals>
+                        <configuration>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <executable>${gpg.executable}</executable>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <passphrase>${gpg.passphrase}</passphrase>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <keyname>${gpg.keyname}</keyname>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <homedir>${gpg.homedir}</homedir>
+                            <useAgent>true</useAgent>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>com.qulice</groupId>-->
-<!--                <artifactId>qulice-maven-plugin</artifactId>-->
-<!--                <version>0.18.19</version>-->
-<!--                <configuration>-->
-<!--                    <license>file:${basedir}/LICENSE.txt</license>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>check</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>com.qulice</groupId>-->
+            <!--                <artifactId>qulice-maven-plugin</artifactId>-->
+            <!--                <version>0.18.19</version>-->
+            <!--                <configuration>-->
+            <!--                    <license>file:${basedir}/LICENSE.txt</license>-->
+            <!--                </configuration>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <goals>-->
+            <!--                            <goal>check</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 
