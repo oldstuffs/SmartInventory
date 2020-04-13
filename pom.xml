@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.portlek</groupId>
     <artifactId>SmartInventory</artifactId>
-    <version>1.7</version>
+    <version>1.8</version>
     <name>SmartInventory</name>
     <description>An API for creating unique inventories for Bukkit servers.</description>
     <url>https://github.com/portlek/SmartInventory</url>
