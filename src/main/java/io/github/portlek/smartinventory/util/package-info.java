@@ -25,6 +25,6 @@
 
 /**
  * Lists all the other util classes related to
- * the SmartInvs API.
+ * the SmartInventory API.
  */
 package io.github.portlek.smartinventory.util;

@@ -43,7 +43,7 @@ import org.bukkit.inventory.Inventory;
 public final class SmartInventory {
 
     /**
-     * Inventory Manager. This field is the core component for managing SmartInvs inventories.
+     * Inventory Manager. This field is the core component for managing SmartInventory inventories.
      */
     private final InventoryManager manager;
 
@@ -106,7 +106,7 @@ public final class SmartInventory {
     private final long updateFrequency;
 
     /**
-     * Provider Inventory. This field is the provider interface for getting contents inside the SmartInvs.
+     * Provider Inventory. This field is the provider interface for getting contents inside the SmartInventory.
      */
     private final InventoryProvider provider;
 
@@ -153,7 +153,7 @@ public final class SmartInventory {
     }
 
     /**
-     * Used for creating a custom SmartInvs inventory. This builder method has a predefined inventory
+     * Used for creating a custom SmartInventory inventory. This builder method has a predefined inventory
      * type (chest), row amount (6) and column amount (9). By default, the inventory is closeable. You
      * would use this to create a custom child inventory for your parent inventory.
      *
@@ -166,8 +166,8 @@ public final class SmartInventory {
     /**
      * Opens up the given inventory on the first page.
      *
-     * @param player Gets the player opening up the SmartInvs
-     * @return the opened SmartInvs inventory
+     * @param player Gets the player opening up the SmartInventory
+     * @return the opened SmartInventory inventory
      */
     public Inventory open(final Player player) {
         return this.open(player, 0, Collections.emptyMap());
@@ -212,9 +212,9 @@ public final class SmartInventory {
     /**
      * Opens up the given inventory with the inputted page number.
      *
-     * @param player Gets the player opening up the SmartInvs
+     * @param player Gets the player opening up the SmartInventory
      * @param page Open inventory to inputted page number
-     * @return SmartInvs inventory to the given page number
+     * @return SmartInventory inventory to the given page number
      */
     public Inventory open(final Player player, final int page) {
         return this.open(player, page, Collections.emptyMap());
@@ -229,9 +229,9 @@ public final class SmartInventory {
     }
 
     /**
-     * Close the SmartInvs for the given player.
+     * Close the SmartInventory for the given player.
      *
-     * @param player Gets the player looking at the SmartInvs
+     * @param player Gets the player looking at the SmartInventory
      */
     public void close(final Player player) {
         this.listeners.stream()
@@ -262,34 +262,34 @@ public final class SmartInventory {
     }
 
     /**
-     * Gets the custom id for the given SmartInvs.
+     * Gets the custom id for the given SmartInventory.
      *
-     * @return custom SmartInvs id
+     * @return custom SmartInventory id
      */
     public String getId() {
         return this.id;
     }
 
     /**
-     * Gets the SmartInvs custom title.
+     * Gets the SmartInventory custom title.
      *
-     * @return SmartInvs custom title
+     * @return SmartInventory custom title
      */
     public String getTitle() {
         return this.title;
     }
 
     /**
-     * Gets the SmartInvs inventory type.
+     * Gets the SmartInventory inventory type.
      *
-     * @return SmartInvs inventory type
+     * @return SmartInventory inventory type
      */
     public InventoryType getType() {
         return this.type;
     }
 
     /**
-     * Gets the number of rows for the given SmartInvs.
+     * Gets the number of rows for the given SmartInventory.
      *
      * @return number of rows
      */
@@ -298,7 +298,7 @@ public final class SmartInventory {
     }
 
     /**
-     * Gets the number of columns for the given SmartInvs.
+     * Gets the number of columns for the given SmartInventory.
      *
      * @return number columns
      */
@@ -307,7 +307,7 @@ public final class SmartInventory {
     }
 
     /**
-     * Will return a boolean value if the given SmartInvs is closable.
+     * Will return a boolean value if the given SmartInventory is closable.
      *
      * @return true if closable, false if not closable
      */
@@ -316,11 +316,11 @@ public final class SmartInventory {
     }
 
     /**
-     * Set whether the SmartInvs is closable or not. If you set the setCloseable() to true, then the SmartInvs
-     * will return true for {@link #isCloseable()}. If you set the setCloseable() to false, then the SmartInvs will return
+     * Set whether the SmartInventory is closable or not. If you set the setCloseable() to true, then the SmartInventory
+     * will return true for {@link #isCloseable()}. If you set the setCloseable() to false, then the SmartInventory will return
      * false for {@link #isCloseable()}.
      *
-     * @param closeable Enable or Disable SmartInvs closeable feature
+     * @param closeable Enable or Disable SmartInventory closeable feature
      */
     public void setCloseable(final boolean closeable) {
         this.closeable = closeable;
@@ -331,9 +331,9 @@ public final class SmartInventory {
     }
 
     /**
-     * Will return the custom SmartInvs with all of its contents for the given player.
+     * Will return the custom SmartInventory with all of its contents for the given player.
      *
-     * @return custom SmartInvs contents
+     * @return custom SmartInventory contents
      */
     public InventoryProvider getProvider() {
         return this.provider;
@@ -349,7 +349,7 @@ public final class SmartInventory {
     }
 
     /**
-     * Get Inventory Manager and manage the operations of a SmartInvs.
+     * Get Inventory Manager and manage the operations of a SmartInventory.
      *
      * @return inventory manager property
      */
@@ -433,7 +433,7 @@ public final class SmartInventory {
         private long updateFrequency = 1L;
 
         /**
-         * Inventory Manager. This field is the core component for managing SmartInvs inventories. You
+         * Inventory Manager. This field is the core component for managing SmartInventory inventories. You
          * can use this field to set your contents inside your custom child inventory as well as get all
          * the contents already set. This field will also allow you to get all the players who have opened
          * the custom child inventory. The manager field also has custom event listeners which will help
@@ -443,7 +443,7 @@ public final class SmartInventory {
         private InventoryManager manager;
 
         /**
-         * Provider Inventory. This field is the provider interface for getting contents inside the SmartInvs.
+         * Provider Inventory. This field is the provider interface for getting contents inside the SmartInventory.
          * This field will populate the custom child inventory and get the player current interacting with
          * that given custom child inventory.
          */
@@ -462,9 +462,9 @@ public final class SmartInventory {
         }
 
         /**
-         * Set a specific SmartInvs unique id.
+         * Set a specific SmartInventory unique id.
          *
-         * @param id set SmartInvs id
+         * @param id set SmartInventory id
          * @return The builder chain.
          */
         public SmartInventory.Builder id(final String id) {
@@ -473,9 +473,9 @@ public final class SmartInventory {
         }
 
         /**
-         * Set a specific SmartInvs title.
+         * Set a specific SmartInventory title.
          *
-         * @param title set SmartInvs title
+         * @param title set SmartInventory title
          * @return The builder chain.
          */
         public SmartInventory.Builder title(final String title) {
@@ -495,7 +495,7 @@ public final class SmartInventory {
         }
 
         /**
-         * Set the amount of rows and set the amount of columns in a SmartInvs.
+         * Set the amount of rows and set the amount of columns in a SmartInventory.
          *
          * @param rows set row amount
          * @param columns set column amount
@@ -534,7 +534,7 @@ public final class SmartInventory {
         }
 
         /**
-         * Method to get all the contents from inside the SmartInvs inventory.
+         * Method to get all the contents from inside the SmartInventory inventory.
          *
          * @param provider update inventory with all contents inside
          * @return The builder chain.
@@ -559,7 +559,7 @@ public final class SmartInventory {
         /**
          * Listens for custom events. This method extends {@link Event} with the generics lower bounded wildcard.
          *
-         * @param listener listen for events within SmartInvs
+         * @param listener listen for events within SmartInventory
          * @return The builder chain.
          */
         public SmartInventory.Builder listener(final InventoryListener<? extends Event> listener) {
@@ -580,7 +580,7 @@ public final class SmartInventory {
 
         /**
          * Manages the custom inventory. This method handles all the actions that can be performs within
-         * a custom inventory using SmartInvs.
+         * a custom inventory using SmartInventory.
          *
          * @param manager manage the custom actions of an inventory
          * @return The builder chain.
@@ -635,7 +635,7 @@ public final class SmartInventory {
         }
 
         /**
-         * Builds the custom SmartInvs inventory.
+         * Builds the custom SmartInventory inventory.
          *
          * @return the custom inventory with its prerequisites
          */

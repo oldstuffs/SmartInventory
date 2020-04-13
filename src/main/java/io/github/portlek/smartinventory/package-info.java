@@ -24,6 +24,6 @@
  */
 
 /**
- * Default package for the SmartInvs API.
+ * Default package for the SmartInventory API.
  */
 package io.github.portlek.smartinventory;

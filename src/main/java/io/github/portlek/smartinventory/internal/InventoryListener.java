@@ -28,7 +28,7 @@ package io.github.portlek.smartinventory.internal;
 import java.util.function.Consumer;
 
 /**
- * An event listener for clickable items inside a SmartInvs that returns a generic type. By
+ * An event listener for clickable items inside a SmartInventory that returns a generic type. By
  * utilizing generics type, we do not need to do type-casting which in return will remove
  * ClassCastException at runtime. If there is no type provided at the time of creation, the
  * compiler will produce a warning that "GenericsType is a raw type".
