@@ -97,7 +97,7 @@ public final class GeneralListener implements Listener {
         final Player player = (Player) event.getWhoClicked();
         this.manager.getInventory(player).ifPresent(inv -> {
             final Optional<InventoryContents> optional = inv.getManager().getContents(player);
-            if (!optional.isPresend()) {
+            if (!optional.isPresent()) {
                 return;
             }
             final InventoryContents contents = optional.get();
