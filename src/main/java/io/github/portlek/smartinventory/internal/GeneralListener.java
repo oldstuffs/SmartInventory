@@ -28,7 +28,7 @@ package io.github.portlek.smartinventory.internal;
 import io.github.portlek.smartinventory.InventoryManager;
 import io.github.portlek.smartinventory.ItemClickData;
 import io.github.portlek.smartinventory.content.SlotPos;
-import java.util.HashMap;
+import java.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
