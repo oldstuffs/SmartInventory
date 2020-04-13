@@ -27,8 +27,9 @@ package io.github.portlek.smartinventory.internal;
 
 import io.github.portlek.smartinventory.InventoryManager;
 import io.github.portlek.smartinventory.ItemClickData;
+import io.github.portlek.smartinventory.content.InventoryContents;
 import io.github.portlek.smartinventory.content.SlotPos;
-import java.util.HashMap;
+import java.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -95,8 +96,14 @@ public final class GeneralListener implements Listener {
     public void onInventoryDrag(final InventoryDragEvent event) {
         final Player player = (Player) event.getWhoClicked();
         this.manager.getInventory(player).ifPresent(inv -> {
+            final Optional<InventoryContents> optional = inv.getManager().getContents(player);
+            if (!optional.isPresent()) {
+                return;
+            }
+            final InventoryContents contents = optional.get();
             for (final int slot : event.getRawSlots()) {
-                if (slot >= player.getOpenInventory().getTopInventory().getSize()) {
+                if (slot >= player.getOpenInventory().getTopInventory().getSize() || 
+                        contents.isEditable(SlotPos.of(slot / 9, slot % 9))) {
                     continue;
                 }
                 event.setCancelled(true);
