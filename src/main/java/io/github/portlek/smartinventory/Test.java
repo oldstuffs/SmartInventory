@@ -27,4 +27,6 @@ package io.github.portlek.smartinventory;
 
 public final class Test {
 
+
+
 }
