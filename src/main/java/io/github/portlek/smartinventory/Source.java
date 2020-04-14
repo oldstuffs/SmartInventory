@@ -25,6 +25,14 @@
 
 package io.github.portlek.smartinventory;
 
-public final class SmartInventory {
+import lombok.NonNull;
+
+public interface Source<T> {
+
+    void subscribe(@NonNull Target<T> target);
+
+    void unsubscribe(@NonNull Target<T> target);
+
+    void notifyTargets(@NonNull T argument);
 
 }

@@ -23,8 +23,7 @@
  *
  */
 
-package io.github.portlek.smartinventory;
-
-public final class SmartInventory {
-
-}
+/**
+ * Default package for the SmartInventory API.
+ */
+package io.github.portlek.smartinventory.old;

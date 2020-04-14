@@ -23,8 +23,10 @@
  *
  */
 
-package io.github.portlek.smartinventory;
-
-public final class SmartInventory {
-
-}
+/**
+ * Lists the classes related to the content of an
+ * inventory, and the ways to edit this content.
+ *
+ * @since 1.0
+ */
+package io.github.portlek.smartinventory.old.content;

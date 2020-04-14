@@ -23,8 +23,8 @@
  *
  */
 
-package io.github.portlek.smartinventory;
-
-public final class SmartInventory {
-
-}
+/**
+ * Lists the classes related to the opening of an
+ * inventory, {@link io.github.portlek.smartinventory.old.opener.InventoryOpener}.
+ */
+package io.github.portlek.smartinventory.old.opener;

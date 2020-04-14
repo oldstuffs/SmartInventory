@@ -25,6 +25,14 @@
 
 package io.github.portlek.smartinventory;
 
-public final class SmartInventory {
+import io.github.portlek.smartinventory.old.content.InventoryContents;
+import lombok.NonNull;
+import org.bukkit.entity.Player;
+
+public interface ProviderContext {
+
+    @NonNull Player player();
+
+    @NonNull InventoryContents contents();
 
 }

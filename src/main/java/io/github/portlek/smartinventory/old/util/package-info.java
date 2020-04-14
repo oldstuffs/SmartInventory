@@ -23,8 +23,8 @@
  *
  */
 
-package io.github.portlek.smartinventory;
-
-public final class SmartInventory {
-
-}
+/**
+ * Lists all the other util classes related to
+ * the SmartInventory API.
+ */
+package io.github.portlek.smartinventory.old.util;

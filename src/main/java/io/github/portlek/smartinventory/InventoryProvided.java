@@ -25,6 +25,12 @@
 
 package io.github.portlek.smartinventory;
 
-public final class SmartInventory {
+import lombok.NonNull;
+
+public interface InventoryProvided extends Target<ProviderContext> {
+
+    void init(@NonNull ProviderContext context);
+
+    void tick(@NonNull ProviderContext context);
 
 }

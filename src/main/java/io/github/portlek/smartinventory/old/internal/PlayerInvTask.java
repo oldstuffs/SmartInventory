@@ -23,8 +23,32 @@
  *
  */
 
-package io.github.portlek.smartinventory;
+package io.github.portlek.smartinventory.old.internal;
 
-public final class SmartInventory {
+import io.github.portlek.smartinventory.old.content.InventoryContents;
+import io.github.portlek.smartinventory.old.content.InventoryProvider;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
+public final class PlayerInvTask extends BukkitRunnable {
+
+    private final Player player;
+
+    private final InventoryProvider provider;
+
+    private final InventoryContents contents;
+
+    public PlayerInvTask(final Player plyr, final InventoryProvider prvdr,
+                         final InventoryContents cntnts) {
+        super();
+        this.player = plyr;
+        this.provider = prvdr;
+        this.contents = cntnts;
+    }
+
+    @Override
+    public void run() {
+        this.provider.update(this.player, this.contents);
+    }
 
 }

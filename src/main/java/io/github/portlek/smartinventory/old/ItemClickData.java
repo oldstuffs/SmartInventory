@@ -23,8 +23,45 @@
  *
  */
 
-package io.github.portlek.smartinventory;
+package io.github.portlek.smartinventory.old;
 
-public final class SmartInventory {
+import io.github.portlek.smartinventory.old.content.SlotPos;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
+
+public final class ItemClickData {
+
+    private final Event event;
+
+    private final Player player;
+
+    private final ItemStack item;
+
+    private final SlotPos slot;
+
+    public ItemClickData(final Event event, final Player player, final ItemStack item,
+                         final SlotPos slot) {
+        this.event = event;
+        this.player = player;
+        this.item = item;
+        this.slot = slot;
+    }
+
+    public Event getEvent() {
+        return this.event;
+    }
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
+    public ItemStack getItem() {
+        return this.item;
+    }
+
+    public SlotPos getSlot() {
+        return this.slot;
+    }
 
 }

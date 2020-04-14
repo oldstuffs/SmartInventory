@@ -25,6 +25,10 @@
 
 package io.github.portlek.smartinventory;
 
-public final class SmartInventory {
+import lombok.NonNull;
+
+public interface Target<T> {
+
+    void update(@NonNull T argument);
 
 }

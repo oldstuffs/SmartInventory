@@ -3,6 +3,8 @@ package io.github.portlek.smartinventory;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import io.github.portlek.smartinventory.old.ClickableItem;
+import io.github.portlek.smartinventory.old.ItemClickData;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
