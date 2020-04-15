@@ -31,8 +31,10 @@ import org.bukkit.entity.Player;
 
 public interface ProviderContext {
 
-    @NonNull Player player();
+    @NonNull
+    Player player();
 
-    @NonNull InventoryContents contents();
+    @NonNull
+    InventoryContents contents();
 
 }

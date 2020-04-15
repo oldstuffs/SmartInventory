@@ -25,8 +25,19 @@
 
 package io.github.portlek.smartinventory;
 
+import lombok.NonNull;
+import org.bukkit.entity.Player;
+
 public final class Test {
 
-
+    public void a(@NonNull final Player player) {
+        /*
+        final SmartInventory inventory = SmartInventory.chain(Plugin.getAPI().inventoryManager)
+            .provided(new TestProvided())
+            .otherStuffs()
+            .build();
+        inventory.open(player);
+        */
+    }
 
 }
