@@ -26,6 +26,7 @@
 package io.github.portlek.smartinventory;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.bukkit.Bukkit;
@@ -65,15 +66,12 @@ public final class SmartInventory {
                 return;
             }
         }
-
         synchronized (this) {
             SmartInventory.PLUGIN_QUEUE.poll();
         }
-
-        final Plugin nextPlugin = SmartInventory.PLUGIN_QUEUE.peek();
-        if (nextPlugin != null && nextPlugin.isEnabled()) {
-            SmartInventory.registerListeners(nextPlugin);
-        }
+        Optional.ofNullable(SmartInventory.PLUGIN_QUEUE.peek())
+            .filter(Plugin::isEnabled)
+            .ifPresent(SmartInventory::registerListeners);
     }
 
 }
