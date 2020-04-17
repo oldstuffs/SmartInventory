@@ -29,26 +29,26 @@ import io.github.portlek.smartinventory.observer.Source;
 import io.github.portlek.smartinventory.observer.Target;
 import java.util.Collection;
 import java.util.Vector;
-import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public final class BasicSource<T> implements Source<T> {
 
     private final Collection<Target<T>> targets = new Vector<>();
 
     @Override
-    public void subscribe(@NonNull final Target<T> target) {
+    public void subscribe(@NotNull final Target<T> target) {
         if (!this.targets.contains(target)) {
             this.targets.add(target);
         }
     }
 
     @Override
-    public void unsubscribe(@NonNull final Target<T> target) {
+    public void unsubscribe(@NotNull final Target<T> target) {
         this.targets.remove(target);
     }
 
     @Override
-    public void notifyTargets(@NonNull final T argument) {
+    public void notifyTargets(@NotNull final T argument) {
         this.targets.forEach(target -> target.update(argument));
     }
 

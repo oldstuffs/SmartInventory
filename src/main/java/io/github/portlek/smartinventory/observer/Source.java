@@ -25,14 +25,14 @@
 
 package io.github.portlek.smartinventory.observer;
 
-import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface Source<T> {
 
-    void subscribe(@NonNull Target<T> target);
+    void subscribe(@NotNull Target<T> target);
 
-    void unsubscribe(@NonNull Target<T> target);
+    void unsubscribe(@NotNull Target<T> target);
 
-    void notifyTargets(@NonNull T argument);
+    void notifyTargets(@NotNull T argument);
 
 }

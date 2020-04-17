@@ -48,6 +48,9 @@ public final class SmartInventory {
 
     private static final Queue<Plugin> PLUGIN_QUEUE = new ConcurrentLinkedQueue<>();
 
+    private SmartInventory() {
+    }
+
     public static void onPluginDisable(@NotNull final PluginDisableEvent event) {
         final Plugin peek = SmartInventory.PLUGIN_QUEUE.peek();
         if (peek != null && !peek.equals(event.getPlugin())) {

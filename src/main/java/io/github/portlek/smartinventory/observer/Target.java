@@ -25,10 +25,10 @@
 
 package io.github.portlek.smartinventory.observer;
 
-import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface Target<T> {
 
-    void update(@NonNull T argument);
+    void update(@NotNull T argument);
 
 }

@@ -27,12 +27,12 @@ package io.github.portlek.smartinventory;
 
 import io.github.portlek.smartinventory.observer.Target;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
-import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface InventoryProvided extends Target<InventoryContents> {
 
-    void init(@NonNull InventoryContents contents);
+    void init(@NotNull InventoryContents contents);
 
-    void tick(@NonNull InventoryContents contents);
+    void tick(@NotNull InventoryContents contents);
 
 }
