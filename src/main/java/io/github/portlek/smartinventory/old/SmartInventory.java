@@ -170,7 +170,22 @@ public final class SmartInventory {
      * @return the opened SmartInventory inventory
      */
     public Inventory open(final Player player) {
-        return this.open(player, 0, Collections.emptyMap());
+        return this.open(player, 0);
+    }
+
+    /**
+     * Opens up the given inventory with the inputted page number.
+     *
+     * @param player Gets the player opening up the SmartInventory
+     * @param page Open inventory to inputted page number
+     * @return SmartInventory inventory to the given page number
+     */
+    public Inventory open(final Player player, final int page) {
+        return this.open(player, page, Collections.emptyMap());
+    }
+
+    public Inventory open(final Player player, final Map<String, Object> properties) {
+        return this.open(player, 0, properties);
     }
 
     public Inventory open(final Player player, final int page, final Map<String, Object> properties) {
@@ -207,21 +222,6 @@ public final class SmartInventory {
      */
     public List<InventoryListener<? extends Event>> getListeners() {
         return Collections.unmodifiableList(this.listeners);
-    }
-
-    /**
-     * Opens up the given inventory with the inputted page number.
-     *
-     * @param player Gets the player opening up the SmartInventory
-     * @param page Open inventory to inputted page number
-     * @return SmartInventory inventory to the given page number
-     */
-    public Inventory open(final Player player, final int page) {
-        return this.open(player, page, Collections.emptyMap());
-    }
-
-    public Inventory open(final Player player, final Map<String, Object> properties) {
-        return this.open(player, 0, properties);
     }
 
     public List<InventoryListener<? extends Event>> getBottomListeners() {
@@ -662,16 +662,16 @@ public final class SmartInventory {
             );
         }
 
+        public Optional<InventoryManager> getManager() {
+            return Optional.ofNullable(this.manager);
+        }
+
         private SlotPos getDefaultDimensions(final InventoryType type) {
             return this.getManager().orElseThrow(() ->
                 new IllegalStateException("Cannot find InventoryManager for type " + type)
             ).findOpener(type).orElseThrow(() ->
                 new IllegalStateException("Cannot find InventoryOpener for type " + type)
             ).defaultSize(type);
-        }
-
-        public Optional<InventoryManager> getManager() {
-            return Optional.ofNullable(this.manager);
         }
 
     }

@@ -25,60 +25,136 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.listeners.PluginDisableListener;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Function;
+import io.github.portlek.smartinventory.listeners.InventoryClickListener;
+import io.github.portlek.smartinventory.old.content.InventoryContents;
+import io.github.portlek.smartinventory.old.opener.ChestInventoryOpener;
+import io.github.portlek.smartinventory.old.opener.InventoryOpener;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public final class SmartInventory {
 
-    public static final Object LOCK = new Object();
+    private static final Consumer<SmartInventory> REGISTER_LISTENERS = inventory ->
+        Collections.singletonList(
+            new InventoryClickListener(inventory)
+        ).forEach(listener ->
+            Bukkit.getPluginManager().registerEvents(listener, inventory.plugin()));
 
-    private static final Function<Plugin, Listener[]> LISTENERS = plugin ->
-        new Listener[]{
-            new PluginDisableListener()
-        };
+    @NotNull
+    private final Plugin plugin;
 
-    private static final Queue<Plugin> PLUGIN_QUEUE = new ConcurrentLinkedQueue<>();
+    private final Map<Player, Page> pages = new HashMap<>();
 
-    private SmartInventory() {
+    private final Map<Player, InventoryContents> contents = new HashMap<>();
+
+    private final Map<Player, BukkitRunnable> tasks = new HashMap<>();
+
+    private final List<InventoryOpener> defaulters = Collections.singletonList(
+        new ChestInventoryOpener()
+    );
+
+    private final Collection<InventoryOpener> openers = new ArrayList<>();
+
+    private SmartInventory(@NotNull final Plugin plugin) {
+        this.plugin = plugin;
     }
 
-    public static void onPluginDisable(@NotNull final PluginDisableEvent event) {
-        final Plugin peek = SmartInventory.PLUGIN_QUEUE.peek();
-        if (peek != null && !peek.equals(event.getPlugin())) {
-            synchronized (SmartInventory.LOCK) {
-                SmartInventory.PLUGIN_QUEUE.remove(event.getPlugin());
-                return;
+    @NotNull
+    public static SmartInventory init(@NotNull final Plugin plugin) {
+        final SmartInventory inventory = new SmartInventory(plugin);
+        SmartInventory.REGISTER_LISTENERS.accept(inventory);
+        return inventory;
+    }
+
+    @NotNull
+    public Plugin plugin() {
+        return this.plugin;
+    }
+
+    @NotNull
+    public Optional<InventoryOpener> findOpener(@NotNull final InventoryType type) {
+        return Stream.of(this.openers, this.defaulters)
+            .flatMap(Collection::stream)
+            .filter(opener -> opener.supports(type))
+            .findAny();
+    }
+
+    public void registerOpeners(@NotNull final InventoryOpener... openers) {
+        this.openers.addAll(Arrays.asList(openers));
+    }
+
+    @NotNull
+    public List<Player> getOpenedPlayers(@NotNull final Page inv) {
+        final List<Player> list = new ArrayList<>();
+        this.pages.forEach((player, playerInv) -> {
+            if (inv.equals(playerInv)) {
+                list.add(player);
             }
-        }
-        synchronized (SmartInventory.LOCK) {
-            SmartInventory.PLUGIN_QUEUE.poll();
-        }
-        Optional.ofNullable(SmartInventory.PLUGIN_QUEUE.peek())
-            .filter(Plugin::isEnabled)
-            .ifPresent(SmartInventory::registerListeners);
+        });
+        return list;
     }
 
-    public static void init(@NotNull final Plugin plugin) {
-        if (SmartInventory.PLUGIN_QUEUE.isEmpty()) {
-            SmartInventory.registerListeners(plugin);
-        }
-        synchronized (SmartInventory.LOCK) {
-            SmartInventory.PLUGIN_QUEUE.add(plugin);
-        }
+    @NotNull
+    public Optional<Page> getPage(@NotNull final Player player) {
+        return Optional.ofNullable(this.pages.get(player));
     }
 
-    private static void registerListeners(@NotNull final Plugin plugin) {
-        Arrays.stream(SmartInventory.LISTENERS.apply(plugin)).forEach(listener ->
-            Bukkit.getPluginManager().registerEvents(listener, plugin));
+    @NotNull
+    public Optional<InventoryContents> getContents(@NotNull final Player player) {
+        return Optional.ofNullable(this.contents.get(player));
+    }
+
+    public void removePage(@NotNull final Player player) {
+        this.pages.remove(player);
+    }
+
+    public void removeContent(@NotNull final Player player) {
+        this.contents.remove(player);
+    }
+
+    public void clearPages() {
+        this.pages.clear();
+    }
+
+    public void clearContents() {
+        this.contents.clear();
+    }
+
+    public void cancelUpdateTask(final Player player) {
+        Optional.ofNullable(this.tasks.get(player)).ifPresent(runnable -> {
+            Bukkit.getScheduler().cancelTask(runnable.getTaskId());
+            this.tasks.remove(player);
+        });
+    }
+
+    public void setPage(@NotNull final Player player, @NotNull final Page page) {
+        this.pages.put(player, page);
+    }
+
+    public void setContents(@NotNull final Player player, @NotNull final InventoryContents contest) {
+        this.contents.put(player, contest);
+    }
+
+    public void tick(@NotNull final Player player, @NotNull final Page page) {
+        final BukkitRunnable task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                page.provider().tick(SmartInventory.this.contents.get(player));
+            }
+        };
+        if (page.async()) {
+            task.runTaskTimer(this.plugin, 1L, page.tick());
+        } else {
+            task.runTaskTimerAsynchronously(this.plugin, 1L, page.tick());
+        }
+        this.tasks.put(player, task);
     }
 
 }

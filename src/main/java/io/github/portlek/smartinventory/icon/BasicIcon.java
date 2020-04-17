@@ -26,16 +26,11 @@
 package io.github.portlek.smartinventory.icon;
 
 import io.github.portlek.smartinventory.Icon;
-import io.github.portlek.smartinventory.Requirement;
 import io.github.portlek.smartinventory.Target;
-import io.github.portlek.smartinventory.event.ClickEvent;
-import io.github.portlek.smartinventory.event.DragEvent;
 import io.github.portlek.smartinventory.event.IconEvent;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
-import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -44,8 +39,6 @@ import org.jetbrains.annotations.NotNull;
 public final class BasicIcon implements Icon {
 
     private final Collection<Target<? extends IconEvent>> targets = new ArrayList<>();
-
-    private final Collection<Requirement<? extends IconEvent>> requirements = new ArrayList<>();
 
     @NotNull
     private final ItemStack item;
@@ -80,49 +73,11 @@ public final class BasicIcon implements Icon {
         final InventoryContents contents = event.contents();
         if (this.cansee.test(contents) &&
             this.canuse.test(contents)) {
-            final boolean control = this.requirements.stream()
-                .filter(requirement -> requirement.getType().isAssignableFrom(event.getClass()))
-                .map(requirement -> (Requirement<T>) requirement)
-                .allMatch(requirement -> requirement.test(event));
-            if (control) {
-                this.targets.stream()
-                    .filter(target -> target.getType().isAssignableFrom(event.getClass()))
-                    .map(target -> (Target<T>) target)
-                    .forEach(target -> target.accept(event));
-            }
+            this.targets.stream()
+                .filter(target -> target.getType().isAssignableFrom(event.getClass()))
+                .map(target -> (Target<T>) target)
+                .forEach(target -> target.accept(event));
         }
-    }
-
-    @SafeVarargs
-    @NotNull
-    @Override
-    public final Icon wheninteract(@NotNull final Consumer<IconEvent> consumer,
-                                   @NotNull final Requirement<IconEvent>... requirements) {
-        return this.target(IconEvent.class, consumer, requirements);
-    }
-
-    @SafeVarargs
-    @NotNull
-    @Override
-    public final Icon whendrag(@NotNull final Consumer<DragEvent> consumer,
-                               @NotNull final Requirement<DragEvent>... requirements) {
-        return this.target(DragEvent.class, consumer, requirements);
-    }
-
-    @SafeVarargs
-    @NotNull
-    @Override
-    public final Icon whenclick(@NotNull final Consumer<ClickEvent> consumer,
-                                @NotNull final Requirement<ClickEvent>... requirements) {
-        return this.target(ClickEvent.class, consumer, requirements);
-    }
-
-    @SafeVarargs
-    @NotNull
-    @Override
-    public final <T extends IconEvent> Icon target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                                                   @NotNull final Requirement<T>... requirements) {
-        return this.target(new BasicTarget<>(clazz, consumer, requirements));
     }
 
     @NotNull

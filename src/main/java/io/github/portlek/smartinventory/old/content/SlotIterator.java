@@ -27,7 +27,6 @@ package io.github.portlek.smartinventory.old.content;
 
 import com.google.common.base.Preconditions;
 import io.github.portlek.smartinventory.old.ClickableItem;
-import io.github.portlek.smartinventory.old.SmartInventory;
 import io.github.portlek.smartinventory.old.util.Pattern;
 import java.util.HashSet;
 import java.util.Optional;
@@ -305,8 +304,6 @@ public interface SlotIterator {
 
     final class Impl implements SlotIterator {
 
-        private final SmartInventory inv;
-
         private final SlotIterator.Type type;
 
         private final InventoryContents contents;
@@ -341,18 +338,16 @@ public interface SlotIterator {
 
         private Pattern<Boolean> blacklistPattern;
 
-        public Impl(final InventoryContents contents, final SmartInventory inv,
-                    final SlotIterator.Type type) {
-            this(contents, inv, type, 0, 0);
+        public Impl(final InventoryContents contents, final SlotIterator.Type type) {
+            this(contents, type, 0, 0);
         }
 
-        public Impl(final InventoryContents contents, final SmartInventory inv,
-                    final SlotIterator.Type type, final int startRow, final int startColumn) {
+        public Impl(final InventoryContents contents, final SlotIterator.Type type, final int startRow,
+                    final int startColumn) {
             this.contents = contents;
-            this.inv = inv;
             this.type = type;
-            this.endRow = this.inv.getRows() - 1;
-            this.endColumn = this.inv.getColumns() - 1;
+            this.endRow = this.contents.page().row() - 1;
+            this.endColumn = this.contents.page().column() - 1;
             this.startRow = startRow;
             this.row = startRow;
             this.startColumn = startColumn;
@@ -386,7 +381,7 @@ public interface SlotIterator {
                             this.column--;
 
                             if (this.column == 0) {
-                                this.column = this.inv.getColumns() - 1;
+                                this.column = this.contents.page().column() - 1;
                                 this.row--;
                             }
                             break;
@@ -394,7 +389,7 @@ public interface SlotIterator {
                             this.row--;
 
                             if (this.row == 0) {
-                                this.row = this.inv.getRows() - 1;
+                                this.row = this.contents.page().row() - 1;
                                 this.column--;
                             }
                             break;
@@ -420,7 +415,7 @@ public interface SlotIterator {
                     switch (this.type) {
                         case HORIZONTAL:
                             ++this.column;
-                            this.column %= this.inv.getColumns();
+                            this.column %= this.contents.page().column();
 
                             if (this.column == 0) {
                                 this.row++;
@@ -428,7 +423,7 @@ public interface SlotIterator {
                             break;
                         case VERTICAL:
                             ++this.row;
-                            this.row %= this.inv.getRows();
+                            this.row %= this.contents.page().row();
 
                             if (this.row == 0) {
                                 this.column++;
@@ -446,7 +441,7 @@ public interface SlotIterator {
 
         @Override
         public SlotIterator blacklist(final int index) {
-            final int count = this.inv.getColumns();
+            final int count = this.contents.page().column();
             this.blacklisted.add(SlotPos.of(index / count, index % count));
             return this;
         }
@@ -506,10 +501,10 @@ public interface SlotIterator {
         @Override
         public SlotIterator endPosition(int row, int column) {
             if (row < 0) {
-                row = this.inv.getRows() - 1;
+                row = this.contents.page().row() - 1;
             }
             if (column < 0) {
-                column = this.inv.getColumns() - 1;
+                column = this.contents.page().column() - 1;
             }
             Preconditions.checkArgument(row * column >= this.startRow * this.startColumn,
                 "The end position needs to be after the start of the slot iterator");

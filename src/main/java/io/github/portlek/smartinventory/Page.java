@@ -25,6 +25,87 @@
 
 package io.github.portlek.smartinventory;
 
+import io.github.portlek.smartinventory.event.PageEvent;
+import io.github.portlek.smartinventory.page.BasicPage;
+import io.github.portlek.smartinventory.target.BasicTarget;
+import java.util.Collections;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
+
 public interface Page {
+
+    static Page build(@NotNull final SmartInventory inventory, @NotNull final InventoryProvided provided) {
+        return new BasicPage(inventory, provided);
+    }
+
+    <T extends PageEvent> void accept(@NotNull T event);
+
+    @NotNull
+    InventoryProvided provider();
+
+    @NotNull
+    SmartInventory inventory();
+
+    long tick();
+
+    @NotNull
+    Page tick(long tick);
+
+    boolean async();
+
+    @NotNull
+    Page async(boolean async);
+
+    int row();
+
+    @NotNull
+    Page row(int row);
+
+    int column();
+
+    @NotNull
+    Page column(int column);
+
+    @NotNull
+    String title();
+
+    @NotNull
+    Page title(@NotNull String title);
+
+    @NotNull
+    default Inventory open(@NotNull final Player player) {
+        return this.open(player, 0);
+    }
+
+    @NotNull
+    default Inventory open(@NotNull final Player player, final int page) {
+        return this.open(player, page, Collections.emptyMap());
+    }
+
+    @NotNull
+    default Inventory open(@NotNull final Player player, @NotNull final Map<String, Object> properties) {
+        return this.open(player, 0, properties);
+    }
+
+    @NotNull
+    Inventory open(@NotNull Player player, int page, @NotNull Map<String, Object> properties);
+
+    @NotNull
+    default <T extends PageEvent> Page target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
+                                              @NotNull final Requirement<T>... requirements) {
+        return this.target(new BasicTarget<>(clazz, consumer, requirements));
+    }
+
+    @NotNull <T extends PageEvent> Page target(@NotNull Target<T> target);
+
+    @NotNull
+    Page canOpen(@NotNull Predicate<Player> predicate);
+
+    @NotNull
+    Page canClose(@NotNull Predicate<Player> predicate);
 
 }

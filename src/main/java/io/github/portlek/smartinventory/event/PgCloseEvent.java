@@ -25,6 +25,30 @@
 
 package io.github.portlek.smartinventory.event;
 
-public interface OpenEvent extends PageEvent {
+import io.github.portlek.smartinventory.old.content.InventoryContents;
+import org.jetbrains.annotations.NotNull;
+
+public final class PgCloseEvent implements CloseEvent {
+
+    @NotNull
+    private final InventoryContents contents;
+
+    public PgCloseEvent(@NotNull final InventoryContents contents) {
+        this.contents = contents;
+    }
+
+    @NotNull
+    @Override
+    public InventoryContents contents() {
+        return this.contents;
+    }
+
+    @Override
+    public void cancel() {
+    }
+
+    @Override
+    public void close() {
+    }
 
 }

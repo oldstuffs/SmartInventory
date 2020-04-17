@@ -31,6 +31,7 @@ import io.github.portlek.smartinventory.event.IconEvent;
 import io.github.portlek.smartinventory.event.SmartEvent;
 import io.github.portlek.smartinventory.icon.BasicIcon;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
+import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.Material;
@@ -39,15 +40,18 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Icon {
 
+    @NotNull
     static <T extends IconEvent> Icon from(@NotNull final ItemStack item) {
         return new BasicIcon(item);
     }
 
+    @NotNull
     static Icon cancel(@NotNull final ItemStack item) {
         return new BasicIcon(item)
             .wheninteract(SmartEvent::cancel);
     }
 
+    @NotNull
     static Icon empty() {
         return new BasicIcon(new ItemStack(Material.AIR));
     }
@@ -63,7 +67,10 @@ public interface Icon {
     }
 
     @NotNull
-    Icon wheninteract(@NotNull Consumer<IconEvent> consumer, @NotNull Requirement<IconEvent>... requirements);
+    default Icon wheninteract(@NotNull final Consumer<IconEvent> consumer,
+                              @NotNull final Requirement<IconEvent>... requirements) {
+        return this.target(IconEvent.class, consumer, requirements);
+    }
 
     @NotNull
     default Icon whendrag(@NotNull final Consumer<DragEvent> consumer) {
@@ -71,7 +78,10 @@ public interface Icon {
     }
 
     @NotNull
-    Icon whendrag(@NotNull Consumer<DragEvent> consumer, @NotNull Requirement<DragEvent>... requirements);
+    default Icon whendrag(@NotNull final Consumer<DragEvent> consumer,
+                          @NotNull final Requirement<DragEvent>... requirements) {
+        return this.target(DragEvent.class, consumer, requirements);
+    }
 
     @NotNull
     default Icon whenclick(@NotNull final Consumer<ClickEvent> consumer) {
@@ -79,10 +89,16 @@ public interface Icon {
     }
 
     @NotNull
-    Icon whenclick(@NotNull Consumer<ClickEvent> consumer, @NotNull Requirement<ClickEvent>... requirements);
+    default Icon whenclick(@NotNull final Consumer<ClickEvent> consumer,
+                           @NotNull final Requirement<ClickEvent>... requirements) {
+        return this.target(ClickEvent.class, consumer, requirements);
+    }
 
-    @NotNull <T extends IconEvent> Icon target(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer,
-                                               @NotNull Requirement<T>... requirements);
+    @NotNull
+    default <T extends IconEvent> Icon target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
+                                              @NotNull final Requirement<T>... requirements) {
+        return this.target(new BasicTarget<>(clazz, consumer, requirements));
+    }
 
     @NotNull <T extends IconEvent> Icon target(@NotNull Target<T> target);
 

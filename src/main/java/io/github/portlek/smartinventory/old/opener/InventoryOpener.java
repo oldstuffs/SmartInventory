@@ -25,17 +25,20 @@
 
 package io.github.portlek.smartinventory.old.opener;
 
+import io.github.portlek.smartinventory.Page;
+import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.old.ClickableItem;
-import io.github.portlek.smartinventory.old.SmartInventory;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
 import io.github.portlek.smartinventory.old.content.SlotPos;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 public interface InventoryOpener {
 
-    Inventory open(SmartInventory inv, Player player);
+    @NotNull
+    Inventory open(@NotNull Page page, @NotNull Player player);
 
     boolean supports(InventoryType type);
 

@@ -25,6 +25,6 @@
 
 package io.github.portlek.smartinventory.event;
 
-public interface CloseEvent extends SmartEvent {
+public interface CloseEvent extends PageEvent {
 
 }

@@ -23,18 +23,47 @@
  *
  */
 
-package io.github.portlek.smartinventory.listeners;
+package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.SmartInventory;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
+import io.github.portlek.smartinventory.old.content.InventoryContents;
+import org.bukkit.Bukkit;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
-public final class PluginDisableListener implements Listener {
+public final class PgOpenEvent implements OpenEvent {
 
-    @EventHandler
-    public void onPluginDisable(final PluginDisableEvent event) {
-        SmartInventory.onPluginDisable(event);
+    @NotNull
+    private final Plugin plugin;
+
+    @NotNull
+    private final InventoryOpenEvent event;
+
+    @NotNull
+    private final InventoryContents contents;
+
+    public PgOpenEvent(@NotNull final Plugin plugin, @NotNull final InventoryOpenEvent event,
+                       @NotNull final InventoryContents contents) {
+        this.plugin = plugin;
+        this.event = event;
+        this.contents = contents;
+    }
+
+    @NotNull
+    @Override
+    public InventoryContents contents() {
+        return this.contents;
+    }
+
+    @Override
+    public void cancel() {
+        this.event.setCancelled(true);
+    }
+
+    @Override
+    public void close() {
+        Bukkit.getScheduler().runTaskLater(this.plugin, () ->
+            this.event.getPlayer().closeInventory(), 1L);
     }
 
 }

@@ -25,13 +25,31 @@
 
 package io.github.portlek.smartinventory.listeners;
 
+import io.github.portlek.smartinventory.SmartInventory;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.jetbrains.annotations.NotNull;
 
 public final class InventoryClickListener implements Listener {
 
-    public void onInventoryClick(final InventoryClickEvent event) {
+    @NotNull
+    private final SmartInventory management;
 
+    public InventoryClickListener(@NotNull final SmartInventory management) {
+        this.management = management;
+    }
+
+    public void onInventoryClick(final InventoryClickEvent event) {
+        if (event.getClickedInventory() == null) {
+            return;
+        }
+        final Player player = (Player) event.getWhoClicked();
+        this.management.getPage(player).ifPresent(page -> {
+            final int row = event.getSlot() / 9;
+            final int column = event.getSlot() % 9;
+
+        });
     }
 
 }

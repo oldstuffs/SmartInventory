@@ -25,23 +25,27 @@
 
 package io.github.portlek.smartinventory.old.opener;
 
-import com.google.common.base.Preconditions;
-import io.github.portlek.smartinventory.old.SmartInventory;
+import io.github.portlek.smartinventory.Page;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 public final class ChestInventoryOpener implements InventoryOpener {
 
     @Override
-    public Inventory open(final SmartInventory inv, final Player player) {
-        Preconditions.checkArgument(inv.getColumns() == 9,
-            "The column count for the chest inventory must be 9, found: %s.", inv.getColumns());
-        Preconditions.checkArgument(inv.getRows() >= 1 && inv.getRows() <= 6,
-            "The row count for the chest inventory must be between 1 and 6, found: %s", inv.getRows());
-        final Inventory handle = Bukkit.createInventory(player, inv.getRows() * inv.getColumns(), inv.getTitle());
-        inv.getManager().getContents(player).ifPresent(contents -> {
+    public Inventory open(@NotNull final Page page, @NotNull final Player player) {
+        if (page.column() != 9) {
+            throw new IllegalArgumentException(
+                String.format("The column count for the chest inventory must be 9, found: %s.", page.column()));
+        }
+        if (page.row() < 1 && page.row() > 6) {
+            throw new IllegalArgumentException(
+                String.format("The row count for the chest inventory must be between 1 and 6, found: %s", page.row()));
+        }
+        final Inventory handle = Bukkit.createInventory(player, page.row() * page.column(), page.title());
+        page.inventory().getContents(player).ifPresent(contents -> {
             this.fill(handle, contents, player);
             player.openInventory(handle);
         });

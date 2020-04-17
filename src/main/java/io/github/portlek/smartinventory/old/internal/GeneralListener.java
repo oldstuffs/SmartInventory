@@ -51,46 +51,7 @@ public final class GeneralListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onInventoryClick(final InventoryClickEvent event) {
-        if (event.getClickedInventory() == null) {
-            return;
-        }
-        final Player player = (Player) event.getWhoClicked();
-        this.manager.getInventory(player).ifPresent(inv -> {
-            if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR ||
-                event.getAction() == InventoryAction.NOTHING) {
-                event.setCancelled(true);
-                return;
-            }
-            if (!event.getClickedInventory().equals(player.getOpenInventory().getTopInventory())) {
-                inv.getBottomListeners().stream()
-                    .filter(listener -> listener.getType().equals(InventoryClickEvent.class))
-                    .map(listener -> (InventoryListener<InventoryClickEvent>) listener)
-                    .forEach(listener -> listener.accept(event));
-                return;
-            }
-            final int row = event.getSlot() / 9;
-            final int column = event.getSlot() % 9;
-            if (!inv.checkBounds(row, column)) {
-                return;
-            }
-            this.manager.getContents(player).ifPresent(contents -> {
-                final SlotPos slot = SlotPos.of(row, column);
-                if (!contents.isEditable(slot)) {
-                    event.setCancelled(true);
-                }
-                inv.getListeners().stream()
-                    .filter(listener -> listener.getType().equals(InventoryClickEvent.class))
-                    // FIXME: 23.02.2020 We should not use casting.
-                    .forEach(listener -> ((InventoryListener<InventoryClickEvent>) listener).accept(event));
-                contents.get(slot).ifPresent(item ->
-                    item.run(new ItemClickData(event, player, event.getCurrentItem(), slot))
-                );
-                // Don't update if the clicked slot is editable - prevent item glitching
-                if (!contents.isEditable(slot)) {
-                    player.updateInventory();
-                }
-            });
-        });
+
     }
 
     @EventHandler(priority = EventPriority.LOW)

@@ -26,8 +26,8 @@
 package io.github.portlek.smartinventory.old.content;
 
 import com.google.common.base.Preconditions;
+import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.old.ClickableItem;
-import io.github.portlek.smartinventory.old.SmartInventory;
 import io.github.portlek.smartinventory.old.util.Pattern;
 import java.util.*;
 import org.bukkit.entity.Player;
@@ -61,7 +61,8 @@ public interface InventoryContents {
      *
      * @return the inventory
      */
-    SmartInventory inventory();
+    @NotNull
+    Page page();
 
     /**
      * Gets the pagination system linked to this.
@@ -617,12 +618,6 @@ public interface InventoryContents {
 
     final class Impl implements InventoryContents {
 
-        private final SmartInventory inventory;
-
-        private final Player player;
-
-        private final ClickableItem[][] contents;
-
         private final Pagination pagination = new Pagination.Impl();
 
         private final Map<String, SlotIterator> iterators = new HashMap<>();
@@ -631,15 +626,24 @@ public interface InventoryContents {
 
         private final Set<SlotPos> editableSlots = new HashSet<>();
 
-        public Impl(final SmartInventory inventory, final Player plyr) {
-            this.inventory = inventory;
+        @NotNull
+        private final Page page;
+
+        @NotNull
+        private final Player player;
+
+        @NotNull
+        private final ClickableItem[][] contents;
+
+        public Impl(@NotNull final Page page, @NotNull final Player plyr) {
+            this.page = page;
             this.player = plyr;
-            this.contents = new ClickableItem[inventory.getRows()][inventory.getColumns()];
+            this.contents = new ClickableItem[page.row()][page.column()];
         }
 
         @Override
-        public SmartInventory inventory() {
-            return this.inventory;
+        public Page page() {
+            return this.page;
         }
 
         @Override
@@ -655,7 +659,7 @@ public interface InventoryContents {
         @Override
         public SlotIterator newIterator(final String id, final SlotIterator.Type type,
                                         final int startRow, final int startColumn) {
-            final SlotIterator iterator = new SlotIterator.Impl(this, this.inventory, type, startRow, startColumn);
+            final SlotIterator iterator = new SlotIterator.Impl(this, type, startRow, startColumn);
             this.iterators.put(id, iterator);
             return iterator;
         }
@@ -663,7 +667,7 @@ public interface InventoryContents {
         @Override
         public SlotIterator newIterator(final SlotIterator.Type type, final int startRow,
                                         final int startColumn) {
-            return new SlotIterator.Impl(this, this.inventory, type, startRow, startColumn);
+            return new SlotIterator.Impl(this, type, startRow, startColumn);
         }
 
         @Override
@@ -679,7 +683,7 @@ public interface InventoryContents {
 
         @Override
         public ClickableItem[][] all() {
-            return this.contents;
+            return this.contents.clone();
         }
 
         @Override
@@ -707,7 +711,7 @@ public interface InventoryContents {
 
         @Override
         public Optional<ClickableItem> get(final int index) {
-            final int count = this.inventory.getColumns();
+            final int count = this.page.column();
             return this.get(index / count, index % count);
         }
 
@@ -729,7 +733,7 @@ public interface InventoryContents {
 
         @Override
         public InventoryContents set(final int index, final ClickableItem item) {
-            final int columnCount = this.inventory.getColumns();
+            final int columnCount = this.page.column();
             return this.set(index / columnCount, index % columnCount, item);
         }
 
@@ -887,13 +891,13 @@ public interface InventoryContents {
 
         @Override
         public InventoryContents fillBorders(final ClickableItem item) {
-            this.fillRect(0, 0, this.inventory.getRows() - 1, this.inventory.getColumns() - 1, item);
+            this.fillRect(0, 0, this.page.row() - 1, this.page.column() - 1, item);
             return this;
         }
 
         @Override
         public InventoryContents fillRect(final int fromIndex, final int toIndex, final ClickableItem item) {
-            final int count = this.inventory.getColumns();
+            final int count = this.page.column();
             return this.fillRect(
                 fromIndex / count, fromIndex % count,
                 toIndex / count, toIndex % count,
@@ -926,7 +930,7 @@ public interface InventoryContents {
 
         @Override
         public InventoryContents fillSquare(final int fromIndex, final int toIndex, final ClickableItem item) {
-            final int count = this.inventory.getColumns();
+            final int count = this.page.column();
             return this.fillSquare(
                 fromIndex / count, fromIndex % count,
                 toIndex / count, toIndex % count,
@@ -961,7 +965,7 @@ public interface InventoryContents {
 
         @Override
         public InventoryContents fillPattern(final Pattern<ClickableItem> pattern, final int startIndex) {
-            final int count = this.inventory.getColumns();
+            final int count = this.page.column();
             return this.fillPattern(pattern, startIndex / count, startIndex % count);
         }
 
@@ -993,7 +997,7 @@ public interface InventoryContents {
         @Override
         public InventoryContents fillPatternRepeating(final Pattern<ClickableItem> pattern,
                                                       final int startIndex, final int endIndex) {
-            final int columnCount = this.inventory.getColumns();
+            final int columnCount = this.page.column();
             final boolean maxSize = endIndex < 0;
 
             if (maxSize) {
@@ -1009,10 +1013,10 @@ public interface InventoryContents {
             Preconditions.checkArgument(pattern.isWrapAround(),
                 "To fill in a repeating pattern wrapAround needs to be enabled for the pattern to work!");
             if (endRow < 0) {
-                endRow = this.inventory.getRows();
+                endRow = this.page.row();
             }
             if (endColumn < 0) {
-                endColumn = this.inventory.getColumns();
+                endColumn = this.page.column();
             }
             Preconditions.checkArgument(startRow < endRow, "The start row needs to be lower than the end row");
             Preconditions.checkArgument(startColumn < endColumn,
@@ -1091,11 +1095,11 @@ public interface InventoryContents {
         }
 
         private void update(final int row, final int column, final ItemStack item) {
-            if (!this.inventory.getManager().getOpenedPlayers(this.inventory).contains(this.player)) {
+            if (!this.page.inventory().getOpenedPlayers(this.page).contains(this.player)) {
                 return;
             }
             final Inventory inv = this.getTopInventory();
-            inv.setItem(this.inventory.getColumns() * row + column, item);
+            inv.setItem(this.page.column() * row + column, item);
         }
 
     }
