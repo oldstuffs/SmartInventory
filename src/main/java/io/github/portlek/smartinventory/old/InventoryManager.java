@@ -43,8 +43,6 @@ public final class InventoryManager {
 
     private final Plugin plugin;
 
-    private final PluginManager pluginmanager = Bukkit.getPluginManager();
-
     private final Map<Player, SmartInventory> inventories = new HashMap<>();
 
     private final Map<Player, InventoryContents> contents = new HashMap<>();
@@ -62,7 +60,7 @@ public final class InventoryManager {
     }
 
     public void init() {
-        this.pluginmanager.registerEvents(new GeneralListener(this), this.plugin);
+        Bukkit.getPluginManager().registerEvents(new GeneralListener(this), this.plugin);
     }
 
     public Optional<InventoryOpener> findOpener(final InventoryType type) {

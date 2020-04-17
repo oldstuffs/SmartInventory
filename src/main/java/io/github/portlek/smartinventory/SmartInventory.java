@@ -30,52 +30,52 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Function;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 
 public final class SmartInventory {
 
-    private static final Listener[] LISTENERS = {
-        new PluginDisableListener(new SmartInventory())
-    };
+    public static final Object LOCK = new Object();
+
+    private static final Function<Plugin, Listener[]> LISTENERS = plugin ->
+        new Listener[]{
+            new PluginDisableListener()
+        };
 
     private static final Queue<Plugin> PLUGIN_QUEUE = new ConcurrentLinkedQueue<>();
 
-    private static void registerListeners(@NotNull final Plugin plugin) {
-        final PluginManager manager = Bukkit.getPluginManager();
-        Arrays.stream(SmartInventory.LISTENERS).forEach(listener ->
-            manager.registerEvents(listener, plugin));
-    }
-
-    public void init(@NotNull final Plugin plugin) {
-        if (SmartInventory.PLUGIN_QUEUE.isEmpty()) {
-            SmartInventory.registerListeners(plugin);
-        }
-        synchronized (this) {
-            SmartInventory.PLUGIN_QUEUE.add(plugin);
-        }
-    }
-
-    public void onPluginDisable(@NotNull final PluginDisableEvent event) {
+    public static void onPluginDisable(@NotNull final PluginDisableEvent event) {
         final Plugin peek = SmartInventory.PLUGIN_QUEUE.peek();
         if (peek != null && !peek.equals(event.getPlugin())) {
-            synchronized (this) {
+            synchronized (SmartInventory.LOCK) {
                 SmartInventory.PLUGIN_QUEUE.remove(event.getPlugin());
                 return;
             }
         }
-        synchronized (this) {
+        synchronized (SmartInventory.LOCK) {
             SmartInventory.PLUGIN_QUEUE.poll();
         }
         Optional.ofNullable(SmartInventory.PLUGIN_QUEUE.peek())
             .filter(Plugin::isEnabled)
             .ifPresent(SmartInventory::registerListeners);
+    }
+
+    public static void init(@NotNull final Plugin plugin) {
+        if (SmartInventory.PLUGIN_QUEUE.isEmpty()) {
+            SmartInventory.registerListeners(plugin);
+        }
+        synchronized (SmartInventory.LOCK) {
+            SmartInventory.PLUGIN_QUEUE.add(plugin);
+        }
+    }
+
+    private static void registerListeners(@NotNull final Plugin plugin) {
+        Arrays.stream(SmartInventory.LISTENERS.apply(plugin)).forEach(listener ->
+            Bukkit.getPluginManager().registerEvents(listener, plugin));
     }
 
 }

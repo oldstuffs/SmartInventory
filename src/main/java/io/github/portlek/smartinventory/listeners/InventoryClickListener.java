@@ -25,16 +25,13 @@
 
 package io.github.portlek.smartinventory.listeners;
 
-import io.github.portlek.smartinventory.SmartInventory;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
-public final class PluginDisableListener implements Listener {
+public final class InventoryClickListener implements Listener {
 
-    @EventHandler
-    public void onPluginDisable(final PluginDisableEvent event) {
-        SmartInventory.onPluginDisable(event);
+    public void onInventoryClick(final InventoryClickEvent event) {
+
     }
 
 }
