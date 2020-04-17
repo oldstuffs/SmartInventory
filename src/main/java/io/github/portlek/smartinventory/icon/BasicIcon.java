@@ -66,17 +66,20 @@ public final class BasicIcon implements Icon {
     @NotNull
     @Override
     public ItemStack calculateItem(@NotNull final InventoryContents contents) {
+        final ItemStack calculated;
         if (this.cansee.test(contents)) {
-            return this.item;
+            calculated = this.item;
+        } else {
+            calculated = this.fallback;
         }
-        return this.fallback;
+        return calculated;
     }
 
     @Override
     public <T extends IconEvent> void accept(@NotNull final T event) {
         final InventoryContents contents = event.contents();
-        if (this.canSee(contents) &&
-            this.canUse(contents)) {
+        if (this.cansee.test(contents) &&
+            this.canuse.test(contents)) {
             final boolean control = this.requirements.stream()
                 .filter(requirement -> requirement.getType().isAssignableFrom(event.getClass()))
                 .map(requirement -> (Requirement<T>) requirement)
@@ -148,18 +151,6 @@ public final class BasicIcon implements Icon {
     public Icon fallback(@NotNull final ItemStack fallback) {
         this.fallback = fallback;
         return this;
-    }
-
-    @NotNull
-    @Override
-    public boolean canSee(@NotNull final InventoryContents contents) {
-        return this.cansee.test(contents);
-    }
-
-    @NotNull
-    @Override
-    public boolean canUse(@NotNull final InventoryContents contents) {
-        return this.canuse.test(contents);
     }
 
 }

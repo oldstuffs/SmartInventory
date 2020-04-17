@@ -95,10 +95,4 @@ public interface Icon {
     @NotNull
     Icon fallback(@NotNull ItemStack fallback);
 
-    @NotNull
-    boolean canSee(@NotNull InventoryContents contents);
-
-    @NotNull
-    boolean canUse(@NotNull InventoryContents contents);
-
 }
