@@ -78,16 +78,24 @@ public final class BasicIcon implements Icon {
         if (this.canSee(contents) &&
             this.canUse(contents)) {
             final boolean control = this.requirements.stream()
-                .filter(requirement -> requirement.getType().equals(event.getClass()))
+                .filter(requirement -> requirement.getType().isAssignableFrom(event.getClass()))
                 .map(requirement -> (Requirement<T>) requirement)
                 .allMatch(requirement -> requirement.test(event));
             if (control) {
                 this.targets.stream()
-                    .filter(target -> target.getType().equals(event.getClass()))
+                    .filter(target -> target.getType().isAssignableFrom(event.getClass()))
                     .map(target -> (Target<T>) target)
                     .forEach(target -> target.accept(event));
             }
         }
+    }
+
+    @SafeVarargs
+    @NotNull
+    @Override
+    public final Icon wheninteract(@NotNull final Consumer<IconEvent> consumer,
+                                   @NotNull final Requirement<IconEvent>... requirements) {
+        return this.target(IconEvent.class, consumer, requirements);
     }
 
     @SafeVarargs

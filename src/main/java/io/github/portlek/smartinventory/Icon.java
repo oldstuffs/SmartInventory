@@ -28,6 +28,7 @@ package io.github.portlek.smartinventory;
 import io.github.portlek.smartinventory.event.ClickEvent;
 import io.github.portlek.smartinventory.event.DragEvent;
 import io.github.portlek.smartinventory.event.IconEvent;
+import io.github.portlek.smartinventory.event.SmartEvent;
 import io.github.portlek.smartinventory.icon.BasicIcon;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
 import java.util.function.Consumer;
@@ -44,7 +45,7 @@ public interface Icon {
 
     static Icon cancel(@NotNull final ItemStack item) {
         return new BasicIcon(item)
-            .canUse(contents -> false);
+            .wheninteract(SmartEvent::cancel);
     }
 
     static Icon empty() {
@@ -57,17 +58,33 @@ public interface Icon {
     <T extends IconEvent> void accept(@NotNull T event);
 
     @NotNull
+    default Icon wheninteract(@NotNull final Consumer<IconEvent> consumer) {
+        return this.wheninteract(consumer, new Requirement[0]);
+    }
+
+    @NotNull
+    Icon wheninteract(@NotNull Consumer<IconEvent> consumer, @NotNull Requirement<IconEvent>... requirements);
+
+    @NotNull
+    default Icon whendrag(@NotNull final Consumer<DragEvent> consumer) {
+        return this.whendrag(consumer, new Requirement[0]);
+    }
+
+    @NotNull
     Icon whendrag(@NotNull Consumer<DragEvent> consumer, @NotNull Requirement<DragEvent>... requirements);
+
+    @NotNull
+    default Icon whenclick(@NotNull final Consumer<ClickEvent> consumer) {
+        return this.whenclick(consumer, new Requirement[0]);
+    }
 
     @NotNull
     Icon whenclick(@NotNull Consumer<ClickEvent> consumer, @NotNull Requirement<ClickEvent>... requirements);
 
-    @NotNull
-    <T extends IconEvent> Icon target(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer,
+    @NotNull <T extends IconEvent> Icon target(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer,
                                                @NotNull Requirement<T>... requirements);
 
-    @NotNull
-    <T extends IconEvent> Icon target(@NotNull Target<T> target);
+    @NotNull <T extends IconEvent> Icon target(@NotNull Target<T> target);
 
     @NotNull
     Icon canSee(@NotNull Predicate<InventoryContents> predicate);
