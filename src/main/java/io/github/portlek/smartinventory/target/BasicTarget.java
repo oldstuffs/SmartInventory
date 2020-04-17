@@ -52,7 +52,7 @@ public final class BasicTarget<T extends SmartEvent> implements Target<T> {
     }
 
     @Override
-    public void handle(@NotNull final T event) {
+    public void accept(@NotNull final T event) {
         final boolean control = Arrays.stream(this.requirements)
             .allMatch(req -> req.test(event));
         if (control) {

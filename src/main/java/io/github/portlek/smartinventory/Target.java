@@ -30,7 +30,7 @@ import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 
-public interface Target<T extends SmartEvent> extends Type<T> {
+public interface Target<T extends SmartEvent> extends Type<T>, Consumer<T> {
 
     @SafeVarargs
     @NotNull
@@ -38,7 +38,5 @@ public interface Target<T extends SmartEvent> extends Type<T> {
                                                  @NotNull final Requirement<T>... requirements) {
         return new BasicTarget<>(clazz, consumer, requirements);
     }
-
-    void handle(@NotNull T event);
 
 }

@@ -85,7 +85,7 @@ public final class BasicIcon implements Icon {
                 this.targets.stream()
                     .filter(target -> target.getType().equals(event.getClass()))
                     .map(target -> (Target<T>) target)
-                    .forEach(target -> target.handle(event));
+                    .forEach(target -> target.accept(event));
             }
         }
     }
