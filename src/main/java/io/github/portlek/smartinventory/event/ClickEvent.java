@@ -25,16 +25,24 @@
 
 package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.old.content.InventoryContents;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 
-public interface SmartEvent {
+public interface ClickEvent extends IconEvent {
+
+    int row();
+
+    int column();
 
     @NotNull
-    InventoryContents contents();
+    ClickType click();
 
-    void cancel();
+    @NotNull
+    InventoryAction action();
 
-    void close();
+    @NotNull
+    InventoryType.SlotType slot();
 
 }

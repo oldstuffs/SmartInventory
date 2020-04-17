@@ -609,6 +609,12 @@ public interface InventoryContents {
     @NotNull
     Player player();
 
+    @NotNull
+    Inventory getBottomInventory();
+
+    @NotNull
+    Inventory getTopInventory();
+
     final class Impl implements InventoryContents {
 
         private final SmartInventory inventory;
@@ -1072,11 +1078,23 @@ public interface InventoryContents {
             return this.player;
         }
 
+        @Override
+        @NotNull
+        public Inventory getBottomInventory() {
+            return this.player.getOpenInventory().getBottomInventory();
+        }
+
+        @Override
+        @NotNull
+        public Inventory getTopInventory() {
+            return this.player.getOpenInventory().getTopInventory();
+        }
+
         private void update(final int row, final int column, final ItemStack item) {
             if (!this.inventory.getManager().getOpenedPlayers(this.inventory).contains(this.player)) {
                 return;
             }
-            final Inventory inv = this.player.getOpenInventory().getTopInventory();
+            final Inventory inv = this.getTopInventory();
             inv.setItem(this.inventory.getColumns() * row + column, item);
         }
 

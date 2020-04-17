@@ -25,16 +25,25 @@
 
 package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.old.content.InventoryContents;
+import io.github.portlek.smartinventory.Icon;
+import java.util.Map;
+import java.util.Set;
+import org.bukkit.event.inventory.DragType;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public interface SmartEvent {
+public interface DragEvent extends IconEvent {
 
     @NotNull
-    InventoryContents contents();
+    DragType drag();
 
-    void cancel();
+    @NotNull
+    Map<Integer, ItemStack> added();
 
-    void close();
+    @NotNull
+    Set<Integer> slots();
+
+    @NotNull
+    ItemStack newcursor();
 
 }

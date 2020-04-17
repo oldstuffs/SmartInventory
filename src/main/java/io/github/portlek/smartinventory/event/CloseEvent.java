@@ -25,16 +25,6 @@
 
 package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.old.content.InventoryContents;
-import org.jetbrains.annotations.NotNull;
-
-public interface SmartEvent {
-
-    @NotNull
-    InventoryContents contents();
-
-    void cancel();
-
-    void close();
+public interface CloseEvent extends SmartEvent {
 
 }

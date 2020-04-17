@@ -28,21 +28,21 @@ package io.github.portlek.smartinventory.icon;
 import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.Requirement;
 import io.github.portlek.smartinventory.Target;
+import io.github.portlek.smartinventory.event.IconEvent;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Predicate;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public final class BasicIcon implements Icon {
 
-    private final Collection<Target<? extends InventoryInteractEvent>> targets = new ArrayList<>();
+    private final Collection<Target<? extends IconEvent>> targets = new ArrayList<>();
 
-    private final Collection<Requirement<? extends InventoryInteractEvent>> requirements = new ArrayList<>();
+    private final Collection<Requirement<? extends IconEvent>> requirements = new ArrayList<>();
 
     @NotNull
     private final ItemStack item;
@@ -70,14 +70,14 @@ public final class BasicIcon implements Icon {
     }
 
     @Override
-    public void accept(@NotNull final InventoryInteractEvent event) {
+    public void accept(@NotNull final IconEvent event) {
 
     }
 
     @SafeVarargs
     @NotNull
     @Override
-    public final Icon target(@NotNull final Target<InventoryInteractEvent>... targets) {
+    public final Icon target(@NotNull final Target<? extends IconEvent>... targets) {
         this.targets.addAll(Arrays.asList(targets));
         return this;
     }
@@ -85,7 +85,7 @@ public final class BasicIcon implements Icon {
     @SafeVarargs
     @NotNull
     @Override
-    public final Icon requirement(@NotNull final Requirement<InventoryInteractEvent>... requirements) {
+    public final Icon requirement(@NotNull final Requirement<? extends IconEvent>... requirements) {
         this.requirements.addAll(Arrays.asList(requirements));
         return this;
     }

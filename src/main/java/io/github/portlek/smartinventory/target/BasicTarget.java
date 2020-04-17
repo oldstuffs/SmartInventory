@@ -30,21 +30,25 @@ import io.github.portlek.smartinventory.Target;
 import io.github.portlek.smartinventory.event.SmartEvent;
 import java.util.Arrays;
 import java.util.function.Consumer;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
 public final class BasicTarget<T extends SmartEvent> implements Target<T> {
 
     @NotNull
     private final Consumer<T> consumer;
 
     @NotNull
-    private final Requirement<T>[] requirement;
+    private final Requirement<T>[] requirements;
+
+    @SafeVarargs
+    public BasicTarget(@NotNull final Consumer<T> consumer, @NotNull final Requirement<T>... requirements) {
+        this.consumer = consumer;
+        this.requirements = requirements;
+    }
 
     @Override
     public void handle(@NotNull final T event) {
-        final boolean control = Arrays.stream(this.requirement)
+        final boolean control = Arrays.stream(this.requirements)
             .allMatch(req -> req.control(event));
         if (control) {
             this.consumer.accept(event);

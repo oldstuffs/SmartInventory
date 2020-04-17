@@ -25,8 +25,11 @@
 
 package io.github.portlek.smartinventory;
 
+import io.github.portlek.smartinventory.event.ClickEvent;
+import io.github.portlek.smartinventory.event.IconEvent;
 import io.github.portlek.smartinventory.icon.BasicIcon;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
+import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.Material;
@@ -37,14 +40,12 @@ import org.jetbrains.annotations.NotNull;
 public interface Icon {
 
     static <T extends InventoryInteractEvent> Icon clickable(@NotNull final ItemStack item,
-                                                             @NotNull final Consumer<InventoryContents>... consumers) {
-        return new BasicIcon(item)
-            .target();
+                                                             @NotNull final Consumer<ClickEvent> event) {
+        return new BasicIcon(item).target(new BasicTarget<>(event));
     }
 
     static <T extends InventoryInteractEvent> Icon cancel(@NotNull final ItemStack item) {
-        return new BasicIcon(item)
-            .canClick(contents -> false);
+        return new BasicIcon(item).canClick(contents -> false);
     }
 
     static <T extends InventoryInteractEvent> Icon empty() {
@@ -54,13 +55,13 @@ public interface Icon {
     @NotNull
     ItemStack calculateItem(@NotNull InventoryContents contents);
 
-    void accept(@NotNull InventoryInteractEvent event);
+    void accept(@NotNull IconEvent event);
 
     @NotNull
-    Icon target(@NotNull Target<InventoryInteractEvent>... targets);
+    Icon target(@NotNull Target<? extends IconEvent>... targets);
 
     @NotNull
-    Icon requirement(@NotNull Requirement<InventoryInteractEvent>... requirements);
+    Icon requirement(@NotNull Requirement<? extends IconEvent>... requirements);
 
     @NotNull
     Icon canSee(@NotNull Predicate<InventoryContents> predicate);
