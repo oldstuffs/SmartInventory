@@ -26,18 +26,12 @@
 package io.github.portlek.smartinventory;
 
 import lombok.NonNull;
-import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public final class Test {
 
-    public void a(@NonNull final Player player) {
-        /*
-        final SmartInventory inventory = SmartInventory.chain(Plugin.getAPI().inventoryManager)
-            .provided(new TestProvided())
-            .otherStuffs()
-            .build();
-        inventory.open(player);
-        */
+    public void a(@NonNull final Plugin plugin) {
+        SmartInventory.init(plugin);
     }
 
 }

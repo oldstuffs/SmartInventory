@@ -25,6 +25,55 @@
 
 package io.github.portlek.smartinventory;
 
+import java.util.Arrays;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.jetbrains.annotations.NotNull;
+
 public final class SmartInventory {
-    
+
+    private static final Listener[] LISTENERS = {
+
+    };
+
+    private static final Queue<Plugin> PLUGIN_QUEUE = new ConcurrentLinkedQueue<>();
+
+    private static void registerListeners(@NotNull final Plugin plugin) {
+        final PluginManager manager = Bukkit.getPluginManager();
+        Arrays.stream(SmartInventory.LISTENERS).forEach(listener ->
+            manager.registerEvents(listener, plugin));
+    }
+
+    public void init(@NotNull final Plugin plugin) {
+        if (SmartInventory.PLUGIN_QUEUE.isEmpty()) {
+            SmartInventory.registerListeners(plugin);
+        }
+        synchronized (this) {
+            SmartInventory.PLUGIN_QUEUE.add(plugin);
+        }
+    }
+
+    public void onPluginDisable(@NotNull final PluginDisableEvent event) {
+        if (!SmartInventory.PLUGIN_QUEUE.peek().equals(event.getPlugin())) {
+            synchronized (this) {
+                SmartInventory.PLUGIN_QUEUE.remove(event.getPlugin());
+                return;
+            }
+        }
+
+        synchronized (this) {
+            SmartInventory.PLUGIN_QUEUE.poll();
+        }
+
+        final Plugin nextPlugin = SmartInventory.PLUGIN_QUEUE.peek();
+        if (nextPlugin != null && nextPlugin.isEnabled()) {
+            SmartInventory.registerListeners(nextPlugin);
+        }
+    }
+
 }
