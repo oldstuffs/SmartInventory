@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Target<T extends SmartEvent> extends Type<T> {
 
+    @SafeVarargs
     @NotNull
     static <T extends SmartEvent> Target<T> from(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
                                                  @NotNull final Requirement<T>... requirements) {

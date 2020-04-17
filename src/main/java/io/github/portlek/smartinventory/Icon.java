@@ -57,26 +57,17 @@ public interface Icon {
     <T extends IconEvent> void accept(@NotNull T event);
 
     @NotNull
-    default Icon whendrag(@NotNull final Consumer<DragEvent> consumer,
-                          @NotNull final Requirement<DragEvent>... requirements) {
-        return this.target(DragEvent.class, consumer, requirements);
-    }
+    Icon whendrag(@NotNull Consumer<DragEvent> consumer, @NotNull Requirement<DragEvent>... requirements);
 
     @NotNull
-    default Icon whenclick(@NotNull final Consumer<ClickEvent> consumer,
-                           @NotNull final Requirement<ClickEvent>... requirements) {
-        return this.target(ClickEvent.class, consumer, requirements);
-    }
+    Icon whenclick(@NotNull Consumer<ClickEvent> consumer, @NotNull Requirement<ClickEvent>... requirements);
 
     @NotNull
-    default <T extends IconEvent> Icon target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                                              @NotNull final Requirement<T>... requirements) {
-        return this.target(Target.from(clazz, consumer, requirements));
-    }
+    <T extends IconEvent> Icon target(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer,
+                                               @NotNull Requirement<T>... requirements);
 
-    @NotNull <T extends IconEvent> Icon target(@NotNull Target<T> target);
-
-    @NotNull <T extends IconEvent> Icon requirement(@NotNull Requirement<T> requirement);
+    @NotNull
+    <T extends IconEvent> Icon target(@NotNull Target<T> target);
 
     @NotNull
     Icon canSee(@NotNull Predicate<InventoryContents> predicate);

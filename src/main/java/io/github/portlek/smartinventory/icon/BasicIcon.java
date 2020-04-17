@@ -28,10 +28,14 @@ package io.github.portlek.smartinventory.icon;
 import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.Requirement;
 import io.github.portlek.smartinventory.Target;
+import io.github.portlek.smartinventory.event.ClickEvent;
+import io.github.portlek.smartinventory.event.DragEvent;
 import io.github.portlek.smartinventory.event.IconEvent;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
+import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -76,7 +80,7 @@ public final class BasicIcon implements Icon {
             final boolean control = this.requirements.stream()
                 .filter(requirement -> requirement.getType().equals(event.getClass()))
                 .map(requirement -> (Requirement<T>) requirement)
-                .allMatch(requirement -> requirement.control(event));
+                .allMatch(requirement -> requirement.test(event));
             if (control) {
                 this.targets.stream()
                     .filter(target -> target.getType().equals(event.getClass()))
@@ -86,17 +90,34 @@ public final class BasicIcon implements Icon {
         }
     }
 
+    @SafeVarargs
     @NotNull
     @Override
-    public <T extends IconEvent> Icon target(@NotNull final Target<T> target) {
-        this.targets.add(target);
-        return this;
+    public final Icon whendrag(@NotNull final Consumer<DragEvent> consumer,
+                               @NotNull final Requirement<DragEvent>... requirements) {
+        return this.target(DragEvent.class, consumer, requirements);
+    }
+
+    @SafeVarargs
+    @NotNull
+    @Override
+    public final Icon whenclick(@NotNull final Consumer<ClickEvent> consumer,
+                                @NotNull final Requirement<ClickEvent>... requirements) {
+        return this.target(ClickEvent.class, consumer, requirements);
+    }
+
+    @SafeVarargs
+    @NotNull
+    @Override
+    public final <T extends IconEvent> Icon target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
+                                                   @NotNull final Requirement<T>... requirements) {
+        return this.target(new BasicTarget<>(clazz, consumer, requirements));
     }
 
     @NotNull
     @Override
-    public final <T extends IconEvent> Icon requirement(@NotNull final Requirement<T> requirement) {
-        this.requirements.add(requirement);
+    public <T extends IconEvent> Icon target(@NotNull final Target<T> target) {
+        this.targets.add(target);
         return this;
     }
 

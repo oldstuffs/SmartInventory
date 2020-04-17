@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 
-public class BasicTarget<T extends SmartEvent> implements Target<T> {
+public final class BasicTarget<T extends SmartEvent> implements Target<T> {
 
     @NotNull
     private final Class<T> clazz;
@@ -43,17 +43,18 @@ public class BasicTarget<T extends SmartEvent> implements Target<T> {
     @NotNull
     private final Requirement<T>[] requirements;
 
+    @SafeVarargs
     public BasicTarget(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                       @NotNull final Requirement<T>[] requirements) {
+                       @NotNull final Requirement<T>... requirements) {
         this.clazz = clazz;
         this.consumer = consumer;
-        this.requirements = requirements;
+        this.requirements = requirements.clone();
     }
 
     @Override
     public void handle(@NotNull final T event) {
         final boolean control = Arrays.stream(this.requirements)
-            .allMatch(req -> req.control(event));
+            .allMatch(req -> req.test(event));
         if (control) {
             this.consumer.accept(event);
         }

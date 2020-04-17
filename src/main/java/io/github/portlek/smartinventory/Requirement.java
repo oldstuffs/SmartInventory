@@ -26,10 +26,8 @@
 package io.github.portlek.smartinventory;
 
 import io.github.portlek.smartinventory.event.SmartEvent;
-import org.jetbrains.annotations.NotNull;
+import java.util.function.Predicate;
 
-public interface Requirement<T extends SmartEvent> extends Type<T> {
-
-    boolean control(@NotNull T event);
+public interface Requirement<T extends SmartEvent> extends Type<T>, Predicate<T> {
 
 }
