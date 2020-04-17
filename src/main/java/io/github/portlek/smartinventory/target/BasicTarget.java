@@ -23,14 +23,32 @@
  *
  */
 
-package io.github.portlek.smartinventory;
+package io.github.portlek.smartinventory.target;
 
+import io.github.portlek.smartinventory.Requirement;
+import io.github.portlek.smartinventory.Target;
 import io.github.portlek.smartinventory.event.SmartEvent;
-import org.bukkit.event.inventory.InventoryEvent;
+import java.util.Arrays;
+import java.util.function.Consumer;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-public interface Target<T extends SmartEvent> {
+@RequiredArgsConstructor
+public final class BasicTarget<T extends SmartEvent> implements Target<T> {
 
-    void handle(@NotNull T event);
+    @NotNull
+    private final Consumer<T> consumer;
+
+    @NotNull
+    private final Requirement<T>[] requirement;
+
+    @Override
+    public void handle(@NotNull final T event) {
+        final boolean control = Arrays.stream(this.requirement)
+            .allMatch(req -> req.control(event));
+        if (control) {
+            this.consumer.accept(event);
+        }
+    }
 
 }

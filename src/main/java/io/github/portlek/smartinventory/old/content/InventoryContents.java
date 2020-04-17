@@ -33,6 +33,7 @@ import java.util.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>
@@ -605,6 +606,9 @@ public interface InventoryContents {
      */
     boolean isEditable(SlotPos slot);
 
+    @NotNull
+    Player player();
+
     final class Impl implements InventoryContents {
 
         private final SmartInventory inventory;
@@ -1060,6 +1064,12 @@ public interface InventoryContents {
         @Override
         public boolean isEditable(final SlotPos slot) {
             return this.editableSlots.contains(slot);
+        }
+
+        @NotNull
+        @Override
+        public Player player() {
+            return this.player;
         }
 
         private void update(final int row, final int column, final ItemStack item) {

@@ -26,15 +26,21 @@
 package io.github.portlek.smartinventory.listeners;
 
 import io.github.portlek.smartinventory.SmartInventory;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class PluginDisableListener implements Listener {
+
+    @NotNull
+    private final SmartInventory inventory;
 
     @EventHandler
     public void onPluginDisable(final PluginDisableEvent event) {
-        new SmartInventory().onPluginDisable(event);
+        this.inventory.onPluginDisable(event);
     }
 
 }

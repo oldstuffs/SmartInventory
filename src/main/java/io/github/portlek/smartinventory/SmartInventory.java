@@ -25,13 +25,16 @@
 
 package io.github.portlek.smartinventory;
 
+import io.github.portlek.smartinventory.listeners.PluginDisableListener;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 public final class SmartInventory {
 
     private static final Listener[] LISTENERS = {
-
+        new PluginDisableListener(new SmartInventory())
     };
 
     private static final Queue<Plugin> PLUGIN_QUEUE = new ConcurrentLinkedQueue<>();
@@ -60,7 +63,8 @@ public final class SmartInventory {
     }
 
     public void onPluginDisable(@NotNull final PluginDisableEvent event) {
-        if (!SmartInventory.PLUGIN_QUEUE.peek().equals(event.getPlugin())) {
+        final Plugin peek = SmartInventory.PLUGIN_QUEUE.peek();
+        if (peek != null && !peek.equals(event.getPlugin())) {
             synchronized (this) {
                 SmartInventory.PLUGIN_QUEUE.remove(event.getPlugin());
                 return;

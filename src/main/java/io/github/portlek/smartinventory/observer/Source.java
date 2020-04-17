@@ -23,14 +23,16 @@
  *
  */
 
-package io.github.portlek.smartinventory;
+package io.github.portlek.smartinventory.observer;
 
-import io.github.portlek.smartinventory.event.SmartEvent;
-import org.bukkit.event.inventory.InventoryEvent;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
-public interface Target<T extends SmartEvent> {
+public interface Source<T> {
 
-    void handle(@NotNull T event);
+    void subscribe(@NonNull Target<T> target);
+
+    void unsubscribe(@NonNull Target<T> target);
+
+    void notifyTargets(@NonNull T argument);
 
 }

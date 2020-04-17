@@ -25,16 +25,12 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.old.content.InventoryContents;
-import lombok.NonNull;
-import org.bukkit.entity.Player;
+import io.github.portlek.smartinventory.event.SmartEvent;
+import org.bukkit.event.inventory.InventoryEvent;
+import org.jetbrains.annotations.NotNull;
 
-public interface ProviderContext {
+public interface Requirement<T extends SmartEvent> {
 
-    @NonNull
-    Player player();
-
-    @NonNull
-    InventoryContents contents();
+    boolean control(@NotNull T event);
 
 }
