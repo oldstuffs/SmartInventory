@@ -29,9 +29,11 @@ import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.Target;
 import io.github.portlek.smartinventory.event.IconEvent;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
+import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +43,7 @@ public final class BasicIcon implements Icon {
 
     private final Collection<Target<? extends IconEvent>> targets = new ArrayList<>();
 
-    private final Collection<Predicate<? extends IconEvent>> requirements = new ArrayList<>();
+    private final Collection<Predicate<? extends IconEvent>> predicates = new ArrayList<>();
 
     @NotNull
     private final ItemStack item;
@@ -73,6 +75,13 @@ public final class BasicIcon implements Icon {
 
     }
 
+    @NotNull
+    @Override
+    public <T extends IconEvent> Icon target(@NotNull final Consumer<T> consumer,
+                                             @NotNull final Predicate<T>... predicates) {
+        return this.target(new BasicTarget<>(consumer, predicates));
+    }
+
     @SafeVarargs
     @NotNull
     @Override
@@ -84,8 +93,8 @@ public final class BasicIcon implements Icon {
     @SafeVarargs
     @NotNull
     @Override
-    public final <T extends IconEvent> Icon requirement(@NotNull final Predicate<T>... requirements) {
-        this.requirements.addAll(Arrays.asList(requirements));
+    public final <T extends IconEvent> Icon requirement(@NotNull final Predicate<T>... predicates) {
+        this.predicates.addAll(Arrays.asList(predicates));
         return this;
     }
 
