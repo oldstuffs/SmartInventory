@@ -26,14 +26,12 @@
 package io.github.portlek.smartinventory.icon;
 
 import io.github.portlek.smartinventory.Icon;
+import io.github.portlek.smartinventory.Requirement;
 import io.github.portlek.smartinventory.Target;
 import io.github.portlek.smartinventory.event.IconEvent;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
-import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -43,7 +41,7 @@ public final class BasicIcon implements Icon {
 
     private final Collection<Target<? extends IconEvent>> targets = new ArrayList<>();
 
-    private final Collection<Predicate<? extends IconEvent>> predicates = new ArrayList<>();
+    private final Collection<Requirement<? extends IconEvent>> requirements = new ArrayList<>();
 
     @NotNull
     private final ItemStack item;
@@ -52,7 +50,7 @@ public final class BasicIcon implements Icon {
     private Predicate<InventoryContents> cansee = contents -> true;
 
     @NotNull
-    private Predicate<InventoryContents> canclick = contents -> true;
+    private Predicate<InventoryContents> canuse = contents -> true;
 
     @NotNull
     private ItemStack fallback = new ItemStack(Material.AIR);
@@ -71,30 +69,34 @@ public final class BasicIcon implements Icon {
     }
 
     @Override
-    public void accept(@NotNull final IconEvent event) {
-
+    public <T extends IconEvent> void accept(@NotNull final T event) {
+        final InventoryContents contents = event.contents();
+        if (this.canSee(contents) &&
+            this.canUse(contents)) {
+            final boolean control = this.requirements.stream()
+                .filter(requirement -> requirement.getType().equals(event.getClass()))
+                .map(requirement -> (Requirement<T>) requirement)
+                .allMatch(requirement -> requirement.control(event));
+            if (control) {
+                this.targets.stream()
+                    .filter(target -> target.getType().equals(event.getClass()))
+                    .map(target -> (Target<T>) target)
+                    .forEach(target -> target.handle(event));
+            }
+        }
     }
 
     @NotNull
     @Override
-    public <T extends IconEvent> Icon target(@NotNull final Consumer<T> consumer,
-                                             @NotNull final Predicate<T>... predicates) {
-        return this.target(new BasicTarget<>(consumer, predicates));
-    }
-
-    @SafeVarargs
-    @NotNull
-    @Override
-    public final <T extends IconEvent> Icon target(@NotNull final Target<T>... targets) {
-        this.targets.addAll(Arrays.asList(targets));
+    public <T extends IconEvent> Icon target(@NotNull final Target<T> target) {
+        this.targets.add(target);
         return this;
     }
 
-    @SafeVarargs
     @NotNull
     @Override
-    public final <T extends IconEvent> Icon requirement(@NotNull final Predicate<T>... predicates) {
-        this.predicates.addAll(Arrays.asList(predicates));
+    public final <T extends IconEvent> Icon requirement(@NotNull final Requirement<T> requirement) {
+        this.requirements.add(requirement);
         return this;
     }
 
@@ -107,8 +109,8 @@ public final class BasicIcon implements Icon {
 
     @NotNull
     @Override
-    public Icon canClick(@NotNull final Predicate<InventoryContents> predicate) {
-        this.canclick = predicate;
+    public Icon canUse(@NotNull final Predicate<InventoryContents> predicate) {
+        this.canuse = predicate;
         return this;
     }
 
@@ -127,8 +129,8 @@ public final class BasicIcon implements Icon {
 
     @NotNull
     @Override
-    public boolean canClick(@NotNull final InventoryContents contents) {
-        return this.canclick.test(contents);
+    public boolean canUse(@NotNull final InventoryContents contents) {
+        return this.canuse.test(contents);
     }
 
 }

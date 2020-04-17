@@ -25,6 +25,8 @@
 
 package io.github.portlek.smartinventory;
 
+import io.github.portlek.smartinventory.event.ClickEvent;
+import io.github.portlek.smartinventory.event.DragEvent;
 import io.github.portlek.smartinventory.event.IconEvent;
 import io.github.portlek.smartinventory.icon.BasicIcon;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
@@ -36,15 +38,13 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Icon {
 
-    @SafeVarargs
-    static <T extends IconEvent> Icon from(@NotNull final ItemStack item, @NotNull final Consumer<T> event,
-                                           @NotNull final Predicate<T>... predicates) {
-        return new BasicIcon(item).target(event, predicates);
+    static <T extends IconEvent> Icon from(@NotNull final ItemStack item) {
+        return new BasicIcon(item);
     }
 
     static Icon cancel(@NotNull final ItemStack item) {
         return new BasicIcon(item)
-            .canClick(contents -> false);
+            .canUse(contents -> false);
     }
 
     static Icon empty() {
@@ -54,19 +54,35 @@ public interface Icon {
     @NotNull
     ItemStack calculateItem(@NotNull InventoryContents contents);
 
-    void accept(@NotNull IconEvent event);
+    <T extends IconEvent> void accept(@NotNull T event);
 
-    @NotNull <T extends IconEvent> Icon target(@NotNull Consumer<T> consumer, @NotNull Predicate<T>... predicates);
+    @NotNull
+    default Icon whendrag(@NotNull final Consumer<DragEvent> consumer,
+                          @NotNull final Requirement<DragEvent>... requirements) {
+        return this.target(DragEvent.class, consumer, requirements);
+    }
 
-    @NotNull <T extends IconEvent> Icon target(@NotNull Target<T>... targets);
+    @NotNull
+    default Icon whenclick(@NotNull final Consumer<ClickEvent> consumer,
+                           @NotNull final Requirement<ClickEvent>... requirements) {
+        return this.target(ClickEvent.class, consumer, requirements);
+    }
 
-    @NotNull <T extends IconEvent> Icon requirement(@NotNull Predicate<T>... predicates);
+    @NotNull
+    default <T extends IconEvent> Icon target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
+                                              @NotNull final Requirement<T>... requirements) {
+        return this.target(Target.from(clazz, consumer, requirements));
+    }
+
+    @NotNull <T extends IconEvent> Icon target(@NotNull Target<T> target);
+
+    @NotNull <T extends IconEvent> Icon requirement(@NotNull Requirement<T> requirement);
 
     @NotNull
     Icon canSee(@NotNull Predicate<InventoryContents> predicate);
 
     @NotNull
-    Icon canClick(@NotNull Predicate<InventoryContents> predicate);
+    Icon canUse(@NotNull Predicate<InventoryContents> predicate);
 
     @NotNull
     Icon fallback(@NotNull ItemStack fallback);
@@ -75,6 +91,6 @@ public interface Icon {
     boolean canSee(@NotNull InventoryContents contents);
 
     @NotNull
-    boolean canClick(@NotNull InventoryContents contents);
+    boolean canUse(@NotNull InventoryContents contents);
 
 }

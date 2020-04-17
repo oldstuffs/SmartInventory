@@ -25,19 +25,11 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.event.SmartEvent;
-import io.github.portlek.smartinventory.target.BasicTarget;
-import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 
-public interface Target<T extends SmartEvent> extends Type<T> {
+public interface Type<T> {
 
     @NotNull
-    static <T extends SmartEvent> Target<T> from(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                                                 @NotNull final Requirement<T>... requirements) {
-        return new BasicTarget<>(clazz, consumer, requirements);
-    }
-
-    void handle(@NotNull T event);
+    Class<T> getType();
 
 }
