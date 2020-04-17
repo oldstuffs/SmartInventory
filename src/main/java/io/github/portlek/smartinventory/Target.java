@@ -26,7 +26,6 @@
 package io.github.portlek.smartinventory;
 
 import io.github.portlek.smartinventory.event.SmartEvent;
-import org.bukkit.event.inventory.InventoryEvent;
 import org.jetbrains.annotations.NotNull;
 
 public interface Target<T extends SmartEvent> {

@@ -25,11 +25,11 @@
 
 package io.github.portlek.smartinventory.target;
 
-import io.github.portlek.smartinventory.Requirement;
 import io.github.portlek.smartinventory.Target;
 import io.github.portlek.smartinventory.event.SmartEvent;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 
 public final class BasicTarget<T extends SmartEvent> implements Target<T> {
@@ -38,10 +38,10 @@ public final class BasicTarget<T extends SmartEvent> implements Target<T> {
     private final Consumer<T> consumer;
 
     @NotNull
-    private final Requirement<T>[] requirements;
+    private final Predicate<T>[] requirements;
 
     @SafeVarargs
-    public BasicTarget(@NotNull final Consumer<T> consumer, @NotNull final Requirement<T>... requirements) {
+    public BasicTarget(@NotNull final Consumer<T> consumer, @NotNull final Predicate<T>... requirements) {
         this.consumer = consumer;
         this.requirements = requirements;
     }
@@ -49,7 +49,7 @@ public final class BasicTarget<T extends SmartEvent> implements Target<T> {
     @Override
     public void handle(@NotNull final T event) {
         final boolean control = Arrays.stream(this.requirements)
-            .allMatch(req -> req.control(event));
+            .allMatch(req -> req.test(event));
         if (control) {
             this.consumer.accept(event);
         }

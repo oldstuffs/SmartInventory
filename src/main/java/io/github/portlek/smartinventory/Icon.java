@@ -26,6 +26,7 @@
 package io.github.portlek.smartinventory;
 
 import io.github.portlek.smartinventory.event.ClickEvent;
+import io.github.portlek.smartinventory.event.DragEvent;
 import io.github.portlek.smartinventory.event.IconEvent;
 import io.github.portlek.smartinventory.icon.BasicIcon;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
@@ -33,22 +34,31 @@ import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public interface Icon {
 
-    static <T extends InventoryInteractEvent> Icon clickable(@NotNull final ItemStack item,
-                                                             @NotNull final Consumer<ClickEvent> event) {
-        return new BasicIcon(item).target(new BasicTarget<>(event));
+    @SafeVarargs
+    static <T extends DragEvent> Icon draggable(@NotNull final ItemStack item,
+                                                @NotNull final Consumer<T> event,
+                                                @NotNull final Predicate<T>... requirements) {
+        return new BasicIcon(item).target(new BasicTarget<>(event, requirements));
     }
 
-    static <T extends InventoryInteractEvent> Icon cancel(@NotNull final ItemStack item) {
-        return new BasicIcon(item).canClick(contents -> false);
+    @SafeVarargs
+    static <T extends ClickEvent> Icon clickable(@NotNull final ItemStack item,
+                                                 @NotNull final Consumer<T> event,
+                                                 @NotNull final Predicate<T>... requirements) {
+        return new BasicIcon(item).target(new BasicTarget<>(event, requirements));
     }
 
-    static <T extends InventoryInteractEvent> Icon empty() {
+    static Icon cancel(@NotNull final ItemStack item) {
+        return new BasicIcon(item)
+            .canClick(contents -> false);
+    }
+
+    static Icon empty() {
         return new BasicIcon(new ItemStack(Material.AIR));
     }
 
@@ -57,11 +67,9 @@ public interface Icon {
 
     void accept(@NotNull IconEvent event);
 
-    @NotNull
-    Icon target(@NotNull Target<? extends IconEvent>... targets);
+    @NotNull <T extends IconEvent> Icon target(@NotNull Target<T>... targets);
 
-    @NotNull
-    Icon requirement(@NotNull Requirement<? extends IconEvent>... requirements);
+    @NotNull <T extends IconEvent> Icon requirement(@NotNull Predicate<T>... requirements);
 
     @NotNull
     Icon canSee(@NotNull Predicate<InventoryContents> predicate);
