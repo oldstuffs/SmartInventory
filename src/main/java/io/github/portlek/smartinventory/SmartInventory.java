@@ -26,11 +26,12 @@
 package io.github.portlek.smartinventory;
 
 import io.github.portlek.smartinventory.listeners.InventoryClickListener;
+import io.github.portlek.smartinventory.listeners.InventoryCloseListener;
+import io.github.portlek.smartinventory.listeners.InventoryOpenListener;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
 import io.github.portlek.smartinventory.old.opener.ChestInventoryOpener;
 import io.github.portlek.smartinventory.old.opener.InventoryOpener;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -40,12 +41,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public final class SmartInventory {
-
-    private static final Consumer<SmartInventory> REGISTER_LISTENERS = inventory ->
-        Collections.singletonList(
-            new InventoryClickListener(inventory)
-        ).forEach(listener ->
-            Bukkit.getPluginManager().registerEvents(listener, inventory.plugin()));
 
     @NotNull
     private final Plugin plugin;
@@ -62,15 +57,18 @@ public final class SmartInventory {
 
     private final Collection<InventoryOpener> openers = new ArrayList<>();
 
-    private SmartInventory(@NotNull final Plugin plugin) {
+    public SmartInventory(@NotNull final Plugin plugin) {
         this.plugin = plugin;
     }
 
     @NotNull
-    public static SmartInventory init(@NotNull final Plugin plugin) {
-        final SmartInventory inventory = new SmartInventory(plugin);
-        SmartInventory.REGISTER_LISTENERS.accept(inventory);
-        return inventory;
+    public void init() {
+        Arrays.asList(
+            new InventoryClickListener(this),
+            new InventoryOpenListener(this),
+            new InventoryCloseListener(this)
+        ).forEach(listener ->
+            Bukkit.getPluginManager().registerEvents(listener, this.plugin()));
     }
 
     @NotNull
@@ -127,7 +125,7 @@ public final class SmartInventory {
         this.contents.clear();
     }
 
-    public void cancelUpdateTask(final Player player) {
+    public void stopTick(final Player player) {
         Optional.ofNullable(this.tasks.get(player)).ifPresent(runnable -> {
             Bukkit.getScheduler().cancelTask(runnable.getTaskId());
             this.tasks.remove(player);

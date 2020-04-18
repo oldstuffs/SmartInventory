@@ -32,13 +32,11 @@ import io.github.portlek.smartinventory.Target;
 import io.github.portlek.smartinventory.event.CloseEvent;
 import io.github.portlek.smartinventory.event.OpenEvent;
 import io.github.portlek.smartinventory.event.PageEvent;
-import io.github.portlek.smartinventory.event.PgCloseEvent;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
 import io.github.portlek.smartinventory.old.opener.InventoryOpener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -50,8 +48,8 @@ public final class BasicPage implements Page {
     private final Collection<Target<? extends PageEvent>> targets = new ArrayList<>();
 
     private final Predicate<PageEvent> control = event ->
-        event instanceof CloseEvent && this.canclose.test(event.contents().player()) ||
-            event instanceof OpenEvent && this.canopen.test(event.contents().player());
+        event instanceof CloseEvent && this.canclose.test((CloseEvent) event) ||
+            event instanceof OpenEvent && this.canopen.test((OpenEvent) event);
 
     @NotNull
     private final SmartInventory inventory;
@@ -69,15 +67,15 @@ public final class BasicPage implements Page {
 
     private int column = 9;
 
-    private long tick;
+    private long tick = 1L;
 
-    private boolean async;
-
-    @NotNull
-    private Predicate<Player> canopen = player -> true;
+    private boolean async = false;
 
     @NotNull
-    private Predicate<Player> canclose = player -> true;
+    private Predicate<OpenEvent> canopen = event -> true;
+
+    @NotNull
+    private Predicate<CloseEvent> canclose = event -> true;
 
     public BasicPage(@NotNull final SmartInventory inventory, @NotNull final InventoryProvided provided) {
         this.inventory = inventory;
@@ -169,14 +167,29 @@ public final class BasicPage implements Page {
 
     @NotNull
     @Override
+    public <T extends PageEvent> Page target(@NotNull final Target<T> target) {
+        this.targets.add(target);
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public Page canOpen(@NotNull final Predicate<OpenEvent> predicate) {
+        this.canopen = predicate;
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public Page canClose(@NotNull final Predicate<CloseEvent> predicate) {
+        this.canclose = predicate;
+        return this;
+    }
+
+    @NotNull
+    @Override
     public Inventory open(@NotNull final Player player, final int page, @NotNull final Map<String, Object> properties) {
-        final Optional<Page> oldpage = this.inventory.getPage(player);
-        final Optional<InventoryContents> oldcontents = this.inventory.getContents(player);
-        oldpage.ifPresent(old -> {
-            oldcontents.map(PgCloseEvent::new)
-                .ifPresent(this::accept);
-            this.inventory.removePage(player);
-        });
+        this.close(player);
         final InventoryContents contents = new InventoryContents.Impl(this, player);
         contents.pagination().page(page);
         properties.forEach(contents::setProperty);
@@ -192,25 +205,12 @@ public final class BasicPage implements Page {
         return handle;
     }
 
-    @NotNull
     @Override
-    public <T extends PageEvent> Page target(@NotNull final Target<T> target) {
-        this.targets.add(target);
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public Page canOpen(@NotNull final Predicate<Player> predicate) {
-        this.canopen = predicate;
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public Page canClose(@NotNull final Predicate<Player> predicate) {
-        this.canclose = predicate;
-        return this;
+    public void close(@NotNull final Player player) {
+        player.closeInventory();
+        this.inventory.removePage(player);
+        this.inventory.removeContent(player);
+        this.inventory.stopTick(player);
     }
 
 }

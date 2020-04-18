@@ -23,8 +23,35 @@
  *
  */
 
-package io.github.portlek.smartinventory;
+package io.github.portlek.smartinventory.listeners;
 
-public interface Pane {
+import io.github.portlek.smartinventory.SmartInventory;
+import io.github.portlek.smartinventory.event.PgOpenEvent;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.jetbrains.annotations.NotNull;
+
+public final class InventoryOpenListener implements Listener {
+
+    @NotNull
+    private final SmartInventory inventory;
+
+    public InventoryOpenListener(@NotNull final SmartInventory inventory) {
+        this.inventory = inventory;
+    }
+
+    public void onInventoryOpen(final InventoryOpenEvent event) {
+        final HumanEntity human = event.getPlayer();
+        if (human instanceof Player) {
+            final Player player = (Player) human;
+            this.inventory.getPage(player).ifPresent(old ->
+                this.inventory.getContents(player)
+                    .map(contents ->
+                        new PgOpenEvent(this.inventory.plugin(), event, contents))
+                    .ifPresent(old::accept));
+        }
+    }
 
 }
