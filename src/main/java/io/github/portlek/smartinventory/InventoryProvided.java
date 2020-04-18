@@ -25,14 +25,15 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.observer.Target;
 import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.observer.Target;
 import org.jetbrains.annotations.NotNull;
 
 public interface InventoryProvided extends Target<InventoryContents> {
 
     void init(@NotNull InventoryContents contents);
 
-    void tick(@NotNull InventoryContents contents);
+    default void tick(@NotNull final InventoryContents contents) {
+    }
 
 }
