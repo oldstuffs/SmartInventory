@@ -117,17 +117,4 @@ public final class GeneralListener implements Listener {
         });
     }
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onPluginDisable(final PluginDisableEvent event) {
-        new HashMap<>(this.manager.getInventories()).forEach((player, inv) -> {
-            inv.getListeners().stream()
-                .filter(listener -> listener.getType().equals(PluginDisableEvent.class))
-                // FIXME: 23.02.2020 We should not use casting.
-                .forEach(listener -> ((InventoryListener<PluginDisableEvent>) listener).accept(event));
-            inv.close(player);
-        });
-        this.manager.clearInventories();
-        this.manager.clearContents();
-    }
-
 }

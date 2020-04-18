@@ -23,33 +23,47 @@
  *
  */
 
-package io.github.portlek.smartinventory.listeners;
+package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.SmartInventory;
-import io.github.portlek.smartinventory.event.PlyrQuitEvent;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
+import io.github.portlek.smartinventory.old.content.InventoryContents;
+import org.bukkit.Bukkit;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public final class PlayerQuitListener implements Listener {
+public final class PgClickEvent implements PageClickEvent {
 
     @NotNull
-    private final SmartInventory inventory;
+    private final Plugin plugin;
 
-    public PlayerQuitListener(@NotNull final SmartInventory inventory) {
-        this.inventory = inventory;
+    @NotNull
+    private final InventoryClickEvent event;
+
+    @NotNull
+    private final InventoryContents contents;
+
+    public PgClickEvent(@NotNull final Plugin plugin, @NotNull final InventoryClickEvent event,
+                        @NotNull final InventoryContents contents) {
+        this.plugin = plugin;
+        this.event = event;
+        this.contents = contents;
     }
 
-    @EventHandler
-    public void onPlayerQuit(final PlayerQuitEvent event) {
-        final Player player = event.getPlayer();
-        this.inventory.getPage(player).ifPresent(page ->
-            this.inventory.getContents(player).ifPresent(contents ->
-                page.accept(new PlyrQuitEvent(contents))));
-        this.inventory.removePage(player);
-        this.inventory.removeContent(player);
+    @NotNull
+    @Override
+    public InventoryContents contents() {
+        return this.contents;
+    }
+
+    @Override
+    public void cancel() {
+        this.event.setCancelled(true);
+    }
+
+    @Override
+    public void close() {
+        Bukkit.getScheduler().runTaskLater(this.plugin, () ->
+            this.contents.player().closeInventory(), 1L);
     }
 
 }

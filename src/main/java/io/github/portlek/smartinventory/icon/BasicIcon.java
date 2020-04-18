@@ -58,6 +58,12 @@ public final class BasicIcon implements Icon {
 
     @NotNull
     @Override
+    public ItemStack calculateItem() {
+        return this.item;
+    }
+
+    @NotNull
+    @Override
     public ItemStack calculateItem(@NotNull final InventoryContents contents) {
         final ItemStack calculated;
         if (this.cansee.test(contents)) {
@@ -89,6 +95,13 @@ public final class BasicIcon implements Icon {
 
     @NotNull
     @Override
+    public Icon targets(@NotNull final Collection<Target<? extends IconEvent>> targets) {
+        this.targets.addAll(targets);
+        return this;
+    }
+
+    @NotNull
+    @Override
     public Icon canSee(@NotNull final Predicate<InventoryContents> predicate) {
         this.cansee = predicate;
         return this;
@@ -106,6 +119,16 @@ public final class BasicIcon implements Icon {
     public Icon fallback(@NotNull final ItemStack fallback) {
         this.fallback = fallback;
         return this;
+    }
+
+    @NotNull
+    @Override
+    public Icon clone(@NotNull final ItemStack newitem) {
+        return Icon.from(newitem)
+            .canSee(this.cansee)
+            .canUse(this.canuse)
+            .fallback(this.fallback)
+            .targets(this.targets);
     }
 
 }

@@ -196,6 +196,14 @@ public final class BasicPage implements Page {
         return this.canclose.test(predicate);
     }
 
+    @Override
+    public boolean checkBounds(final int row, final int column) {
+        if (row < 0 || column < 0) {
+            return false;
+        }
+        return row < this.row && column < this.column;
+    }
+
     @NotNull
     @Override
     public Inventory open(@NotNull final Player player, final int page, @NotNull final Map<String, Object> properties) {

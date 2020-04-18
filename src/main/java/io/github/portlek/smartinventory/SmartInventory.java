@@ -25,10 +25,10 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.listeners.InventoryClickListener;
-import io.github.portlek.smartinventory.listeners.InventoryCloseListener;
-import io.github.portlek.smartinventory.listeners.InventoryOpenListener;
-import io.github.portlek.smartinventory.listeners.PlayerQuitListener;
+import io.github.portlek.smartinventory.listener.InventoryClickListener;
+import io.github.portlek.smartinventory.listener.InventoryCloseListener;
+import io.github.portlek.smartinventory.listener.InventoryOpenListener;
+import io.github.portlek.smartinventory.listener.PlayerQuitListener;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
 import io.github.portlek.smartinventory.old.opener.ChestInventoryOpener;
 import io.github.portlek.smartinventory.old.opener.InventoryOpener;

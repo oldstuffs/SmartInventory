@@ -26,8 +26,8 @@
 package io.github.portlek.smartinventory.old.content;
 
 import com.google.common.base.Preconditions;
+import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.old.ClickableItem;
 import io.github.portlek.smartinventory.old.util.Pattern;
 import java.util.*;
 import org.bukkit.entity.Player;
@@ -49,7 +49,7 @@ import org.jetbrains.annotations.NotNull;
  * For example, you can get the item at a given slot by
  * using {@link InventoryContents#get(SlotPos)}. You can
  * also fill an entire column with the use of the method
- * {@link InventoryContents#fillColumn(int, ClickableItem)}.
+ * {@link InventoryContents#fillColumn(int, Icon)}.
  * </p>
  */
 public interface InventoryContents {
@@ -132,14 +132,14 @@ public interface InventoryContents {
     SlotIterator newIterator(SlotIterator.Type type, SlotPos startPos);
 
     /**
-     * Returns a 2D array of ClickableItems containing
+     * Returns a 2D array of Icons containing
      * all the items of the inventory.
-     * The ClickableItems can be null when there is no
+     * The Icons can be null when there is no
      * item in the corresponding slot.
      *
      * @return the items of the inventory
      */
-    ClickableItem[][] all();
+    Icon[][] all();
 
     /**
      * Returns a list of all the slots in the inventory.
@@ -165,7 +165,7 @@ public interface InventoryContents {
      * @param index the slot index
      * @return the found item, if there is one
      */
-    Optional<ClickableItem> get(int index);
+    Optional<Icon> get(int index);
 
     /**
      * Same as {@link InventoryContents#get(int)},
@@ -173,7 +173,7 @@ public interface InventoryContents {
      *
      * @see InventoryContents#get(int)
      */
-    Optional<ClickableItem> get(int row, int column);
+    Optional<Icon> get(int row, int column);
 
     /**
      * Same as {@link InventoryContents#get(int)},
@@ -181,7 +181,7 @@ public interface InventoryContents {
      *
      * @see InventoryContents#get(int)
      */
-    Optional<ClickableItem> get(SlotPos slotPos);
+    Optional<Icon> get(SlotPos slotPos);
 
     /**
      * Sets the item in the inventory at the given
@@ -191,23 +191,23 @@ public interface InventoryContents {
      * @param item the item to set, or {@code null} to clear the slot
      * @return {@code this}, for chained calls
      */
-    InventoryContents set(int index, ClickableItem item);
+    InventoryContents set(int index, Icon item);
 
     /**
-     * Same as {@link InventoryContents#set(int, ClickableItem)},
+     * Same as {@link InventoryContents#set(int, Icon)},
      * but with a row and a column instead of the index.
      *
-     * @see InventoryContents#set(int, ClickableItem)
+     * @see InventoryContents#set(int, Icon)
      */
-    InventoryContents set(int row, int column, ClickableItem item);
+    InventoryContents set(int row, int column, Icon item);
 
     /**
-     * Same as {@link InventoryContents#set(int, ClickableItem)},
+     * Same as {@link InventoryContents#set(int, Icon)},
      * but with a {@link SlotPos} instead of the index.
      *
-     * @see InventoryContents#set(int, ClickableItem)
+     * @see InventoryContents#set(int, Icon)
      */
-    InventoryContents set(SlotPos slotPos, ClickableItem item);
+    InventoryContents set(SlotPos slotPos, Icon item);
 
     /**
      * Adds an item to the <b>first empty slot</b> of the inventory.
@@ -219,7 +219,7 @@ public interface InventoryContents {
      * @param item the item to add
      * @return {@code this}, for chained calls
      */
-    InventoryContents add(ClickableItem item);
+    InventoryContents add(Icon item);
 
     /**
      * Looks for the given item and compares them using {@link ItemStack#isSimilar(ItemStack)},
@@ -241,7 +241,7 @@ public interface InventoryContents {
      * @param item the clickable item with the item stack to look for
      * @return an optional containing the position where the item first occurred, or an empty optional
      */
-    Optional<SlotPos> findItem(ClickableItem item);
+    Optional<SlotPos> findItem(Icon item);
 
     /**
      * Clears the first slot where the given item is in.
@@ -259,13 +259,13 @@ public interface InventoryContents {
      * <br>
      * The items will be compared using {@link ItemStack#isSimilar(ItemStack)} to check if the are equal.
      * <br>
-     * {@link ClickableItem#getItem()} is used to get the item that will be compared against
+     * {@link Icon#calculateItem()} is used to get the item that will be compared against
      * <br><br>
      * The amount stored in the item is ignored for simplicity.
      *
-     * @param item the item as a ClickableItem that shall be removed from the inventory
+     * @param item the item as a Icon that shall be removed from the inventory
      */
-    void removeFirst(ClickableItem item);
+    void removeFirst(Icon item);
 
     /**
      * Removes the specified amount of items from the inventory.
@@ -282,12 +282,12 @@ public interface InventoryContents {
      * <br>
      * The items will be compared using {@link ItemStack#isSimilar(ItemStack)} to check if the are equal.
      * <br>
-     * {@link ClickableItem#getItem()} is used to get the item that will be compared against
+     * {@link Icon#calculateItem()} is used to get the item that will be compared against
      *
-     * @param item the item as a ClickableItem that shall be removed from the inventory
+     * @param item the item as a Icon that shall be removed from the inventory
      * @param amount the amount that shall be removed
      */
-    void removeAmount(ClickableItem item, int amount);
+    void removeAmount(Icon item, int amount);
 
     /**
      * Removes all occurrences of the item from the inventory.
@@ -303,11 +303,11 @@ public interface InventoryContents {
      * <br>
      * The items will be compared using {@link ItemStack#isSimilar(ItemStack)} to check if the are equal.
      * <br>
-     * {@link ClickableItem#getItem()} is used to get the item that will be compared against
+     * {@link Icon#calculateItem()} is used to get the item that will be compared against
      *
-     * @param item the item as an ClickableItem that shall be removed from the inventory
+     * @param item the item as an Icon that shall be removed from the inventory
      */
-    void removeAll(ClickableItem item);
+    void removeAll(Icon item);
 
     /**
      * Fills the inventory with the given item.
@@ -315,7 +315,7 @@ public interface InventoryContents {
      * @param item the item
      * @return {@code this}, for chained calls
      */
-    InventoryContents fill(ClickableItem item);
+    InventoryContents fill(Icon item);
 
     /**
      * Fills the given inventory row with the given item.
@@ -324,7 +324,7 @@ public interface InventoryContents {
      * @param item the item
      * @return {@code this}, for chained calls
      */
-    InventoryContents fillRow(int row, ClickableItem item);
+    InventoryContents fillRow(int row, Icon item);
 
     /**
      * Fills the given inventory column with the given item.
@@ -333,7 +333,7 @@ public interface InventoryContents {
      * @param item the item
      * @return {@code this}, for chained calls
      */
-    InventoryContents fillColumn(int column, ClickableItem item);
+    InventoryContents fillColumn(int column, Icon item);
 
     /**
      * Fills the inventory borders with the given item.
@@ -341,7 +341,7 @@ public interface InventoryContents {
      * @param item the item
      * @return {@code this}, for chained calls
      */
-    InventoryContents fillBorders(ClickableItem item);
+    InventoryContents fillBorders(Icon item);
 
     /**
      * Fills a rectangle inside the inventory using the given
@@ -356,36 +356,36 @@ public interface InventoryContents {
      * @param item the item
      * @return {@code this}, for chained calls
      */
-    InventoryContents fillRect(int fromIndex, int toIndex, ClickableItem item);
+    InventoryContents fillRect(int fromIndex, int toIndex, Icon item);
 
     /**
-     * Same as {@link InventoryContents#fillRect(int, int, ClickableItem)},
+     * Same as {@link InventoryContents#fillRect(int, int, Icon)},
      * but with {@link SlotPos} instead of the indexes.
      *
-     * @see InventoryContents#fillRect(int, int, ClickableItem)
+     * @see InventoryContents#fillRect(int, int, Icon)
      */
-    InventoryContents fillRect(int fromRow, int fromColumn, int toRow, int toColumn, ClickableItem item);
+    InventoryContents fillRect(int fromRow, int fromColumn, int toRow, int toColumn, Icon item);
 
     /**
-     * Same as {@link InventoryContents#fillRect(int, int, ClickableItem)},
+     * Same as {@link InventoryContents#fillRect(int, int, Icon)},
      * but with rows and columns instead of the indexes.
      *
-     * @see InventoryContents#fillRect(int, int, ClickableItem)
+     * @see InventoryContents#fillRect(int, int, Icon)
      */
-    InventoryContents fillRect(SlotPos fromPos, SlotPos toPos, ClickableItem item);
+    InventoryContents fillRect(SlotPos fromPos, SlotPos toPos, Icon item);
 
     /**
-     * Completely fills the provided square with the given {@link ClickableItem}.
+     * Completely fills the provided square with the given {@link Icon}.
      *
      * @param fromIndex the slot index of the upper left corner
      * @param toIndex the slot index of the lower right corner
      * @param item the item
      * @return {@code this}, for chained calls
      */
-    InventoryContents fillSquare(int fromIndex, int toIndex, ClickableItem item);
+    InventoryContents fillSquare(int fromIndex, int toIndex, Icon item);
 
     /**
-     * Completely fills the provided square with the given {@link ClickableItem}.
+     * Completely fills the provided square with the given {@link Icon}.
      *
      * @param fromRow the row of the upper left corner
      * @param fromColumn the column of the upper-left corner
@@ -394,17 +394,17 @@ public interface InventoryContents {
      * @param item the item
      * @return {@code this}, for chained calls
      */
-    InventoryContents fillSquare(int fromRow, int fromColumn, int toRow, int toColumn, ClickableItem item);
+    InventoryContents fillSquare(int fromRow, int fromColumn, int toRow, int toColumn, Icon item);
 
     /**
-     * Completely fills the provided square with the given {@link ClickableItem}.
+     * Completely fills the provided square with the given {@link Icon}.
      *
      * @param fromPos the slot position of the upper left corner
      * @param toPos the slot position of the lower right corner
      * @param item the item
      * @return {@code this}, for chained calls
      */
-    InventoryContents fillSquare(SlotPos fromPos, SlotPos toPos, ClickableItem item);
+    InventoryContents fillSquare(SlotPos fromPos, SlotPos toPos, Icon item);
 
     /**
      * Fills the inventory with the given {@link Pattern}.
@@ -417,7 +417,7 @@ public interface InventoryContents {
      * @see #fillPattern(Pattern, int, int) to fill the pattern from the provided row and column
      * @see #fillPattern(Pattern, SlotPos) to fill the pattern from the provided slot pos
      */
-    InventoryContents fillPattern(Pattern<ClickableItem> pattern);
+    InventoryContents fillPattern(Pattern<Icon> pattern);
 
     /**
      * Fills the inventory with the given {@link Pattern}.
@@ -431,7 +431,7 @@ public interface InventoryContents {
      * @see #fillPattern(Pattern, int, int) to fill the pattern from the provided row and column
      * @see #fillPattern(Pattern, SlotPos) to fill the pattern from the provided slot pos
      */
-    InventoryContents fillPattern(Pattern<ClickableItem> pattern, int startIndex);
+    InventoryContents fillPattern(Pattern<Icon> pattern, int startIndex);
 
     /**
      * Fills the inventory with the given {@link Pattern}.
@@ -446,7 +446,7 @@ public interface InventoryContents {
      * @see #fillPattern(Pattern, int) to fill the pattern from the provided slot index
      * @see #fillPattern(Pattern, SlotPos) to fill the pattern from the provided slot pos
      */
-    InventoryContents fillPattern(Pattern<ClickableItem> pattern, int startRow, int startColumn);
+    InventoryContents fillPattern(Pattern<Icon> pattern, int startRow, int startColumn);
 
     /**
      * Fills the inventory with the given {@link Pattern}.
@@ -460,7 +460,7 @@ public interface InventoryContents {
      * @see #fillPattern(Pattern, int) to fill the pattern from the provided slot index
      * @see #fillPattern(Pattern, int, int) to fill the pattern from the provided row and column
      */
-    InventoryContents fillPattern(Pattern<ClickableItem> pattern, SlotPos startPos);
+    InventoryContents fillPattern(Pattern<Icon> pattern, SlotPos startPos);
 
     /**
      * Fills the inventory with the given {@link Pattern}.
@@ -479,7 +479,7 @@ public interface InventoryContents {
      * using slot positions contructed from their rows and columns
      * @see #fillPatternRepeating(Pattern, SlotPos, SlotPos) to fill a repeating pattern using slot positions
      */
-    InventoryContents fillPatternRepeating(Pattern<ClickableItem> pattern);
+    InventoryContents fillPatternRepeating(Pattern<Icon> pattern);
 
     /**
      * Fills the inventory with the given {@link Pattern}.
@@ -502,7 +502,7 @@ public interface InventoryContents {
      * using slot positions contructed from their rows and columns
      * @see #fillPatternRepeating(Pattern, SlotPos, SlotPos) to fill a repeating pattern using slot positions
      */
-    InventoryContents fillPatternRepeating(Pattern<ClickableItem> pattern, int startIndex, int endIndex);
+    InventoryContents fillPatternRepeating(Pattern<Icon> pattern, int startIndex, int endIndex);
 
     /**
      * Fills the inventory with the given {@link Pattern}.
@@ -527,7 +527,7 @@ public interface InventoryContents {
      * @see #fillPatternRepeating(Pattern, int, int) to fill a repeating pattern using slot indexes
      * @see #fillPatternRepeating(Pattern, SlotPos, SlotPos) to fill a repeating pattern using slot positions
      */
-    InventoryContents fillPatternRepeating(Pattern<ClickableItem> pattern, int startRow, int startColumn,
+    InventoryContents fillPatternRepeating(Pattern<Icon> pattern, int startRow, int startColumn,
                                            int endRow, int endColumn);
 
     /**
@@ -552,7 +552,7 @@ public interface InventoryContents {
      * @see #fillPatternRepeating(Pattern, int, int, int, int) to fill a repeating pattern
      * using slot positions contructed from their rows and columns
      */
-    InventoryContents fillPatternRepeating(Pattern<ClickableItem> pattern, SlotPos startPos,
+    InventoryContents fillPatternRepeating(Pattern<Icon> pattern, SlotPos startPos,
                                            SlotPos endPos);
 
     /**
@@ -633,12 +633,12 @@ public interface InventoryContents {
         private final Player player;
 
         @NotNull
-        private final ClickableItem[][] contents;
+        private final Icon[][] contents;
 
         public Impl(@NotNull final Page page, @NotNull final Player plyr) {
             this.page = page;
             this.player = plyr;
-            this.contents = new ClickableItem[page.row()][page.column()];
+            this.contents = new Icon[page.row()][page.column()];
         }
 
         @Override
@@ -682,7 +682,7 @@ public interface InventoryContents {
         }
 
         @Override
-        public ClickableItem[][] all() {
+        public Icon[][] all() {
             return this.contents.clone();
         }
 
@@ -710,13 +710,13 @@ public interface InventoryContents {
         }
 
         @Override
-        public Optional<ClickableItem> get(final int index) {
+        public Optional<Icon> get(final int index) {
             final int count = this.page.column();
             return this.get(index / count, index % count);
         }
 
         @Override
-        public Optional<ClickableItem> get(final int row, final int column) {
+        public Optional<Icon> get(final int row, final int column) {
             if (row < 0 || row >= this.contents.length) {
                 return Optional.empty();
             }
@@ -727,18 +727,18 @@ public interface InventoryContents {
         }
 
         @Override
-        public Optional<ClickableItem> get(final SlotPos pos) {
+        public Optional<Icon> get(final SlotPos pos) {
             return this.get(pos.getRow(), pos.getColumn());
         }
 
         @Override
-        public InventoryContents set(final int index, final ClickableItem item) {
+        public InventoryContents set(final int index, final Icon item) {
             final int columnCount = this.page.column();
             return this.set(index / columnCount, index % columnCount, item);
         }
 
         @Override
-        public InventoryContents set(final int row, final int column, final ClickableItem item) {
+        public InventoryContents set(final int row, final int column, final Icon item) {
             if (row < 0 || row >= this.contents.length) {
                 return this;
             }
@@ -749,18 +749,18 @@ public interface InventoryContents {
             if (item == null) {
                 this.update(row, column, null);
             } else {
-                this.update(row, column, item.getItem(this.player));
+                this.update(row, column, item.calculateItem(this));
             }
             return this;
         }
 
         @Override
-        public InventoryContents set(final SlotPos slotPos, final ClickableItem item) {
+        public InventoryContents set(final SlotPos slotPos, final Icon item) {
             return this.set(slotPos.getRow(), slotPos.getColumn(), item);
         }
 
         @Override
-        public InventoryContents add(final ClickableItem item) {
+        public InventoryContents add(final Icon item) {
             for (int row = 0; row < this.contents.length; row++) {
                 for (int column = 0; column < this.contents[0].length; column++) {
                     if (this.contents[row][column] == null) {
@@ -776,8 +776,8 @@ public interface InventoryContents {
         public Optional<SlotPos> findItem(final ItemStack itemStack) {
             for (int row = 0; row < this.contents.length; row++) {
                 for (int column = 0; column < this.contents[0].length; column++) {
-                    final ClickableItem item = this.contents[row][column];
-                    if (item != null && itemStack.isSimilar(item.getItem(this.player))) {
+                    final Icon item = this.contents[row][column];
+                    if (item != null && itemStack.isSimilar(item.calculateItem(this))) {
                         return Optional.of(SlotPos.of(row, column));
                     }
                 }
@@ -786,8 +786,8 @@ public interface InventoryContents {
         }
 
         @Override
-        public Optional<SlotPos> findItem(final ClickableItem clickableItem) {
-            return this.findItem(clickableItem.getItem(this.player));
+        public Optional<SlotPos> findItem(final Icon clickableItem) {
+            return this.findItem(clickableItem.calculateItem(this));
         }
 
         @Override
@@ -799,9 +799,9 @@ public interface InventoryContents {
         }
 
         @Override
-        public void removeFirst(final ClickableItem item) {
+        public void removeFirst(final Icon item) {
             Preconditions.checkNotNull(item, "The clickableitem to remove cannot be null");
-            this.removeFirst(item.getItem());
+            this.removeFirst(item.calculateItem());
         }
 
         @Override
@@ -809,10 +809,10 @@ public interface InventoryContents {
             Preconditions.checkNotNull(item, "The itemstack to remove cannot be null");
             for (int row = 0; row < this.contents.length; row++) {
                 for (int column = 0; column < this.contents[row].length; column++) {
-                    final ClickableItem clickableItem = this.contents[row][column];
-                    if (clickableItem != null &&
-                        item.isSimilar(clickableItem.getItem())) {
-                        final ItemStack foundStack = clickableItem.getItem();
+                    final Icon icon = this.contents[row][column];
+                    if (icon != null &&
+                        item.isSimilar(icon.calculateItem())) {
+                        final ItemStack foundStack = icon.calculateItem();
                         // if the stack amount is smaller than what needs to be removed, remove the stack and continue
                         if (foundStack.getAmount() <= amount) {
                             amount -= foundStack.getAmount();
@@ -823,8 +823,8 @@ public interface InventoryContents {
                         } else if (foundStack.getAmount() > amount) {// but if the stack is bigger that what needs to be removed, shrink the stack and then finish
                             final ItemStack clonedStack = foundStack.clone();
                             clonedStack.setAmount(clonedStack.getAmount() - amount);
-                            final ClickableItem clonedClickableItem = clickableItem.clone(clonedStack);
-                            this.set(row, column, clonedClickableItem);
+                            final Icon clonedIcon = icon.clone(clonedStack);
+                            this.set(row, column, clonedIcon);
                             return;
                         }
                     }
@@ -833,9 +833,9 @@ public interface InventoryContents {
         }
 
         @Override
-        public void removeAmount(final ClickableItem item, final int amount) {
+        public void removeAmount(final Icon item, final int amount) {
             Preconditions.checkNotNull(item, "The clickableitem to remove cannot be null");
-            this.removeAmount(item.getItem(), amount);
+            this.removeAmount(item.calculateItem(), amount);
         }
 
         @Override
@@ -844,7 +844,7 @@ public interface InventoryContents {
             for (int row = 0; row < this.contents.length; row++) {
                 for (int column = 0; column < this.contents[row].length; column++) {
                     if (this.contents[row][column] != null &&
-                        item.isSimilar(this.contents[row][column].getItem())) {
+                        item.isSimilar(this.contents[row][column].calculateItem())) {
                         this.set(row, column, null);
                     }
                 }
@@ -852,13 +852,13 @@ public interface InventoryContents {
         }
 
         @Override
-        public void removeAll(final ClickableItem item) {
+        public void removeAll(final Icon item) {
             Preconditions.checkNotNull(item, "The clickableitem to remove cannot be null");
-            this.removeAll(item.getItem());
+            this.removeAll(item.calculateItem());
         }
 
         @Override
-        public InventoryContents fill(final ClickableItem item) {
+        public InventoryContents fill(final Icon item) {
             for (int row = 0; row < this.contents.length; row++) {
                 for (int column = 0; column < this.contents[row].length; column++) {
                     this.set(row, column, item);
@@ -868,7 +868,7 @@ public interface InventoryContents {
         }
 
         @Override
-        public InventoryContents fillRow(final int row, final ClickableItem item) {
+        public InventoryContents fillRow(final int row, final Icon item) {
             if (row < 0 || row >= this.contents.length) {
                 return this;
             }
@@ -879,7 +879,7 @@ public interface InventoryContents {
         }
 
         @Override
-        public InventoryContents fillColumn(final int column, final ClickableItem item) {
+        public InventoryContents fillColumn(final int column, final Icon item) {
             if (column < 0 || column >= this.contents[0].length) {
                 return this;
             }
@@ -890,13 +890,13 @@ public interface InventoryContents {
         }
 
         @Override
-        public InventoryContents fillBorders(final ClickableItem item) {
+        public InventoryContents fillBorders(final Icon item) {
             this.fillRect(0, 0, this.page.row() - 1, this.page.column() - 1, item);
             return this;
         }
 
         @Override
-        public InventoryContents fillRect(final int fromIndex, final int toIndex, final ClickableItem item) {
+        public InventoryContents fillRect(final int fromIndex, final int toIndex, final Icon item) {
             final int count = this.page.column();
             return this.fillRect(
                 fromIndex / count, fromIndex % count,
@@ -907,7 +907,7 @@ public interface InventoryContents {
 
         @Override
         public InventoryContents fillRect(final int fromRow, final int fromColumn, final int toRow, final int toColumn,
-                                          final ClickableItem item) {
+                                          final Icon item) {
             for (int row = fromRow; row <= toRow; row++) {
                 for (int column = fromColumn; column <= toColumn; column++) {
                     if (row != fromRow &&
@@ -924,12 +924,12 @@ public interface InventoryContents {
 
         @Override
         public InventoryContents fillRect(final SlotPos fromPos, final SlotPos toPos,
-                                          final ClickableItem item) {
+                                          final Icon item) {
             return this.fillRect(fromPos.getRow(), fromPos.getColumn(), toPos.getRow(), toPos.getColumn(), item);
         }
 
         @Override
-        public InventoryContents fillSquare(final int fromIndex, final int toIndex, final ClickableItem item) {
+        public InventoryContents fillSquare(final int fromIndex, final int toIndex, final Icon item) {
             final int count = this.page.column();
             return this.fillSquare(
                 fromIndex / count, fromIndex % count,
@@ -940,7 +940,7 @@ public interface InventoryContents {
 
         @Override
         public InventoryContents fillSquare(final int fromRow, final int fromColumn, final int toRow,
-                                            final int toColumn, final ClickableItem item) {
+                                            final int toColumn, final Icon item) {
             Preconditions.checkArgument(fromRow < toRow, "The start row needs to be lower than the end row");
             Preconditions.checkArgument(fromColumn < toColumn,
                 "The start column needs to be lower than the end column");
@@ -954,27 +954,27 @@ public interface InventoryContents {
 
         @Override
         public InventoryContents fillSquare(final SlotPos fromPos, final SlotPos toPos,
-                                            final ClickableItem item) {
+                                            final Icon item) {
             return this.fillSquare(fromPos.getRow(), fromPos.getColumn(), toPos.getRow(), toPos.getColumn(), item);
         }
 
         @Override
-        public InventoryContents fillPattern(final Pattern<ClickableItem> pattern) {
+        public InventoryContents fillPattern(final Pattern<Icon> pattern) {
             return this.fillPattern(pattern, 0, 0);
         }
 
         @Override
-        public InventoryContents fillPattern(final Pattern<ClickableItem> pattern, final int startIndex) {
+        public InventoryContents fillPattern(final Pattern<Icon> pattern, final int startIndex) {
             final int count = this.page.column();
             return this.fillPattern(pattern, startIndex / count, startIndex % count);
         }
 
         @Override
-        public InventoryContents fillPattern(final Pattern<ClickableItem> pattern, final int startRow,
+        public InventoryContents fillPattern(final Pattern<Icon> pattern, final int startRow,
                                              final int startColumn) {
             for (int row = 0; row < pattern.getRowCount(); row++) {
                 for (int column = 0; column < pattern.getColumnCount(); column++) {
-                    final ClickableItem item = pattern.getObject(row, column);
+                    final Icon item = pattern.getObject(row, column);
                     if (item != null) {
                         this.set(startRow + row, startColumn + column, item);
                     }
@@ -984,18 +984,18 @@ public interface InventoryContents {
         }
 
         @Override
-        public InventoryContents fillPattern(final Pattern<ClickableItem> pattern,
+        public InventoryContents fillPattern(final Pattern<Icon> pattern,
                                              final SlotPos startPos) {
             return this.fillPattern(pattern, startPos.getRow(), startPos.getColumn());
         }
 
         @Override
-        public InventoryContents fillPatternRepeating(final Pattern<ClickableItem> pattern) {
+        public InventoryContents fillPatternRepeating(final Pattern<Icon> pattern) {
             return this.fillPatternRepeating(pattern, 0, 0, -1, -1);
         }
 
         @Override
-        public InventoryContents fillPatternRepeating(final Pattern<ClickableItem> pattern,
+        public InventoryContents fillPatternRepeating(final Pattern<Icon> pattern,
                                                       final int startIndex, final int endIndex) {
             final int columnCount = this.page.column();
             final boolean maxSize = endIndex < 0;
@@ -1008,7 +1008,7 @@ public interface InventoryContents {
         }
 
         @Override
-        public InventoryContents fillPatternRepeating(final Pattern<ClickableItem> pattern, final int startRow,
+        public InventoryContents fillPatternRepeating(final Pattern<Icon> pattern, final int startRow,
                                                       final int startColumn, int endRow, int endColumn) {
             Preconditions.checkArgument(pattern.isWrapAround(),
                 "To fill in a repeating pattern wrapAround needs to be enabled for the pattern to work!");
@@ -1025,7 +1025,7 @@ public interface InventoryContents {
             final int columnDelta = endColumn - startColumn;
             for (int row = 0; row <= rowDelta; row++) {
                 for (int column = 0; column <= columnDelta; column++) {
-                    final ClickableItem item = pattern.getObject(row, column);
+                    final Icon item = pattern.getObject(row, column);
                     if (item != null) {
                         this.set(startRow + row, startColumn + column, item);
                     }
@@ -1035,7 +1035,7 @@ public interface InventoryContents {
         }
 
         @Override
-        public InventoryContents fillPatternRepeating(final Pattern<ClickableItem> pattern,
+        public InventoryContents fillPatternRepeating(final Pattern<Icon> pattern,
                                                       final SlotPos startPos, final SlotPos endPos) {
             return this.fillPatternRepeating(pattern, startPos.getRow(), startPos.getColumn(), endPos.getRow(),
                 endPos.getColumn());

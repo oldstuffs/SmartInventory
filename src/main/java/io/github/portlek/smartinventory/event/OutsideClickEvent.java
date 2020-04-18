@@ -23,34 +23,8 @@
  *
  */
 
-package io.github.portlek.smartinventory.listeners;
+package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.SmartInventory;
-import io.github.portlek.smartinventory.event.PlgnDisableEvent;
-import java.util.HashMap;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
-import org.jetbrains.annotations.NotNull;
-
-public final class PluginDisableListener implements Listener {
-
-    @NotNull
-    private final SmartInventory inventory;
-
-    public PluginDisableListener(@NotNull final SmartInventory inventory) {
-        this.inventory = inventory;
-    }
-
-    @EventHandler
-    public void onPluginDisable(final PluginDisableEvent event) {
-        new HashMap<>(this.inventory.getPages()).forEach((player, page) -> {
-            this.inventory.getContents(player).ifPresent(contents ->
-                page.accept(new PlgnDisableEvent(contents)));
-            page.close(player);
-        });
-        this.inventory.clearPages();
-        this.inventory.clearContents();
-    }
+public interface OutsideClickEvent extends PageClickEvent {
 
 }

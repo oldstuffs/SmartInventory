@@ -25,7 +25,7 @@
 
 package io.github.portlek.smartinventory.old.content;
 
-import io.github.portlek.smartinventory.old.ClickableItem;
+import io.github.portlek.smartinventory.old.Icon;
 import java.util.Arrays;
 
 /**
@@ -64,7 +64,7 @@ public interface Pagination {
      *
      * @return the current page items
      */
-    ClickableItem[] getPageItems();
+    Icon[] getPageItems();
 
     /**
      * Gets the current page.

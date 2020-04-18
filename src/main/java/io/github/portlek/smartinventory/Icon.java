@@ -32,6 +32,7 @@ import io.github.portlek.smartinventory.event.SmartEvent;
 import io.github.portlek.smartinventory.icon.BasicIcon;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
 import io.github.portlek.smartinventory.target.BasicTarget;
+import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.Material;
@@ -41,8 +42,24 @@ import org.jetbrains.annotations.NotNull;
 public interface Icon {
 
     @NotNull
-    static <T extends IconEvent> Icon from(@NotNull final ItemStack item) {
+    static Icon from(@NotNull final ItemStack item) {
         return new BasicIcon(item);
+    }
+
+    @SafeVarargs
+    @NotNull
+    static Icon click(@NotNull final ItemStack item, @NotNull final Consumer<ClickEvent> consumer,
+                      @NotNull final Requirement<ClickEvent>... requirements) {
+        return new BasicIcon(item)
+            .whenclick(consumer, requirements);
+    }
+
+    @SafeVarargs
+    @NotNull
+    static Icon drag(@NotNull final ItemStack item, @NotNull final Consumer<DragEvent> consumer,
+                     @NotNull final Requirement<DragEvent>... requirements) {
+        return new BasicIcon(item)
+            .whendrag(consumer, requirements);
     }
 
     @NotNull
@@ -55,6 +72,9 @@ public interface Icon {
     static Icon empty() {
         return new BasicIcon(new ItemStack(Material.AIR));
     }
+
+    @NotNull
+    ItemStack calculateItem();
 
     @NotNull
     ItemStack calculateItem(@NotNull InventoryContents contents);
@@ -102,6 +122,8 @@ public interface Icon {
 
     @NotNull <T extends IconEvent> Icon target(@NotNull Target<T> target);
 
+    @NotNull Icon targets(@NotNull Collection<Target<? extends IconEvent>> targets);
+
     @NotNull
     Icon canSee(@NotNull Predicate<InventoryContents> predicate);
 
@@ -110,5 +132,8 @@ public interface Icon {
 
     @NotNull
     Icon fallback(@NotNull ItemStack fallback);
+
+    @NotNull
+    Icon clone(@NotNull ItemStack newitem);
 
 }

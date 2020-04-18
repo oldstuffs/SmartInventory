@@ -118,6 +118,8 @@ public interface Page {
 
     boolean canClose(@NotNull CloseEvent predicate);
 
+    boolean checkBounds(int row, int column);
+
     @NotNull
     default Inventory open(@NotNull final Player player) {
         return this.open(player, 0);

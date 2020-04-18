@@ -23,35 +23,47 @@
  *
  */
 
-package io.github.portlek.smartinventory.listeners;
+package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.SmartInventory;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import io.github.portlek.smartinventory.old.content.InventoryContents;
+import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public final class InventoryClickListener implements Listener {
+public final class PgBottomClickEvent implements BottomClickEvent {
 
     @NotNull
-    private final SmartInventory management;
+    private final Plugin plugin;
 
-    public InventoryClickListener(@NotNull final SmartInventory management) {
-        this.management = management;
+    @NotNull
+    private final InventoryClickEvent event;
+
+    @NotNull
+    private final InventoryContents contents;
+
+    public PgBottomClickEvent(@NotNull final Plugin plugin, @NotNull final InventoryClickEvent event,
+                              @NotNull final InventoryContents contents) {
+        this.plugin = plugin;
+        this.event = event;
+        this.contents = contents;
     }
 
-    @EventHandler
-    public void onInventoryClick(final InventoryClickEvent event) {
-        if (event.getClickedInventory() == null) {
-            return;
-        }
-        final Player player = (Player) event.getWhoClicked();
-        this.management.getPage(player).ifPresent(page -> {
-            final int row = event.getSlot() / 9;
-            final int column = event.getSlot() % 9;
+    @NotNull
+    @Override
+    public InventoryContents contents() {
+        return this.contents;
+    }
 
-        });
+    @Override
+    public void cancel() {
+        this.event.setCancelled(true);
+    }
+
+    @Override
+    public void close() {
+        Bukkit.getScheduler().runTaskLater(this.plugin, () ->
+            this.contents.player().closeInventory(), 1L);
     }
 
 }

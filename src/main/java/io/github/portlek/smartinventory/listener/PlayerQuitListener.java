@@ -23,47 +23,31 @@
  *
  */
 
-package io.github.portlek.smartinventory.listeners;
+package io.github.portlek.smartinventory.listener;
 
 import io.github.portlek.smartinventory.SmartInventory;
-import io.github.portlek.smartinventory.event.PgCloseEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
+import io.github.portlek.smartinventory.event.PlyrQuitEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
-public final class InventoryCloseListener implements Listener {
+public final class PlayerQuitListener implements Listener {
 
     @NotNull
     private final SmartInventory inventory;
 
-    public InventoryCloseListener(@NotNull final SmartInventory inventory) {
+    public PlayerQuitListener(@NotNull final SmartInventory inventory) {
         this.inventory = inventory;
     }
 
     @EventHandler
-    public void onInventoryClose(final InventoryCloseEvent event) {
-        final HumanEntity human = event.getPlayer();
-        if (!(human instanceof Player)) {
-            return;
-        }
-        final Player player = (Player) human;
-        this.inventory.getPage(player).ifPresent(old ->
-            this.inventory.getContents(player)
-                .map(PgCloseEvent::new)
-                .ifPresent(close -> {
-                    old.accept(close);
-                    if (!old.canClose(close)) {
-                        Bukkit.getScheduler().runTask(this.inventory.plugin(), () ->
-                            player.openInventory(event.getInventory()));
-                        return;
-                    }
-                    event.getInventory().clear();
-                }));
-        this.inventory.stopTick(player);
+    public void onPlayerQuit(final PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+        this.inventory.getPage(player).ifPresent(page ->
+            this.inventory.getContents(player).ifPresent(contents ->
+                page.accept(new PlyrQuitEvent(contents))));
         this.inventory.removePage(player);
         this.inventory.removeContent(player);
     }
