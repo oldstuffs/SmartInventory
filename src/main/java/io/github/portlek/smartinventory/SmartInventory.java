@@ -28,6 +28,7 @@ package io.github.portlek.smartinventory;
 import io.github.portlek.smartinventory.listeners.InventoryClickListener;
 import io.github.portlek.smartinventory.listeners.InventoryCloseListener;
 import io.github.portlek.smartinventory.listeners.InventoryOpenListener;
+import io.github.portlek.smartinventory.listeners.PlayerQuitListener;
 import io.github.portlek.smartinventory.old.content.InventoryContents;
 import io.github.portlek.smartinventory.old.opener.ChestInventoryOpener;
 import io.github.portlek.smartinventory.old.opener.InventoryOpener;
@@ -66,7 +67,8 @@ public final class SmartInventory {
         Arrays.asList(
             new InventoryClickListener(this),
             new InventoryOpenListener(this),
-            new InventoryCloseListener(this)
+            new InventoryCloseListener(this),
+            new PlayerQuitListener(this)
         ).forEach(listener ->
             Bukkit.getPluginManager().registerEvents(listener, this.plugin()));
     }
@@ -107,6 +109,16 @@ public final class SmartInventory {
     @NotNull
     public Optional<InventoryContents> getContents(@NotNull final Player player) {
         return Optional.ofNullable(this.contents.get(player));
+    }
+
+    @NotNull
+    public Map<Player, Page> getPages() {
+        return Collections.unmodifiableMap(this.pages);
+    }
+
+    @NotNull
+    public Map<Player, InventoryContents> getContents() {
+        return Collections.unmodifiableMap(this.contents);
     }
 
     public void removePage(@NotNull final Player player) {

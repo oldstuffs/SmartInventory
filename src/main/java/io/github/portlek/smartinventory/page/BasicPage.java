@@ -48,8 +48,8 @@ public final class BasicPage implements Page {
     private final Collection<Target<? extends PageEvent>> targets = new ArrayList<>();
 
     private final Predicate<PageEvent> control = event ->
-        event instanceof CloseEvent && this.canclose.test((CloseEvent) event) ||
-            event instanceof OpenEvent && this.canopen.test((OpenEvent) event);
+        event instanceof CloseEvent && this.canClose((CloseEvent) event) ||
+            event instanceof OpenEvent && this.canOpen((OpenEvent) event);
 
     @NotNull
     private final SmartInventory inventory;
@@ -184,6 +184,16 @@ public final class BasicPage implements Page {
     public Page canClose(@NotNull final Predicate<CloseEvent> predicate) {
         this.canclose = predicate;
         return this;
+    }
+
+    @Override
+    public boolean canOpen(@NotNull final OpenEvent predicate) {
+        return this.canopen.test(predicate);
+    }
+
+    @Override
+    public boolean canClose(@NotNull final CloseEvent predicate) {
+        return this.canclose.test(predicate);
     }
 
     @NotNull

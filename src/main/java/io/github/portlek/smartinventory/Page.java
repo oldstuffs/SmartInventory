@@ -114,6 +114,10 @@ public interface Page {
     @NotNull
     Page canClose(@NotNull Predicate<CloseEvent> predicate);
 
+    boolean canOpen(@NotNull OpenEvent predicate);
+
+    boolean canClose(@NotNull CloseEvent predicate);
+
     @NotNull
     default Inventory open(@NotNull final Player player) {
         return this.open(player, 0);

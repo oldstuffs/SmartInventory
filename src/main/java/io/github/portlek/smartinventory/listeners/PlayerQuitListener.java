@@ -26,35 +26,30 @@
 package io.github.portlek.smartinventory.listeners;
 
 import io.github.portlek.smartinventory.SmartInventory;
-import io.github.portlek.smartinventory.event.PgOpenEvent;
-import org.bukkit.entity.HumanEntity;
+import io.github.portlek.smartinventory.event.PlyrQuitEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
-public final class InventoryOpenListener implements Listener {
+public final class PlayerQuitListener implements Listener {
 
     @NotNull
     private final SmartInventory inventory;
 
-    public InventoryOpenListener(@NotNull final SmartInventory inventory) {
+    public PlayerQuitListener(@NotNull final SmartInventory inventory) {
         this.inventory = inventory;
     }
 
     @EventHandler
-    public void onInventoryOpen(final InventoryOpenEvent event) {
-        final HumanEntity human = event.getPlayer();
-        if (!(human instanceof Player)) {
-            return;
-        }
-        final Player player = (Player) human;
-        this.inventory.getPage(player).ifPresent(old ->
-            this.inventory.getContents(player)
-                .map(contents ->
-                    new PgOpenEvent(this.inventory.plugin(), event, contents))
-                .ifPresent(old::accept));
+    public void onPlayerQuit(final PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+        this.inventory.getPage(player).ifPresent(page ->
+            this.inventory.getContents(player).ifPresent(contents ->
+                page.accept(new PlyrQuitEvent(contents))));
+        this.inventory.removePage(player);
+        this.inventory.removeContent(player);
     }
 
 }
