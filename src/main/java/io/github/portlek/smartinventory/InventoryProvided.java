@@ -36,4 +36,8 @@ public interface InventoryProvided extends Target<InventoryContents> {
     default void tick(@NotNull final InventoryContents contents) {
     }
 
+    @Override
+    default void update(@NotNull final InventoryContents argument) {
+    }
+
 }
