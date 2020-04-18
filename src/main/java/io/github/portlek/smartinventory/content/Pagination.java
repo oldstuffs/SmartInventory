@@ -23,9 +23,9 @@
  *
  */
 
-package io.github.portlek.smartinventory.old.content;
+package io.github.portlek.smartinventory.content;
 
-import io.github.portlek.smartinventory.old.Icon;
+import io.github.portlek.smartinventory.Icon;
 import java.util.Arrays;
 
 /**
@@ -148,7 +148,7 @@ public interface Pagination {
      * @param items the items
      * @return {@code this}, for chained calls
      */
-    Pagination setItems(ClickableItem... items);
+    Pagination setItems(Icon... items);
 
     /**
      * Sets the maximum amount of items per page.
@@ -162,12 +162,12 @@ public interface Pagination {
 
         private int currentPage;
 
-        private ClickableItem[] items = new ClickableItem[0];
+        private Icon[] items = new Icon[0];
 
         private int itemsPerPage = 5;
 
         @Override
-        public ClickableItem[] getPageItems() {
+        public Icon[] getPageItems() {
             return Arrays.copyOfRange(this.items,
                 this.currentPage * this.itemsPerPage,
                 (this.currentPage + 1) * this.itemsPerPage);
@@ -225,7 +225,7 @@ public interface Pagination {
 
         @Override
         public Pagination addToIterator(final SlotIterator iterator) {
-            for (final ClickableItem item : this.getPageItems()) {
+            for (final Icon item : this.getPageItems()) {
                 iterator.next().set(item);
                 if (iterator.ended()) {
                     break;
@@ -235,7 +235,7 @@ public interface Pagination {
         }
 
         @Override
-        public Pagination setItems(final ClickableItem... items) {
+        public Pagination setItems(final Icon... items) {
             this.items = items;
             return this;
         }

@@ -23,12 +23,12 @@
  *
  */
 
-package io.github.portlek.smartinventory.old.content;
+package io.github.portlek.smartinventory.content;
 
 import com.google.common.base.Preconditions;
 import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.old.util.Pattern;
+import io.github.portlek.smartinventory.util.Pattern;
 import java.util.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

@@ -23,11 +23,11 @@
  *
  */
 
-package io.github.portlek.smartinventory.old.content;
+package io.github.portlek.smartinventory.content;
 
 import com.google.common.base.Preconditions;
-import io.github.portlek.smartinventory.old.ClickableItem;
-import io.github.portlek.smartinventory.old.util.Pattern;
+import io.github.portlek.smartinventory.Icon;
+import io.github.portlek.smartinventory.util.Pattern;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -46,7 +46,7 @@ public interface SlotIterator {
      *
      * @return the item at the current position
      */
-    Optional<ClickableItem> get();
+    Optional<Icon> get();
 
     /**
      * Replaces the item at the current position in the inventory
@@ -55,7 +55,7 @@ public interface SlotIterator {
      * @param item the new item
      * @return {@code this}, for chained calls
      */
-    SlotIterator set(ClickableItem item);
+    SlotIterator set(Icon item);
 
     /**
      * Moves the cursor to the previous position inside
@@ -355,12 +355,12 @@ public interface SlotIterator {
         }
 
         @Override
-        public Optional<ClickableItem> get() {
+        public Optional<Icon> get() {
             return this.contents.get(this.row, this.column);
         }
 
         @Override
-        public SlotIterator set(final ClickableItem item) {
+        public SlotIterator set(final Icon item) {
             if (this.canPlace()) {
                 this.contents.set(this.row, this.column, item);
             }

@@ -23,14 +23,8 @@
  *
  */
 
-package io.github.portlek.smartinventory.event;
+package io.github.portlek.smartinventory.event.abs;
 
-import io.github.portlek.smartinventory.Icon;
-import org.jetbrains.annotations.NotNull;
-
-public interface IconEvent extends SmartEvent {
-
-    @NotNull
-    Icon icon();
+public interface DisableEvent extends PageEvent {
 
 }

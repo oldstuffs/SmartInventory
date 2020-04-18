@@ -27,8 +27,8 @@ package io.github.portlek.smartinventory.icon;
 
 import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.Target;
-import io.github.portlek.smartinventory.event.IconEvent;
-import io.github.portlek.smartinventory.old.content.InventoryContents;
+import io.github.portlek.smartinventory.event.abs.IconEvent;
+import io.github.portlek.smartinventory.content.InventoryContents;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Predicate;

@@ -23,10 +23,10 @@
  *
  */
 
-package io.github.portlek.smartinventory.old.util;
+package io.github.portlek.smartinventory.util;
 
 import com.google.common.base.Preconditions;
-import io.github.portlek.smartinventory.old.content.SlotPos;
+import io.github.portlek.smartinventory.content.SlotPos;
 import java.util.*;
 
 /**

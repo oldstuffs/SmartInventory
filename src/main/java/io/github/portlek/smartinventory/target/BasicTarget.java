@@ -27,7 +27,7 @@ package io.github.portlek.smartinventory.target;
 
 import io.github.portlek.smartinventory.Requirement;
 import io.github.portlek.smartinventory.Target;
-import io.github.portlek.smartinventory.event.SmartEvent;
+import io.github.portlek.smartinventory.event.abs.SmartEvent;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;

@@ -23,7 +23,26 @@
  *
  */
 
-/**
- * Default package for the SmartInventory API.
- */
-package io.github.portlek.smartinventory.old;
+package io.github.portlek.smartinventory.event.abs;
+
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryType;
+import org.jetbrains.annotations.NotNull;
+
+public interface ClickEvent extends IconEvent {
+
+    int row();
+
+    int column();
+
+    @NotNull
+    ClickType click();
+
+    @NotNull
+    InventoryAction action();
+
+    @NotNull
+    InventoryType.SlotType slot();
+
+}

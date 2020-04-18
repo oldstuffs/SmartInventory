@@ -25,7 +25,7 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.event.SmartEvent;
+import io.github.portlek.smartinventory.event.abs.SmartEvent;
 import java.util.function.Predicate;
 
 public interface Requirement<T extends SmartEvent> extends Type<T>, Predicate<T> {

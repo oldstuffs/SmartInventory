@@ -23,8 +23,26 @@
  *
  */
 
-package io.github.portlek.smartinventory.event;
+package io.github.portlek.smartinventory.event.abs;
 
-public interface OutsideClickEvent extends PageClickEvent {
+import java.util.Map;
+import java.util.Set;
+import org.bukkit.event.inventory.DragType;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+public interface DragEvent extends IconEvent {
+
+    @NotNull
+    DragType drag();
+
+    @NotNull
+    Map<Integer, ItemStack> added();
+
+    @NotNull
+    Set<Integer> slots();
+
+    @NotNull
+    ItemStack newcursor();
 
 }

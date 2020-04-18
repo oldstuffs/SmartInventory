@@ -26,7 +26,8 @@
 package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.Icon;
-import io.github.portlek.smartinventory.old.content.InventoryContents;
+import io.github.portlek.smartinventory.event.abs.ClickEvent;
+import io.github.portlek.smartinventory.content.InventoryContents;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;

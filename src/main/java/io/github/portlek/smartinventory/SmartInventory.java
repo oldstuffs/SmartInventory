@@ -25,13 +25,10 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.listener.InventoryClickListener;
-import io.github.portlek.smartinventory.listener.InventoryCloseListener;
-import io.github.portlek.smartinventory.listener.InventoryOpenListener;
-import io.github.portlek.smartinventory.listener.PlayerQuitListener;
-import io.github.portlek.smartinventory.old.content.InventoryContents;
-import io.github.portlek.smartinventory.old.opener.ChestInventoryOpener;
-import io.github.portlek.smartinventory.old.opener.InventoryOpener;
+import io.github.portlek.smartinventory.listener.*;
+import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
+import io.github.portlek.smartinventory.opener.InventoryOpener;
 import java.util.*;
 import java.util.stream.Stream;
 import org.bukkit.Bukkit;
@@ -68,7 +65,9 @@ public final class SmartInventory {
             new InventoryClickListener(this),
             new InventoryOpenListener(this),
             new InventoryCloseListener(this),
-            new PlayerQuitListener(this)
+            new PlayerQuitListener(this),
+            new PluginDisableListener(this),
+            new InventoryDragListener(this)
         ).forEach(listener ->
             Bukkit.getPluginManager().registerEvents(listener, this.plugin()));
     }

@@ -25,7 +25,8 @@
 
 package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.old.content.InventoryContents;
+import io.github.portlek.smartinventory.event.abs.CloseEvent;
+import io.github.portlek.smartinventory.content.InventoryContents;
 import org.jetbrains.annotations.NotNull;
 
 public final class PgCloseEvent implements CloseEvent {

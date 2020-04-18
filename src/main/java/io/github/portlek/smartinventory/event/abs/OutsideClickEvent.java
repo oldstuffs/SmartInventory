@@ -23,30 +23,8 @@
  *
  */
 
-package io.github.portlek.smartinventory.old.content;
+package io.github.portlek.smartinventory.event.abs;
 
-import org.bukkit.entity.Player;
-
-/**
- * Inventory Provider Interface
- */
-public interface InventoryProvider {
-
-    /**
-     * Will check for all the contents inside the SmartInventory and get the given player.
-     *
-     * @param player Get the given player
-     * @param contents Get all the contents inside the SmartInventory
-     */
-    void init(Player player, InventoryContents contents);
-
-    /**
-     * Runs a hashmap to update the player with the given contents inside the SmartInventory.
-     *
-     * @param player Get given player
-     * @param contents Get all the contents inside the SmartInventory
-     */
-    default void update(final Player player, final InventoryContents contents) {
-    }
+public interface OutsideClickEvent extends PageClickEvent {
 
 }

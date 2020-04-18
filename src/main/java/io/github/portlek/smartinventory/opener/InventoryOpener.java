@@ -23,13 +23,12 @@
  *
  */
 
-package io.github.portlek.smartinventory.old.opener;
+package io.github.portlek.smartinventory.opener;
 
+import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.SmartInventory;
-import io.github.portlek.smartinventory.old.ClickableItem;
-import io.github.portlek.smartinventory.old.content.InventoryContents;
-import io.github.portlek.smartinventory.old.content.SlotPos;
+import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.content.SlotPos;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -40,15 +39,14 @@ public interface InventoryOpener {
     @NotNull
     Inventory open(@NotNull Page page, @NotNull Player player);
 
-    boolean supports(InventoryType type);
+    boolean supports(@NotNull InventoryType type);
 
-    default void fill(final Inventory handle, final InventoryContents contents,
-                      final Player player) {
-        final ClickableItem[][] items = contents.all();
+    default void fill(@NotNull final Inventory handle, @NotNull final InventoryContents contents) {
+        final Icon[][] items = contents.all();
         for (int row = 0; row < items.length; row++) {
             for (int column = 0; column < items[row].length; column++) {
                 if (items[row][column] != null) {
-                    handle.setItem(9 * row + column, items[row][column].getItem(player));
+                    handle.setItem(9 * row + column, items[row][column].calculateItem(contents));
                 }
             }
         }
@@ -57,7 +55,7 @@ public interface InventoryOpener {
     /**
      * This method is used to configure the default inventory size(s)
      * for inventories supported by this opener. These values will only
-     * be applied if the size is not set explicitly. (See {@link SmartInventory.Builder#size(int, int)}).
+     * be applied if the size is not set explicitly.
      * <p>
      * This method must return a non-null value for all supported inventory types.
      *
@@ -66,7 +64,7 @@ public interface InventoryOpener {
      * (3x9) for type (ender)chest, (3x3) for dispenser and dropper and
      * (1x_sizeOfInventoryType_) for everything else.
      */
-    default SlotPos defaultSize(final InventoryType type) {
+    default SlotPos defaultSize(@NotNull final InventoryType type) {
         switch (type) {
             case CHEST:
             case ENDER_CHEST:

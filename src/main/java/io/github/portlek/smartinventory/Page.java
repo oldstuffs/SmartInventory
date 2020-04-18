@@ -25,9 +25,9 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.event.CloseEvent;
-import io.github.portlek.smartinventory.event.OpenEvent;
-import io.github.portlek.smartinventory.event.PageEvent;
+import io.github.portlek.smartinventory.event.abs.CloseEvent;
+import io.github.portlek.smartinventory.event.abs.OpenEvent;
+import io.github.portlek.smartinventory.event.abs.PageEvent;
 import io.github.portlek.smartinventory.page.BasicPage;
 import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.Collections;

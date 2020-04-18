@@ -25,13 +25,12 @@
 
 package io.github.portlek.smartinventory.listener;
 
-import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.IcClickEvent;
 import io.github.portlek.smartinventory.event.PgBottomClickEvent;
 import io.github.portlek.smartinventory.event.PgClickEvent;
 import io.github.portlek.smartinventory.event.PgOutsideClickEvent;
-import io.github.portlek.smartinventory.old.content.SlotPos;
+import io.github.portlek.smartinventory.content.SlotPos;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -23,18 +23,8 @@
  *
  */
 
-package io.github.portlek.smartinventory.event;
+package io.github.portlek.smartinventory.event.abs;
 
-import io.github.portlek.smartinventory.old.content.InventoryContents;
-import org.jetbrains.annotations.NotNull;
-
-public interface SmartEvent {
-
-    @NotNull
-    InventoryContents contents();
-
-    void cancel();
-
-    void close();
+public interface PageEvent extends SmartEvent {
 
 }

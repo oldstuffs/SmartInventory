@@ -23,7 +23,7 @@
  *
  */
 
-package io.github.portlek.smartinventory.old.opener;
+package io.github.portlek.smartinventory.opener;
 
 import io.github.portlek.smartinventory.Page;
 import org.bukkit.Bukkit;
@@ -46,7 +46,7 @@ public final class ChestInventoryOpener implements InventoryOpener {
         }
         final Inventory handle = Bukkit.createInventory(player, page.row() * page.column(), page.title());
         page.inventory().getContents(player).ifPresent(contents -> {
-            this.fill(handle, contents, player);
+            this.fill(handle, contents);
             player.openInventory(handle);
         });
         return handle;

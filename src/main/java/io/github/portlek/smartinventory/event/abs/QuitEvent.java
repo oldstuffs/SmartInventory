@@ -23,8 +23,8 @@
  *
  */
 
-package io.github.portlek.smartinventory.event;
+package io.github.portlek.smartinventory.event.abs;
 
-public interface PageClickEvent extends PageEvent {
+public interface QuitEvent extends PageEvent {
 
 }

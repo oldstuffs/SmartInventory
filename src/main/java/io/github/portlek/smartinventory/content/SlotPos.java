@@ -23,7 +23,7 @@
  *
  */
 
-package io.github.portlek.smartinventory.old.content;
+package io.github.portlek.smartinventory.content;
 
 /**
  * Represents the position (row + column) of a slot
