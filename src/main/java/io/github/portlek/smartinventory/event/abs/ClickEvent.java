@@ -25,9 +25,11 @@
 
 package io.github.portlek.smartinventory.event.abs;
 
+import java.util.Optional;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public interface ClickEvent extends IconEvent {
@@ -44,5 +46,8 @@ public interface ClickEvent extends IconEvent {
 
     @NotNull
     InventoryType.SlotType slot();
+
+    @NotNull
+    Optional<ItemStack> cursor();
 
 }

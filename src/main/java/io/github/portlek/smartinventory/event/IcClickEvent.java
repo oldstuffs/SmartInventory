@@ -26,13 +26,15 @@
 package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.Icon;
-import io.github.portlek.smartinventory.event.abs.ClickEvent;
 import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.event.abs.ClickEvent;
+import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,6 +86,12 @@ public final class IcClickEvent implements ClickEvent {
     @Override
     public InventoryType.SlotType slot() {
         return this.event.getSlotType();
+    }
+
+    @NotNull
+    @Override
+    public Optional<ItemStack> cursor() {
+        return Optional.ofNullable(this.event.getCursor());
     }
 
     @NotNull

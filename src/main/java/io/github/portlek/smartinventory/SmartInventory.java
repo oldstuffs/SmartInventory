@@ -25,8 +25,8 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.listener.*;
 import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.listener.*;
 import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
 import io.github.portlek.smartinventory.opener.InventoryOpener;
 import java.util.*;
@@ -103,6 +103,10 @@ public final class SmartInventory {
     @NotNull
     public Optional<Page> getPage(@NotNull final Player player) {
         return Optional.ofNullable(this.pages.get(player));
+    }
+
+    public void notifyUpdate(@NotNull final Player player) {
+        this.getContents(player).ifPresent(InventoryContents::notifyUpdate);
     }
 
     @NotNull

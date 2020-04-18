@@ -162,11 +162,9 @@ public interface InventoryContents {
     InventoryContents fillPatternRepeating(Pattern<Icon> pattern, SlotPos startPos,
                                            SlotPos endPos);
 
-    @NotNull
-    <T> T property(String name);
+    @NotNull <T> T property(String name);
 
-    @NotNull
-    <T> T property(String name, T def);
+    @NotNull <T> T property(String name, T def);
 
     @NotNull
     InventoryContents setProperty(String name, Object value);
@@ -183,6 +181,8 @@ public interface InventoryContents {
 
     @NotNull
     Inventory getTopInventory();
+
+    void notifyUpdate();
 
     final class Impl implements InventoryContents {
 
@@ -660,6 +660,11 @@ public interface InventoryContents {
         @NotNull
         public Inventory getTopInventory() {
             return this.player.getOpenInventory().getTopInventory();
+        }
+
+        @Override
+        public void notifyUpdate() {
+            this.page.notifyUpdate(this);
         }
 
         private void update(final int row, final int column, final ItemStack item) {

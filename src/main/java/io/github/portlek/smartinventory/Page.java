@@ -25,6 +25,7 @@
 
 package io.github.portlek.smartinventory;
 
+import io.github.portlek.smartinventory.content.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.OpenEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;
@@ -43,6 +44,8 @@ public interface Page {
     static Page build(@NotNull final SmartInventory inventory, @NotNull final InventoryProvided provided) {
         return new BasicPage(inventory, provided);
     }
+
+    void notifyUpdate(@NotNull InventoryContents contents);
 
     <T extends PageEvent> void accept(@NotNull T event);
 

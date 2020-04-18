@@ -29,10 +29,12 @@ import io.github.portlek.smartinventory.InventoryProvided;
 import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.Target;
+import io.github.portlek.smartinventory.content.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.OpenEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;
-import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.observer.Source;
+import io.github.portlek.smartinventory.observer.source.BasicSource;
 import io.github.portlek.smartinventory.opener.InventoryOpener;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +46,8 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public final class BasicPage implements Page {
+
+    private final Source<InventoryContents> source = new BasicSource<>();
 
     private final Collection<Target<? extends PageEvent>> targets = new ArrayList<>();
 
@@ -80,6 +84,12 @@ public final class BasicPage implements Page {
     public BasicPage(@NotNull final SmartInventory inventory, @NotNull final InventoryProvided provided) {
         this.inventory = inventory;
         this.provided = provided;
+        this.source.subscribe(provided);
+    }
+
+    @Override
+    public void notifyUpdate(@NotNull final InventoryContents contents) {
+        this.source.notifyTargets(contents);
     }
 
     @Override
