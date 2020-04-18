@@ -52,18 +52,6 @@ public interface InventoryOpener {
         }
     }
 
-    /**
-     * This method is used to configure the default inventory size(s)
-     * for inventories supported by this opener. These values will only
-     * be applied if the size is not set explicitly.
-     * <p>
-     * This method must return a non-null value for all supported inventory types.
-     *
-     * @param type inventory type
-     * @return The desired default dimensions, this default implementation returns
-     * (3x9) for type (ender)chest, (3x3) for dispenser and dropper and
-     * (1x_sizeOfInventoryType_) for everything else.
-     */
     default SlotPos defaultSize(@NotNull final InventoryType type) {
         switch (type) {
             case CHEST:

@@ -35,576 +35,144 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * <p>
- * Represents the content of an inventory.
- * </p>
- *
- * <p>
- * This contains several methods which let you get and modify
- * the content of the inventory.
- * </p>
- *
- * <p>
- * For example, you can get the item at a given slot by
- * using {@link InventoryContents#get(SlotPos)}. You can
- * also fill an entire column with the use of the method
- * {@link InventoryContents#fillColumn(int, Icon)}.
- * </p>
- */
 public interface InventoryContents {
 
-    /**
-     * Gets the inventory linked to this.
-     * <br>
-     * Cannot be {@code null}.
-     *
-     * @return the inventory
-     */
     @NotNull
     Page page();
 
-    /**
-     * Gets the pagination system linked to this.
-     * <br>
-     * Cannot be {@code null}.
-     *
-     * @return the pagination
-     */
+    @NotNull
     Pagination pagination();
 
-    /**
-     * Gets a previously registered iterator named with the given id.
-     * <br>
-     * If no iterator is found, this will return {@link Optional#empty()}.
-     *
-     * @param id the id of the iterator
-     * @return the found iterator, if there is one
-     */
-    Optional<SlotIterator> iterator(String id);
+    @NotNull
+    Optional<SlotIterator> iterator(@NotNull String id);
 
-    /**
-     * Creates and registers an iterator using a given id.
-     *
-     * <p>
-     * You can retrieve the iterator at any time using
-     * the {@link InventoryContents#iterator(String)} method.
-     * </p>
-     *
-     * @param id the id of the iterator
-     * @param type the type of the iterator
-     * @param startRow the starting row of the iterator
-     * @param startColumn the starting column of the iterator
-     * @return the newly created iterator
-     */
+    @NotNull
     SlotIterator newIterator(String id, SlotIterator.Type type, int startRow, int startColumn);
 
-    /**
-     * Creates and returns an iterator.
-     *
-     * <p>
-     * This does <b>NOT</b> registers the iterator,
-     * thus {@link InventoryContents#iterator(String)} will not be
-     * able to return the iterators created with this method.
-     * </p>
-     *
-     * @param type the type of the iterator
-     * @param startRow the starting row of the iterator
-     * @param startColumn the starting column of the iterator
-     * @return the newly created iterator
-     */
+    @NotNull
     SlotIterator newIterator(SlotIterator.Type type, int startRow, int startColumn);
 
-    /**
-     * Same as {@link InventoryContents#newIterator(String, SlotIterator.Type, int, int)},
-     * but using a {@link SlotPos} instead.
-     *
-     * @see InventoryContents#newIterator(String, SlotIterator.Type, int, int)
-     */
+    @NotNull
     SlotIterator newIterator(String id, SlotIterator.Type type, SlotPos startPos);
 
-    /**
-     * Same as {@link InventoryContents#newIterator(SlotIterator.Type, int, int)},
-     * but using a {@link SlotPos} instead.
-     *
-     * @see InventoryContents#newIterator(SlotIterator.Type, int, int)
-     */
+    @NotNull
     SlotIterator newIterator(SlotIterator.Type type, SlotPos startPos);
 
-    /**
-     * Returns a 2D array of Icons containing
-     * all the items of the inventory.
-     * The Icons can be null when there is no
-     * item in the corresponding slot.
-     *
-     * @return the items of the inventory
-     */
+    @NotNull
     Icon[][] all();
 
-    /**
-     * Returns a list of all the slots in the inventory.
-     *
-     * @return the inventory slots
-     */
+    @NotNull
     List<SlotPos> slots();
 
-    /**
-     * Returns the position of the first empty slot
-     * in the inventory, or {@link Optional#empty()} if
-     * there is no free slot.
-     *
-     * @return the first empty slot, if there is one
-     */
+    @NotNull
     Optional<SlotPos> firstEmpty();
 
-    /**
-     * Returns the item in the inventory at the given
-     * slot index, or {@link Optional#empty()} if
-     * the slot is empty or if the index is out of bounds.
-     *
-     * @param index the slot index
-     * @return the found item, if there is one
-     */
+    @NotNull
     Optional<Icon> get(int index);
 
-    /**
-     * Same as {@link InventoryContents#get(int)},
-     * but with a row and a column instead of the index.
-     *
-     * @see InventoryContents#get(int)
-     */
+    @NotNull
     Optional<Icon> get(int row, int column);
 
-    /**
-     * Same as {@link InventoryContents#get(int)},
-     * but with a {@link SlotPos} instead of the index.
-     *
-     * @see InventoryContents#get(int)
-     */
+    @NotNull
     Optional<Icon> get(SlotPos slotPos);
 
-    /**
-     * Sets the item in the inventory at the given
-     * slot index.
-     *
-     * @param index the slot index
-     * @param item the item to set, or {@code null} to clear the slot
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents set(int index, Icon item);
 
-    /**
-     * Same as {@link InventoryContents#set(int, Icon)},
-     * but with a row and a column instead of the index.
-     *
-     * @see InventoryContents#set(int, Icon)
-     */
+    @NotNull
     InventoryContents set(int row, int column, Icon item);
 
-    /**
-     * Same as {@link InventoryContents#set(int, Icon)},
-     * but with a {@link SlotPos} instead of the index.
-     *
-     * @see InventoryContents#set(int, Icon)
-     */
+    @NotNull
     InventoryContents set(SlotPos slotPos, Icon item);
 
-    /**
-     * Adds an item to the <b>first empty slot</b> of the inventory.
-     * <br>
-     * <b>Warning:</b> If there is already a stack of the same item,
-     * this will not add the item to the stack, this will always
-     * add the item into an empty slot.
-     *
-     * @param item the item to add
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents add(Icon item);
 
-    /**
-     * Looks for the given item and compares them using {@link ItemStack#isSimilar(ItemStack)},
-     * ignoring the amount.
-     * <br>
-     * This method searches row for row from left to right.
-     *
-     * @param item the item to look for
-     * @return an optional containing the position where the item first occurred, or an empty optional
-     */
+    @NotNull
     Optional<SlotPos> findItem(ItemStack item);
 
-    /**
-     * Looks for the given item and compares them using {@link ItemStack#isSimilar(ItemStack)},
-     * ignoring the amount.
-     * <br>
-     * This method searches row for row from left to right.
-     *
-     * @param item the clickable item with the item stack to look for
-     * @return an optional containing the position where the item first occurred, or an empty optional
-     */
+    @NotNull
     Optional<SlotPos> findItem(Icon item);
 
-    /**
-     * Clears the first slot where the given item is in.
-     * <br>
-     * The items will be compared using {@link ItemStack#isSimilar(ItemStack)} to check if the are equal.
-     * <br><br>
-     * The amount stored in the item is ignored for simplicity.
-     *
-     * @param item the item as an ItemStack that shall be removed from the inventory
-     */
     void removeFirst(ItemStack item);
 
-    /**
-     * Clears the first slot where the given item is in.
-     * <br>
-     * The items will be compared using {@link ItemStack#isSimilar(ItemStack)} to check if the are equal.
-     * <br>
-     * {@link Icon#calculateItem()} is used to get the item that will be compared against
-     * <br><br>
-     * The amount stored in the item is ignored for simplicity.
-     *
-     * @param item the item as a Icon that shall be removed from the inventory
-     */
     void removeFirst(Icon item);
 
-    /**
-     * Removes the specified amount of items from the inventory.
-     * <br>
-     * The items will be compared using {@link ItemStack#isSimilar(ItemStack)} to check if the are equal.
-     *
-     * @param item the item as an ItemStack that shall be removed from the inventory
-     * @param amount the amount that shall be removed
-     */
     void removeAmount(ItemStack item, int amount);
 
-    /**
-     * Removes the specified amount of items from the inventory.
-     * <br>
-     * The items will be compared using {@link ItemStack#isSimilar(ItemStack)} to check if the are equal.
-     * <br>
-     * {@link Icon#calculateItem()} is used to get the item that will be compared against
-     *
-     * @param item the item as a Icon that shall be removed from the inventory
-     * @param amount the amount that shall be removed
-     */
     void removeAmount(Icon item, int amount);
 
-    /**
-     * Removes all occurrences of the item from the inventory.
-     * <br>
-     * The items will be compared using {@link ItemStack#isSimilar(ItemStack)} to check if the are equal.
-     *
-     * @param item the item as an ItemStack that shall be removed from the inventory
-     */
     void removeAll(ItemStack item);
 
-    /**
-     * Removes all occurrences of the item from the inventory.
-     * <br>
-     * The items will be compared using {@link ItemStack#isSimilar(ItemStack)} to check if the are equal.
-     * <br>
-     * {@link Icon#calculateItem()} is used to get the item that will be compared against
-     *
-     * @param item the item as an Icon that shall be removed from the inventory
-     */
     void removeAll(Icon item);
 
-    /**
-     * Fills the inventory with the given item.
-     *
-     * @param item the item
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents fill(Icon item);
 
-    /**
-     * Fills the given inventory row with the given item.
-     *
-     * @param row the row to fill
-     * @param item the item
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents fillRow(int row, Icon item);
 
-    /**
-     * Fills the given inventory column with the given item.
-     *
-     * @param column the column to fill
-     * @param item the item
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents fillColumn(int column, Icon item);
 
-    /**
-     * Fills the inventory borders with the given item.
-     *
-     * @param item the item
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents fillBorders(Icon item);
 
-    /**
-     * Fills a rectangle inside the inventory using the given
-     * positions.
-     * <br>
-     * The created rectangle will have its top-left position at
-     * the given <b>from slot index</b> and its bottom-right position at
-     * the given <b>to slot index</b>.
-     *
-     * @param fromIndex the slot index at the top-left position
-     * @param toIndex the slot index at the bottom-right position
-     * @param item the item
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents fillRect(int fromIndex, int toIndex, Icon item);
 
-    /**
-     * Same as {@link InventoryContents#fillRect(int, int, Icon)},
-     * but with {@link SlotPos} instead of the indexes.
-     *
-     * @see InventoryContents#fillRect(int, int, Icon)
-     */
+    @NotNull
     InventoryContents fillRect(int fromRow, int fromColumn, int toRow, int toColumn, Icon item);
 
-    /**
-     * Same as {@link InventoryContents#fillRect(int, int, Icon)},
-     * but with rows and columns instead of the indexes.
-     *
-     * @see InventoryContents#fillRect(int, int, Icon)
-     */
+    @NotNull
     InventoryContents fillRect(SlotPos fromPos, SlotPos toPos, Icon item);
 
-    /**
-     * Completely fills the provided square with the given {@link Icon}.
-     *
-     * @param fromIndex the slot index of the upper left corner
-     * @param toIndex the slot index of the lower right corner
-     * @param item the item
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents fillSquare(int fromIndex, int toIndex, Icon item);
 
-    /**
-     * Completely fills the provided square with the given {@link Icon}.
-     *
-     * @param fromRow the row of the upper left corner
-     * @param fromColumn the column of the upper-left corner
-     * @param toRow the row of the lower right corner
-     * @param toColumn the column of the lower right corner
-     * @param item the item
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents fillSquare(int fromRow, int fromColumn, int toRow, int toColumn, Icon item);
 
-    /**
-     * Completely fills the provided square with the given {@link Icon}.
-     *
-     * @param fromPos the slot position of the upper left corner
-     * @param toPos the slot position of the lower right corner
-     * @param item the item
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents fillSquare(SlotPos fromPos, SlotPos toPos, Icon item);
 
-    /**
-     * Fills the inventory with the given {@link Pattern}.
-     * <br>
-     * The pattern will start at the first slot.
-     *
-     * @param pattern the filling pattern
-     * @return {@code this}, for chained calls
-     * @see #fillPattern(Pattern, int) to fill the pattern from the provided slot index
-     * @see #fillPattern(Pattern, int, int) to fill the pattern from the provided row and column
-     * @see #fillPattern(Pattern, SlotPos) to fill the pattern from the provided slot pos
-     */
+    @NotNull
     InventoryContents fillPattern(Pattern<Icon> pattern);
 
-    /**
-     * Fills the inventory with the given {@link Pattern}.
-     * <br>
-     * The pattern will start at the given slot index.
-     *
-     * @param pattern the filling pattern
-     * @param startIndex the start slot index for the filling
-     * @return {@code this}, for chained calls
-     * @see #fillPattern(Pattern) to fill the pattern from the first slot
-     * @see #fillPattern(Pattern, int, int) to fill the pattern from the provided row and column
-     * @see #fillPattern(Pattern, SlotPos) to fill the pattern from the provided slot pos
-     */
+    @NotNull
     InventoryContents fillPattern(Pattern<Icon> pattern, int startIndex);
 
-    /**
-     * Fills the inventory with the given {@link Pattern}.
-     * <br>
-     * The pattern will start at the given slot position based on the provided row and column.
-     *
-     * @param pattern the filling pattern
-     * @param startRow the start row of the slot for filling
-     * @param startColumn the start column of the slot for filling
-     * @return {@code this}, for chained calls
-     * @see #fillPattern(Pattern) to fill the pattern from the first slot
-     * @see #fillPattern(Pattern, int) to fill the pattern from the provided slot index
-     * @see #fillPattern(Pattern, SlotPos) to fill the pattern from the provided slot pos
-     */
+    @NotNull
     InventoryContents fillPattern(Pattern<Icon> pattern, int startRow, int startColumn);
 
-    /**
-     * Fills the inventory with the given {@link Pattern}.
-     * <br>
-     * The pattern will start at the given slot position.
-     *
-     * @param pattern the filling pattern
-     * @param startPos the start position of the slot for filling
-     * @return {@code this}, for chained calls
-     * @see #fillPattern(Pattern) to fill the pattern from the first slot
-     * @see #fillPattern(Pattern, int) to fill the pattern from the provided slot index
-     * @see #fillPattern(Pattern, int, int) to fill the pattern from the provided row and column
-     */
+    @NotNull
     InventoryContents fillPattern(Pattern<Icon> pattern, SlotPos startPos);
 
-    /**
-     * Fills the inventory with the given {@link Pattern}.
-     * <br>
-     * The pattern will start at the first slot and end at the last slot.
-     * If the pattern is not big enough, it will wrap around to the other side and repeat the pattern.
-     * <br>
-     * The top-left corner of the specified inventory area is also the top-left corner of the specified pattern.
-     * <br>
-     * <b>For this to work the pattern needs to be created with {@code wrapAround} enabled.</b>
-     *
-     * @param pattern the filling pattern
-     * @return {@code this}, for chained calls
-     * @see #fillPatternRepeating(Pattern, int, int) to fill a repeating pattern using slot indexes
-     * @see #fillPatternRepeating(Pattern, int, int, int, int) to fill a repeating pattern
-     * using slot positions contructed from their rows and columns
-     * @see #fillPatternRepeating(Pattern, SlotPos, SlotPos) to fill a repeating pattern using slot positions
-     */
+    @NotNull
     InventoryContents fillPatternRepeating(Pattern<Icon> pattern);
 
-    /**
-     * Fills the inventory with the given {@link Pattern}.
-     * <br>
-     * The pattern will start at the first slot index and end at the second slot index.
-     * If the pattern is not big enough, it will wrap around to the other side and repeat the pattern.
-     * <br>
-     * The top-left corner of the specified inventory area is also the top-left corner of the specified pattern.
-     * <br>
-     * If {@code endIndex} is a negative value it is set to the bottom-right corner.
-     * <br>
-     * <b>For this to work the pattern needs to be created with {@code wrapAround} enabled.</b>
-     *
-     * @param pattern the filling pattern
-     * @param startIndex the start slot index where the pattern should begin
-     * @param endIndex the end slot index where the pattern should end
-     * @return {@code this}, for chained calls
-     * @see #fillPatternRepeating(Pattern) to fill a repeating pattern into the whole inventory
-     * @see #fillPatternRepeating(Pattern, int, int, int, int) to fill a repeating pattern
-     * using slot positions contructed from their rows and columns
-     * @see #fillPatternRepeating(Pattern, SlotPos, SlotPos) to fill a repeating pattern using slot positions
-     */
+    @NotNull
     InventoryContents fillPatternRepeating(Pattern<Icon> pattern, int startIndex, int endIndex);
 
-    /**
-     * Fills the inventory with the given {@link Pattern}.
-     * <br>
-     * The pattern will start at the given slot position and end at the second slot position.
-     * If the pattern is not big enough, it will wrap around to the other side and repeat the pattern.
-     * <br>
-     * The top-left corner of the specified inventory area is also the top-left corner of the specified pattern.
-     * <br>
-     * If {@code endRow} is a negative value, endRow is automatically set to the max row size,
-     * if {@code endColumn} is a negative value, endColumn is automatically set to the max column size.
-     * <br>
-     * <b>For this to work the pattern needs to be created with {@code wrapAround} enabled.</b>
-     *
-     * @param pattern the filling pattern
-     * @param startRow the start row of the slot for filling
-     * @param startColumn the start column of the slot for filling
-     * @param endRow the end row of the slot for filling
-     * @param endColumn the end column of the slot for filling
-     * @return {@code this}, for chained calls
-     * @see #fillPatternRepeating(Pattern) to fill a repeating pattern into the whole inventory
-     * @see #fillPatternRepeating(Pattern, int, int) to fill a repeating pattern using slot indexes
-     * @see #fillPatternRepeating(Pattern, SlotPos, SlotPos) to fill a repeating pattern using slot positions
-     */
+    @NotNull
     InventoryContents fillPatternRepeating(Pattern<Icon> pattern, int startRow, int startColumn,
                                            int endRow, int endColumn);
 
-    /**
-     * Fills the inventory with the given {@link Pattern}.
-     * <br>
-     * The pattern will start at the given slot position and end at the second slot position.
-     * If the pattern is not big enough, it will wrap around to the other side and repeat the pattern.
-     * <br>
-     * The top-left corner of the specified inventory area is also the top-left corner of the specified pattern.
-     * <br>
-     * If the row of {@code endPos} is a negative value, endRow is automatically set to the max row size,
-     * if the column of {@code endPos} is a negative value, endColumn is automatically set to the max column size.
-     * <br>
-     * <b>For this to work the pattern needs to be created with {@code wrapAround} enabled.</b>
-     *
-     * @param pattern the filling pattern
-     * @param startPos the position where the pattern should start
-     * @param endPos the position where the pattern should end
-     * @return {@code this}, for chained calls
-     * @see #fillPatternRepeating(Pattern) to fill a repeating pattern into the whole inventory
-     * @see #fillPatternRepeating(Pattern, int, int) to fill a repeating pattern using slot indexes
-     * @see #fillPatternRepeating(Pattern, int, int, int, int) to fill a repeating pattern
-     * using slot positions contructed from their rows and columns
-     */
+    @NotNull
     InventoryContents fillPatternRepeating(Pattern<Icon> pattern, SlotPos startPos,
                                            SlotPos endPos);
 
-    /**
-     * Gets the value of the property with the given name.
-     *
-     * @param name the property's name
-     * @param <T> the type of the value
-     * @return the property's value
-     */
+    @NotNull
     <T> T property(String name);
 
-    /**
-     * Gets the value of the property with the given name,
-     * or a default value if the property isn't set.
-     *
-     * @param name the property's name
-     * @param def the default value
-     * @param <T> the type of the value
-     * @return the property's value, or the given default value
-     */
+    @NotNull
     <T> T property(String name, T def);
 
-    /**
-     * Sets the value of the property with the given name.
-     * <br>
-     * This will replace the existing value for the property,
-     * if there is one.
-     *
-     * @param name the property's name
-     * @param value the new property's value
-     * @return {@code this}, for chained calls
-     */
+    @NotNull
     InventoryContents setProperty(String name, Object value);
 
-    /**
-     * Makes a slot editable, which enables the player to
-     * put items in and take items out of the inventory in the
-     * specified slot.
-     *
-     * @param slot The slot to set editable
-     * @param editable {@code true} to make a slot editable, {@code false}
-     * to make it 'static' again.
-     */
     void setEditable(SlotPos slot, boolean editable);
 
-    /**
-     * Returns if a given slot is editable or not.
-     *
-     * @param slot The slot to check
-     * @return {@code true} if the editable.
-     * @see #setEditable(SlotPos, boolean)
-     */
     boolean isEditable(SlotPos slot);
 
     @NotNull

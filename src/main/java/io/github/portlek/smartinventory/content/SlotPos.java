@@ -25,10 +25,6 @@
 
 package io.github.portlek.smartinventory.content;
 
-/**
- * Represents the position (row + column) of a slot
- * in an inventory.
- */
 public final class SlotPos {
 
     private final int row;
