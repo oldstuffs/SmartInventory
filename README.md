@@ -6,7 +6,6 @@ Advanced Inventory API for your Minecraft Bukkit plugins.
 
 [![Build Status](https://travis-ci.com/portlek/SmartInventory.svg?branch=master)](https://travis-ci.com/portlek/SmartInventory)
 ![maven-central](https://img.shields.io/maven-central/v/io.github.portlek/SmartInventory)
-Advanced Inventory API for your Minecraft Bukkit plugins.
 
 ## Setup
 
