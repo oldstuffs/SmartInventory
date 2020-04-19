@@ -1,17 +1,38 @@
 # SmartInventory
-[![idea](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
-[![rultor](https://www.rultor.com/b/yegor256/rultor)](https://www.rultor.com/p/portlek/configs)
-![build](https://github.com/portlek/SmartInventory/workflows/Java%20CI%20with%20Maven/badge.svg)
-![maven-central](https://img.shields.io/maven-central/v/io.github.portlek/SmartInventory)
 
+[![idea](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
+[![rultor](https://www.rultor.com/b/yegor256/rultor)](https://www.rultor.com/p/portlek/SmartInventory)
+
+[![Build Status](https://travis-ci.com/portlek/SmartInventory.svg?branch=master)](https://travis-ci.com/portlek/SmartInventory)
+![maven-central](https://img.shields.io/maven-central/v/io.github.portlek/SmartInventory)
 Advanced Inventory API for your Minecraft Bukkit plugins.
+
+## Setup
+
+<details>
+<summary>Gradle</summary>
+
+```gradle
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("io.github.portlek:SmartInventory:${version}")
+}
+```
+</details>
+
+<details>
+<summary>Maven</summary>
 
 ```xml
 <dependencies>
     <dependency>
-        <groupId>io.github.portlek</groupId>
-        <artifactId>SmartInvnetory</artifactId>
-        <version>${version}</version>
+      <groupId>io.github.portlek</groupId>
+      <artifactId>SmartInventory</artifactId>
+      <version>${version}</version>
     </dependency>
 </dependencies>
 ```
+</details>
