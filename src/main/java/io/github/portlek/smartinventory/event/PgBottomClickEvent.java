@@ -25,8 +25,8 @@
 
 package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.event.abs.BottomClickEvent;
 import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.event.abs.BottomClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.Plugin;

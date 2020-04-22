@@ -25,8 +25,8 @@
 
 package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.event.abs.QuitEvent;
 import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.event.abs.QuitEvent;
 import org.jetbrains.annotations.NotNull;
 
 public final class PlyrQuitEvent implements QuitEvent {

@@ -26,8 +26,8 @@
 package io.github.portlek.smartinventory.listener;
 
 import io.github.portlek.smartinventory.SmartInventory;
-import io.github.portlek.smartinventory.event.IcDragEvent;
 import io.github.portlek.smartinventory.content.SlotPos;
+import io.github.portlek.smartinventory.event.IcDragEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

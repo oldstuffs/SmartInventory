@@ -25,8 +25,8 @@
 
 package io.github.portlek.smartinventory.event;
 
-import io.github.portlek.smartinventory.event.abs.DisableEvent;
 import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.event.abs.DisableEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class PlgnDisableEvent implements DisableEvent {

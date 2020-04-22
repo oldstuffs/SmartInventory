@@ -31,7 +31,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface InventoryProvided extends Target<InventoryContents> {
 
-    void init(@NotNull InventoryContents contents);
+    default void init(@NotNull final InventoryContents contents) {
+    }
 
     default void tick(@NotNull final InventoryContents contents) {
     }
