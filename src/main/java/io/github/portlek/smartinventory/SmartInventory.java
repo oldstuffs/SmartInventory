@@ -25,149 +25,59 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.content.InventoryContents;
-import io.github.portlek.smartinventory.listener.*;
-import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
 import io.github.portlek.smartinventory.opener.InventoryOpener;
-import java.util.*;
-import java.util.stream.Stream;
-import org.bukkit.Bukkit;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-public final class SmartInventory {
+public interface SmartInventory {
 
     @NotNull
-    private final Plugin plugin;
-
-    private final Map<Player, Page> pages = new HashMap<>();
-
-    private final Map<Player, InventoryContents> contents = new HashMap<>();
-
-    private final Map<Player, BukkitRunnable> tasks = new HashMap<>();
-
-    private final List<InventoryOpener> defaulters = Collections.singletonList(
-        new ChestInventoryOpener()
-    );
-
-    private final Collection<InventoryOpener> openers = new ArrayList<>();
-
-    public SmartInventory(@NotNull final Plugin plugin) {
-        this.plugin = plugin;
-    }
+    void init();
 
     @NotNull
-    public void init() {
-        Arrays.asList(
-            new InventoryClickListener(this),
-            new InventoryOpenListener(this),
-            new InventoryCloseListener(this),
-            new PlayerQuitListener(this),
-            new PluginDisableListener(this),
-            new InventoryDragListener(this)
-        ).forEach(listener ->
-            Bukkit.getPluginManager().registerEvents(listener, this.plugin()));
-    }
+    Plugin plugin();
 
     @NotNull
-    public Plugin plugin() {
-        return this.plugin;
-    }
+    Optional<InventoryOpener> findOpener(@NotNull InventoryType type);
+
+    void registerOpeners(@NotNull InventoryOpener... openers);
 
     @NotNull
-    public Optional<InventoryOpener> findOpener(@NotNull final InventoryType type) {
-        return Stream.of(this.openers, this.defaulters)
-            .flatMap(Collection::stream)
-            .filter(opener -> opener.supports(type))
-            .findAny();
-    }
-
-    public void registerOpeners(@NotNull final InventoryOpener... openers) {
-        this.openers.addAll(Arrays.asList(openers));
-    }
+    List<Player> getOpenedPlayers(@NotNull Page inv);
 
     @NotNull
-    public List<Player> getOpenedPlayers(@NotNull final Page inv) {
-        final List<Player> list = new ArrayList<>();
-        this.pages.forEach((player, playerInv) -> {
-            if (inv.equals(playerInv)) {
-                list.add(player);
-            }
-        });
-        return list;
-    }
+    Optional<Page> getPage(@NotNull Player player);
+
+    void notifyUpdate(@NotNull Player player);
 
     @NotNull
-    public Optional<Page> getPage(@NotNull final Player player) {
-        return Optional.ofNullable(this.pages.get(player));
-    }
-
-    public void notifyUpdate(@NotNull final Player player) {
-        this.getContents(player).ifPresent(InventoryContents::notifyUpdate);
-    }
+    Optional<InventoryContents> getContents(@NotNull Player player);
 
     @NotNull
-    public Optional<InventoryContents> getContents(@NotNull final Player player) {
-        return Optional.ofNullable(this.contents.get(player));
-    }
+    Map<Player, Page> getPages();
 
     @NotNull
-    public Map<Player, Page> getPages() {
-        return Collections.unmodifiableMap(this.pages);
-    }
+    Map<Player, InventoryContents> getContents();
 
-    @NotNull
-    public Map<Player, InventoryContents> getContents() {
-        return Collections.unmodifiableMap(this.contents);
-    }
+    void removePage(@NotNull Player player);
 
-    public void removePage(@NotNull final Player player) {
-        this.pages.remove(player);
-    }
+    void removeContent(@NotNull Player player);
 
-    public void removeContent(@NotNull final Player player) {
-        this.contents.remove(player);
-    }
+    void clearPages();
 
-    public void clearPages() {
-        this.pages.clear();
-    }
+    void clearContents();
 
-    public void clearContents() {
-        this.contents.clear();
-    }
+    void stopTick(Player player);
 
-    public void stopTick(final Player player) {
-        Optional.ofNullable(this.tasks.get(player)).ifPresent(runnable -> {
-            Bukkit.getScheduler().cancelTask(runnable.getTaskId());
-            this.tasks.remove(player);
-        });
-    }
+    void setPage(@NotNull Player player, @NotNull Page page);
 
-    public void setPage(@NotNull final Player player, @NotNull final Page page) {
-        this.pages.put(player, page);
-    }
+    void setContents(@NotNull Player player, @NotNull InventoryContents contest);
 
-    public void setContents(@NotNull final Player player, @NotNull final InventoryContents contest) {
-        this.contents.put(player, contest);
-    }
-
-    public void tick(@NotNull final Player player, @NotNull final Page page) {
-        final BukkitRunnable task = new BukkitRunnable() {
-            @Override
-            public void run() {
-                page.provider().tick(SmartInventory.this.contents.get(player));
-            }
-        };
-        if (page.async()) {
-            task.runTaskTimer(this.plugin, 1L, page.tick());
-        } else {
-            task.runTaskTimerAsynchronously(this.plugin, 1L, page.tick());
-        }
-        this.tasks.put(player, task);
-    }
+    void tick(@NotNull Player player, @NotNull Page page);
 
 }

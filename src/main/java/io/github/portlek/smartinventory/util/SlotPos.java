@@ -23,7 +23,7 @@
  *
  */
 
-package io.github.portlek.smartinventory.content;
+package io.github.portlek.smartinventory.util;
 
 public final class SlotPos {
 

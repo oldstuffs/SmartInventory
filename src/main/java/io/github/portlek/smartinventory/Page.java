@@ -25,7 +25,6 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.content.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.OpenEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;

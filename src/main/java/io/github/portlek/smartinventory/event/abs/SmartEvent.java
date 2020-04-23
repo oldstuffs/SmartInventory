@@ -25,7 +25,7 @@
 
 package io.github.portlek.smartinventory.event.abs;
 
-import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.InventoryContents;
 import org.jetbrains.annotations.NotNull;
 
 public interface SmartEvent {

@@ -26,9 +26,9 @@
 package io.github.portlek.smartinventory.opener;
 
 import io.github.portlek.smartinventory.Icon;
+import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.content.InventoryContents;
-import io.github.portlek.smartinventory.content.SlotPos;
+import io.github.portlek.smartinventory.util.SlotPos;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;

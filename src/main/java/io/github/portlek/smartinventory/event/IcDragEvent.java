@@ -26,7 +26,7 @@
 package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.Icon;
-import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.DragEvent;
 import java.util.Map;
 import java.util.Set;

@@ -23,33 +23,43 @@
  *
  */
 
-package io.github.portlek.smartinventory.event;
+package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import org.jetbrains.annotations.NotNull;
 
-public final class PgCloseEvent implements CloseEvent {
+public interface Pagination {
 
     @NotNull
-    private final InventoryContents contents;
+    Icon[] getPageItems();
 
-    public PgCloseEvent(@NotNull final InventoryContents contents) {
-        this.contents = contents;
-    }
+    int getPage();
 
     @NotNull
-    @Override
-    public InventoryContents contents() {
-        return this.contents;
-    }
+    Pagination page(int page);
 
-    @Override
-    public void cancel() {
-    }
+    boolean isFirst();
 
-    @Override
-    public void close() {
-    }
+    boolean isLast();
+
+    @NotNull
+    Pagination first();
+
+    @NotNull
+    Pagination previous();
+
+    @NotNull
+    Pagination next();
+
+    @NotNull
+    Pagination last();
+
+    @NotNull
+    Pagination addToIterator(SlotIterator iterator);
+
+    @NotNull
+    Pagination setItems(Icon... items);
+
+    @NotNull
+    Pagination setItemsPerPage(int itemsPerPage);
 
 }

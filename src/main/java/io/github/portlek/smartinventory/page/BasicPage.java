@@ -25,11 +25,7 @@
 
 package io.github.portlek.smartinventory.page;
 
-import io.github.portlek.smartinventory.InventoryProvided;
-import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.SmartInventory;
-import io.github.portlek.smartinventory.Target;
-import io.github.portlek.smartinventory.content.InventoryContents;
+import io.github.portlek.smartinventory.*;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.OpenEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;

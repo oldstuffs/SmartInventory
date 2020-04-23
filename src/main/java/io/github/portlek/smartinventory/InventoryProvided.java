@@ -25,7 +25,6 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.content.InventoryContents;
 import io.github.portlek.smartinventory.observer.Target;
 import org.jetbrains.annotations.NotNull;
 

@@ -25,7 +25,6 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.content.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.ClickEvent;
 import io.github.portlek.smartinventory.event.abs.DragEvent;
 import io.github.portlek.smartinventory.event.abs.IconEvent;
