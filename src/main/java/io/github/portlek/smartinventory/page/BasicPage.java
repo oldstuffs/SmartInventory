@@ -26,6 +26,7 @@
 package io.github.portlek.smartinventory.page;
 
 import io.github.portlek.smartinventory.*;
+import io.github.portlek.smartinventory.content.BasicInventoryContents;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.OpenEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;
@@ -214,7 +215,7 @@ public final class BasicPage implements Page {
     @Override
     public Inventory open(@NotNull final Player player, final int page, @NotNull final Map<String, Object> properties) {
         this.close(player);
-        final InventoryContents contents = new InventoryContents.Impl(this, player);
+        final InventoryContents contents = new BasicInventoryContents(this, player);
         contents.pagination().page(page);
         properties.forEach(contents::setProperty);
         this.inventory.setContents(player, contents);
