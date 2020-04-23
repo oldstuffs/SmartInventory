@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BasicInventoryContents implements InventoryContents {
 
-    private final Pagination pagination = new Pagination.Impl();
+    private final Pagination pagination = new BasicPagination();
 
     private final Map<String, SlotIterator> iterators = new HashMap<>();
 
@@ -78,7 +78,7 @@ public final class BasicInventoryContents implements InventoryContents {
     @Override
     public SlotIterator newIterator(final String id, final SlotIterator.Type type,
                                     final int startRow, final int startColumn) {
-        final SlotIterator iterator = new SlotIterator.Impl(this, type, startRow, startColumn);
+        final SlotIterator iterator = new BasicSlotIterator(this, type, startRow, startColumn);
         this.iterators.put(id, iterator);
         return iterator;
     }
@@ -86,7 +86,7 @@ public final class BasicInventoryContents implements InventoryContents {
     @Override
     public SlotIterator newIterator(final SlotIterator.Type type, final int startRow,
                                     final int startColumn) {
-        return new SlotIterator.Impl(this, type, startRow, startColumn);
+        return new BasicSlotIterator(this, type, startRow, startColumn);
     }
 
     @Override
