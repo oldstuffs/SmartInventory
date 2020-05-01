@@ -50,4 +50,7 @@ public interface ClickEvent extends IconEvent {
     @NotNull
     Optional<ItemStack> cursor();
 
+    @NotNull
+    Optional<ItemStack> current();
+
 }

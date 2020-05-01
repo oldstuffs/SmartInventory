@@ -96,6 +96,12 @@ public final class IcClickEvent implements ClickEvent {
 
     @NotNull
     @Override
+    public Optional<ItemStack> current() {
+        return Optional.of(this.event.getCurrentItem());
+    }
+
+    @NotNull
+    @Override
     public Icon icon() {
         return this.icon;
     }
