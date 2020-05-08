@@ -50,11 +50,10 @@ public final class InventoryOpenListener implements Listener {
             return;
         }
         final Player player = (Player) human;
-        this.inventory.getPage(player).ifPresent(old ->
+        this.inventory.getPage(player).ifPresent(page ->
             this.inventory.getContents(player)
-                .map(contents ->
-                    new PgOpenEvent(this.inventory.plugin(), event, contents))
-                .ifPresent(old::accept));
+                .map(contents -> new PgOpenEvent(this.inventory.plugin(), event, contents))
+                .ifPresent(page::accept));
     }
 
 }

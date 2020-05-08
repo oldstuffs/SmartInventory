@@ -54,16 +54,12 @@ public final class InventoryCloseListener implements Listener {
             return;
         }
         final Player player = (Player) human;
-        final Optional<Page> optional = this.inventory.getPage(player);
-        if (!optional.isPresent()) {
-            return;
-        }
         final Optional<InventoryContents> contentsoptional = this.inventory.getContents(player);
         if (!contentsoptional.isPresent()) {
             return;
         }
-        final Page page = optional.get();
         final InventoryContents contents = contentsoptional.get();
+        final Page page = contents.page();
         final PgCloseEvent close = new PgCloseEvent(contents);
         page.accept(close);
         if (!page.canClose(close)) {
