@@ -25,8 +25,11 @@
 
 package io.github.portlek.smartinventory.listener;
 
+import io.github.portlek.smartinventory.InventoryContents;
+import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
+import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -51,18 +54,24 @@ public final class InventoryCloseListener implements Listener {
             return;
         }
         final Player player = (Player) human;
-        this.inventory.getPage(player).ifPresent(old ->
-            this.inventory.getContents(player)
-                .map(PgCloseEvent::new)
-                .ifPresent(close -> {
-                    old.accept(close);
-                    if (!old.canClose(close)) {
-                        Bukkit.getScheduler().runTask(this.inventory.plugin(), () ->
-                            player.openInventory(event.getInventory()));
-                        return;
-                    }
-                    event.getInventory().clear();
-                }));
+        final Optional<Page> optional = this.inventory.getPage(player);
+        if (!optional.isPresent()) {
+            return;
+        }
+        final Optional<InventoryContents> contentsoptional = this.inventory.getContents(player);
+        if (!contentsoptional.isPresent()) {
+            return;
+        }
+        final Page page = optional.get();
+        final InventoryContents contents = contentsoptional.get();
+        final PgCloseEvent close = new PgCloseEvent(contents);
+        page.accept(close);
+        if (!page.canClose(close)) {
+            Bukkit.getScheduler().runTask(this.inventory.plugin(), () ->
+                player.openInventory(event.getInventory()));
+            return;
+        }
+        event.getInventory().clear();
         this.inventory.stopTick(player);
         this.inventory.removePage(player);
         this.inventory.removeContent(player);
