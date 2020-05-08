@@ -91,12 +91,10 @@ public final class BasicPage implements Page {
 
     @Override
     public <T extends PageEvent> void accept(@NotNull final T event) {
-        if (this.control.test(event)) {
-            this.targets.stream()
-                .filter(target -> target.getType().isAssignableFrom(event.getClass()))
-                .map(target -> (Target<T>) target)
-                .forEach(target -> target.accept(event));
-        }
+        this.targets.stream()
+            .filter(target -> target.getType().isAssignableFrom(event.getClass()))
+            .map(target -> (Target<T>) target)
+            .forEach(target -> target.accept(event));
     }
 
     @NotNull
