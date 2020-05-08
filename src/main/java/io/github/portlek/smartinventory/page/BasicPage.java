@@ -27,6 +27,7 @@ package io.github.portlek.smartinventory.page;
 
 import io.github.portlek.smartinventory.*;
 import io.github.portlek.smartinventory.content.BasicInventoryContents;
+import io.github.portlek.smartinventory.event.PgCloseEvent;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.OpenEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;
@@ -230,10 +231,13 @@ public final class BasicPage implements Page {
 
     @Override
     public void close(@NotNull final Player player) {
-        player.closeInventory();
+        this.inventory.getContents(player)
+            .map(PgCloseEvent::new)
+            .ifPresent(this::accept);
         this.inventory.removePage(player);
         this.inventory.removeContent(player);
         this.inventory.stopTick(player);
+        player.closeInventory();
     }
 
 }
