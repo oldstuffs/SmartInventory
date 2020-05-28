@@ -40,6 +40,7 @@ public final class PluginDisableListener implements Listener {
 
     public PluginDisableListener(@NotNull final SmartInventory inventory) {
         this.inventory = inventory;
+        PlgnDisableEvent.class.getSimpleName();
     }
 
     @EventHandler
