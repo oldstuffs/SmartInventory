@@ -100,6 +100,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <minimizeJar>true</minimizeJar>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
@@ -146,13 +147,9 @@
                             <goal>sign</goal>
                         </goals>
                         <configuration>
-                            <!--suppress UnresolvedMavenProperty -->
                             <executable>${gpg.executable}</executable>
-                            <!--suppress UnresolvedMavenProperty -->
                             <passphrase>${gpg.passphrase}</passphrase>
-                            <!--suppress UnresolvedMavenProperty -->
                             <keyname>${gpg.keyname}</keyname>
-                            <!--suppress UnresolvedMavenProperty -->
                             <homedir>${gpg.homedir}</homedir>
                             <useAgent>true</useAgent>
                         </configuration>
@@ -170,11 +167,6 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>io.github.portlek</groupId>
-            <artifactId>BukkitItemBuilder</artifactId>
-            <version>1.2</version>
-        </dependency>
         <dependency>
             <artifactId>annotations</artifactId>
             <groupId>org.jetbrains</groupId>
