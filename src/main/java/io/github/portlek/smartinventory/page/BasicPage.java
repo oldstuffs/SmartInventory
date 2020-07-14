@@ -49,6 +49,7 @@ public final class BasicPage implements Page {
 
     private final Collection<Target<? extends PageEvent>> targets = new ArrayList<>();
 
+    // TODO ???
     private final Predicate<PageEvent> control = event ->
         event instanceof CloseEvent && this.canClose((CloseEvent) event) ||
             event instanceof OpenEvent && this.canOpen((OpenEvent) event);
