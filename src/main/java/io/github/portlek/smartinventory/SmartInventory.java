@@ -40,7 +40,7 @@ public interface SmartInventory {
     void init();
 
     @NotNull
-    Plugin plugin();
+    Plugin getPlugin();
 
     @NotNull
     Optional<InventoryOpener> findOpener(@NotNull InventoryType type);

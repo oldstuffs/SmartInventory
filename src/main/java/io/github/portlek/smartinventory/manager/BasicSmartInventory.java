@@ -33,6 +33,8 @@ import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
 import io.github.portlek.smartinventory.opener.InventoryOpener;
 import java.util.*;
 import java.util.stream.Stream;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -40,6 +42,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class BasicSmartInventory implements SmartInventory {
 
     private final Map<Player, Page> pages = new HashMap<>();
@@ -55,11 +58,8 @@ public final class BasicSmartInventory implements SmartInventory {
     private final Collection<InventoryOpener> openers = new ArrayList<>();
 
     @NotNull
+    @Getter
     private final Plugin plugin;
-
-    public BasicSmartInventory(@NotNull final Plugin plugin) {
-        this.plugin = plugin;
-    }
 
     @NotNull
     @Override
@@ -72,13 +72,7 @@ public final class BasicSmartInventory implements SmartInventory {
             new PluginDisableListener(this),
             new InventoryDragListener(this)
         ).forEach(listener ->
-            Bukkit.getPluginManager().registerEvents(listener, this.plugin()));
-    }
-
-    @NotNull
-    @Override
-    public Plugin plugin() {
-        return this.plugin;
+            Bukkit.getPluginManager().registerEvents(listener, this.plugin));
     }
 
     @NotNull
