@@ -42,9 +42,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BasicSmartInventory implements SmartInventory {
 
-    @NotNull
-    private final Plugin plugin;
-
     private final Map<Player, Page> pages = new HashMap<>();
 
     private final Map<Player, InventoryContents> contents = new HashMap<>();
@@ -56,6 +53,9 @@ public final class BasicSmartInventory implements SmartInventory {
     );
 
     private final Collection<InventoryOpener> openers = new ArrayList<>();
+
+    @NotNull
+    private final Plugin plugin;
 
     public BasicSmartInventory(@NotNull final Plugin plugin) {
         this.plugin = plugin;
