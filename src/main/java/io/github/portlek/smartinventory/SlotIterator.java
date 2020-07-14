@@ -30,13 +30,6 @@ import io.github.portlek.smartinventory.util.SlotPos;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * <p>
- * The SlotIterator system allows you to iterate through the slots of
- * an inventory either {@link SlotIterator.Type#HORIZONTAL horizontally}
- * or {@link SlotIterator.Type#VERTICAL vertically}.
- * </p>
- *///TODO: Add SlotIterator usage example
 public interface SlotIterator {
 
     @NotNull

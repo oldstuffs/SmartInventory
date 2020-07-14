@@ -27,22 +27,28 @@ package io.github.portlek.smartinventory.util;
 
 import com.google.common.base.Preconditions;
 import java.util.*;
+import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class Pattern<T> {
 
     private final Map<Character, T> mapping = new HashMap<>();
 
+    @NotNull
     private final String[] lines;
 
     private final boolean wrapAround;
 
+    @Nullable
+    @Getter
     private T defaultValue;
 
-    public Pattern(final String... lines) {
+    public Pattern(@NotNull final String... lines) {
         this(false, lines);
     }
 
-    public Pattern(final boolean wrapAround, final String... lines) {
+    public Pattern(final boolean wrapAround, @NotNull final String... lines) {
         Preconditions.checkArgument(lines.length > 0, "The given pattern lines must not be empty.");
         final int count = lines[0].length();
         this.lines = new String[lines.length];
@@ -56,11 +62,13 @@ public final class Pattern<T> {
         this.wrapAround = wrapAround;
     }
 
-    public Pattern<T> attach(final char character, final T object) {
+    @NotNull
+    public Pattern<T> attach(final char character, @NotNull final T object) {
         this.mapping.put(character, object);
         return this;
     }
 
+    @NotNull
     public T getObject(final int index) {
         final int count = this.getColumnCount();
         return this.getObject(index / count, index % count);
@@ -70,10 +78,11 @@ public final class Pattern<T> {
         return this.lines[0].length();
     }
 
+    @NotNull
     public T getObject(final int row, final int column) {
         int rowclone = row;
         int columnclone = column;
-        if (this.wrapAround) { // Prevent overflow of numbers. Allows for infinite repeating patterns.
+        if (this.wrapAround) {
             rowclone %= this.getRowCount();
             if (rowclone < 0) {
                 rowclone += this.getRowCount();
@@ -93,10 +102,12 @@ public final class Pattern<T> {
         return this.lines.length;
     }
 
-    public T getObject(final SlotPos slot) {
+    @NotNull
+    public T getObject(@NotNull final SlotPos slot) {
         return this.getObject(slot.getRow(), slot.getColumn());
     }
 
+    @NotNull
     public Optional<SlotPos> findKey(final char character) {
         for (int row = 0; row < this.getRowCount(); row++) {
             for (int column = 0; column < this.getColumnCount(); column++) {
@@ -108,6 +119,7 @@ public final class Pattern<T> {
         return Optional.empty();
     }
 
+    @NotNull
     public List<SlotPos> findAllKeys(final char character) {
         final List<SlotPos> positions = new ArrayList<>();
         for (int row = 0; row < this.getRowCount(); row++) {
@@ -120,11 +132,8 @@ public final class Pattern<T> {
         return positions;
     }
 
-    public T getDefault() {
-        return this.defaultValue;
-    }
-
-    public Pattern<T> setDefault(final T defaultValue) {
+    @NotNull
+    public Pattern<T> setDefault(@NotNull final T defaultValue) {
         this.defaultValue = defaultValue;
         return this;
     }

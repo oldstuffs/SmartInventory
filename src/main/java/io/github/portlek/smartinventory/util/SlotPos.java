@@ -25,54 +25,23 @@
 
 package io.github.portlek.smartinventory.util;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+@RequiredArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 public final class SlotPos {
 
     private final int row;
 
     private final int column;
 
-    public SlotPos(final int row, final int column) {
-        this.row = row;
-        this.column = column;
-    }
-
     public static SlotPos of(final int row, final int column) {
         return new SlotPos(row, column);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = this.row;
-        result = 31 * result + this.column;
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || this.getClass() != obj.getClass()) {
-            return false;
-        }
-        final SlotPos slotPos = (SlotPos) obj;
-        return this.row == slotPos.row && this.column == slotPos.column;
-    }
-
-    @Override
-    public String toString() {
-        return "SlotPos{" +
-            "row=" + this.row +
-            ", column=" + this.column +
-            '}';
-    }
-
-    public int getRow() {
-        return this.row;
-    }
-
-    public int getColumn() {
-        return this.column;
     }
 
 }
