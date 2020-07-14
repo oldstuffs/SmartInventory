@@ -34,6 +34,7 @@ import io.github.portlek.smartinventory.event.PgClickEvent;
 import io.github.portlek.smartinventory.event.PgOutsideClickEvent;
 import io.github.portlek.smartinventory.util.SlotPos;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -44,14 +45,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class InventoryClickListener implements Listener {
 
     @NotNull
     private final SmartInventory inventory;
-
-    public InventoryClickListener(@NotNull final SmartInventory inventory) {
-        this.inventory = inventory;
-    }
 
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent event) {
@@ -72,16 +70,16 @@ public final class InventoryClickListener implements Listener {
         }
         final Inventory clicked = event.getClickedInventory();
         if (clicked == null) {
-            page.accept(new PgOutsideClickEvent(this.inventory.plugin(), event, contents));
+            page.accept(new PgOutsideClickEvent(this.inventory.getPlugin(), event, contents));
             return;
         }
         if (clicked.equals(player.getOpenInventory().getBottomInventory())) {
-            page.accept(new PgBottomClickEvent(this.inventory.plugin(), event, contents));
+            page.accept(new PgBottomClickEvent(this.inventory.getPlugin(), event, contents));
             return;
         }
         final ItemStack current = event.getCurrentItem();
         if (current == null || current.getType() == Material.AIR) {
-            page.accept(new PgClickEvent(this.inventory.plugin(), event, contents));
+            page.accept(new PgClickEvent(this.inventory.getPlugin(), event, contents));
             return;
         }
         final int row = event.getSlot() / 9;
@@ -94,7 +92,7 @@ public final class InventoryClickListener implements Listener {
             event.setCancelled(true);
         }
         contents.get(slot).ifPresent(item ->
-            item.accept(new IcClickEvent(this.inventory.plugin(), event, contents, item)));
+            item.accept(new IcClickEvent(this.inventory.getPlugin(), event, contents, item)));
         if (!contents.isEditable(slot)) {
             player.updateInventory();
         }

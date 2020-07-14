@@ -30,6 +30,7 @@ import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -38,14 +39,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class InventoryCloseListener implements Listener {
 
     @NotNull
     private final SmartInventory inventory;
-
-    public InventoryCloseListener(@NotNull final SmartInventory inventory) {
-        this.inventory = inventory;
-    }
 
     @EventHandler
     public void onInventoryClose(final InventoryCloseEvent event) {
@@ -63,7 +61,7 @@ public final class InventoryCloseListener implements Listener {
         final PgCloseEvent close = new PgCloseEvent(contents);
         page.accept(close);
         if (!page.canClose(close)) {
-            Bukkit.getScheduler().runTask(this.inventory.plugin(), () ->
+            Bukkit.getScheduler().runTask(this.inventory.getPlugin(), () ->
                 player.openInventory(event.getInventory()));
             return;
         }

@@ -28,18 +28,19 @@ package io.github.portlek.smartinventory.listener;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PlgnDisableEvent;
 import java.util.HashMap;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class PluginDisableListener implements Listener {
 
     @NotNull
     private final SmartInventory inventory;
 
-    public PluginDisableListener(@NotNull final SmartInventory inventory) {
-        this.inventory = inventory;
+    {
         PlgnDisableEvent.class.getSimpleName();
     }
 

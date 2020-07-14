@@ -27,20 +27,18 @@ package io.github.portlek.smartinventory.listener;
 
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PlyrQuitEvent;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class PlayerQuitListener implements Listener {
 
     @NotNull
     private final SmartInventory inventory;
-
-    public PlayerQuitListener(@NotNull final SmartInventory inventory) {
-        this.inventory = inventory;
-    }
 
     @EventHandler
     public void onPlayerQuit(final PlayerQuitEvent event) {
