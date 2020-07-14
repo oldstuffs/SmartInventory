@@ -30,11 +30,13 @@ import io.github.portlek.smartinventory.*;
 import io.github.portlek.smartinventory.util.Pattern;
 import io.github.portlek.smartinventory.util.SlotPos;
 import java.util.*;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class BasicInventoryContents implements InventoryContents {
 
     private final Pagination pagination = new BasicPagination();
@@ -54,10 +56,8 @@ public final class BasicInventoryContents implements InventoryContents {
     @NotNull
     private final Icon[][] contents;
 
-    public BasicInventoryContents(@NotNull final Page page, @NotNull final Player plyr) {
-        this.page = page;
-        this.player = plyr;
-        this.contents = new Icon[page.row()][page.column()];
+    public BasicInventoryContents(@NotNull final Page page, @NotNull final Player player) {
+        this(page, player, new Icon[page.row()][page.column()]);
     }
 
     @Override

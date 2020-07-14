@@ -27,16 +27,14 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.QuitEvent;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class PlyrQuitEvent implements QuitEvent {
 
     @NotNull
     private final InventoryContents contents;
-
-    public PlyrQuitEvent(@NotNull final InventoryContents contents) {
-        this.contents = contents;
-    }
 
     @NotNull
     @Override

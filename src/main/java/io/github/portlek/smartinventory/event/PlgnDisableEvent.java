@@ -27,16 +27,14 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.DisableEvent;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public class PlgnDisableEvent implements DisableEvent {
 
     @NotNull
     private final InventoryContents contents;
-
-    public PlgnDisableEvent(@NotNull final InventoryContents contents) {
-        this.contents = contents;
-    }
 
     @NotNull
     @Override

@@ -272,7 +272,7 @@ public final class BasicSlotIterator implements SlotIterator {
                                     final int columnOffset) {
         this.patternRowOffset = rowOffset;
         this.patternColumnOffset = columnOffset;
-        if (pattern.getDefault() == null) {
+        if (pattern.getDefaultValue() == null) {
             pattern.setDefault(false);
         }
         this.pattern = pattern;
@@ -289,7 +289,7 @@ public final class BasicSlotIterator implements SlotIterator {
                                          final int columnOffset) {
         this.blacklistPatternRowOffset = rowOffset;
         this.blacklistPatternColumnOffset = columnOffset;
-        if (pattern.getDefault() == null) {
+        if (pattern.getDefaultValue() == null) {
             pattern.setDefault(false);
         }
         this.blacklistPattern = pattern;

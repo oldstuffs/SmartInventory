@@ -27,16 +27,14 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class PgCloseEvent implements CloseEvent {
 
     @NotNull
     private final InventoryContents contents;
-
-    public PgCloseEvent(@NotNull final InventoryContents contents) {
-        this.contents = contents;
-    }
 
     @NotNull
     @Override

@@ -27,11 +27,13 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.OpenEvent;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class PgOpenEvent implements OpenEvent {
 
     @NotNull
@@ -42,13 +44,6 @@ public final class PgOpenEvent implements OpenEvent {
 
     @NotNull
     private final InventoryContents contents;
-
-    public PgOpenEvent(@NotNull final Plugin plugin, @NotNull final InventoryOpenEvent event,
-                       @NotNull final InventoryContents contents) {
-        this.plugin = plugin;
-        this.event = event;
-        this.contents = contents;
-    }
 
     @NotNull
     @Override

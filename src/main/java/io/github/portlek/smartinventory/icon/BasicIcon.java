@@ -32,10 +32,12 @@ import io.github.portlek.smartinventory.event.abs.IconEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class BasicIcon implements Icon {
 
     private final Collection<Target<? extends IconEvent>> targets = new ArrayList<>();
@@ -51,10 +53,6 @@ public final class BasicIcon implements Icon {
 
     @NotNull
     private ItemStack fallback = new ItemStack(Material.AIR);
-
-    public BasicIcon(@NotNull final ItemStack item) {
-        this.item = item;
-    }
 
     @NotNull
     @Override

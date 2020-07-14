@@ -26,6 +26,7 @@
 package io.github.portlek.smartinventory.event.abs;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import org.bukkit.event.inventory.DragType;
 import org.bukkit.inventory.ItemStack;
@@ -43,6 +44,6 @@ public interface DragEvent extends IconEvent {
     Set<Integer> slots();
 
     @NotNull
-    ItemStack newcursor();
+    Optional<ItemStack> newcursor();
 
 }

@@ -29,6 +29,7 @@ import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.ClickEvent;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
@@ -38,6 +39,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public final class IcClickEvent implements ClickEvent {
 
     @NotNull
@@ -51,14 +53,6 @@ public final class IcClickEvent implements ClickEvent {
 
     @NotNull
     private final Icon icon;
-
-    public IcClickEvent(@NotNull final Plugin plugin, @NotNull final InventoryClickEvent event,
-                        @NotNull final InventoryContents contents, @NotNull final Icon icon) {
-        this.plugin = plugin;
-        this.event = event;
-        this.contents = contents;
-        this.icon = icon;
-    }
 
     @Override
     public int row() {
@@ -97,7 +91,7 @@ public final class IcClickEvent implements ClickEvent {
     @NotNull
     @Override
     public Optional<ItemStack> current() {
-        return Optional.of(this.event.getCurrentItem());
+        return Optional.ofNullable(this.event.getCurrentItem());
     }
 
     @NotNull
