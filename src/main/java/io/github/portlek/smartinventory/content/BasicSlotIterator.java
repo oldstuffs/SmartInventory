@@ -113,23 +113,18 @@ public final class BasicSlotIterator implements SlotIterator {
         }
         do {
             if (this.started) {
-                switch (this.type) {
-                    case HORIZONTAL:
-                        this.column--;
-
-                        if (this.column == 0) {
-                            this.column = this.contents.page().column() - 1;
-                            this.row--;
-                        }
-                        break;
-                    case VERTICAL:
+                if (this.type == SlotIterator.Type.HORIZONTAL) {
+                    this.column--;
+                    if (this.column == 0) {
+                        this.column = this.contents.page().column() - 1;
                         this.row--;
-
-                        if (this.row == 0) {
-                            this.row = this.contents.page().row() - 1;
-                            this.column--;
-                        }
-                        break;
+                    }
+                } else if (this.type == SlotIterator.Type.VERTICAL) {
+                    this.row--;
+                    if (this.row == 0) {
+                        this.row = this.contents.page().row() - 1;
+                        this.column--;
+                    }
                 }
             } else {
                 this.started = true;
