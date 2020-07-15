@@ -233,9 +233,9 @@ public final class BasicPage implements Page {
         this.inventory.getContents(player)
             .map(PgCloseEvent::new)
             .ifPresent(this::accept);
+        this.inventory.stopTick(player);
         this.inventory.removePage(player);
         this.inventory.removeContent(player);
-        this.inventory.stopTick(player);
         player.closeInventory();
     }
 
