@@ -46,16 +46,16 @@ public interface InventoryContents {
     Optional<SlotIterator> iterator(@NotNull String id);
 
     @NotNull
-    SlotIterator newIterator(String id, SlotIterator.Type type, int startRow, int startColumn);
+    SlotIterator newIterator(@NotNull String id, @NotNull SlotIterator.Type type, int startRow, int startColumn);
 
     @NotNull
-    SlotIterator newIterator(SlotIterator.Type type, int startRow, int startColumn);
+    SlotIterator newIterator(@NotNull SlotIterator.Type type, int startRow, int startColumn);
 
     @NotNull
-    SlotIterator newIterator(String id, SlotIterator.Type type, SlotPos startPos);
+    SlotIterator newIterator(@NotNull String id, @NotNull SlotIterator.Type type, @NotNull SlotPos startPos);
 
     @NotNull
-    SlotIterator newIterator(SlotIterator.Type type, SlotPos startPos);
+    SlotIterator newIterator(@NotNull SlotIterator.Type type, @NotNull SlotPos startPos);
 
     @NotNull
     Icon[][] all();
@@ -73,104 +73,104 @@ public interface InventoryContents {
     Optional<Icon> get(int row, int column);
 
     @NotNull
-    Optional<Icon> get(SlotPos slotPos);
+    Optional<Icon> get(@NotNull SlotPos slotPos);
 
     @NotNull
     InventoryContents set(int index, Icon item);
 
     @NotNull
-    InventoryContents set(int row, int column, Icon item);
+    InventoryContents set(int row, int column, @NotNull Icon item);
 
     @NotNull
-    InventoryContents set(SlotPos slotPos, Icon item);
+    InventoryContents set(@NotNull SlotPos slotPos, @NotNull Icon item);
 
     @NotNull
     InventoryContents add(Icon item);
 
     @NotNull
-    Optional<SlotPos> findItem(ItemStack item);
+    Optional<SlotPos> findItem(@NotNull ItemStack item);
 
     @NotNull
-    Optional<SlotPos> findItem(Icon item);
+    Optional<SlotPos> findItem(@NotNull Icon item);
 
-    void removeFirst(ItemStack item);
+    void removeFirst(@NotNull ItemStack item);
 
-    void removeFirst(Icon item);
+    void removeFirst(@NotNull Icon item);
 
-    void removeAmount(ItemStack item, int amount);
+    void removeAmount(@NotNull ItemStack item, int amount);
 
-    void removeAmount(Icon item, int amount);
+    void removeAmount(@NotNull Icon item, int amount);
 
-    void removeAll(ItemStack item);
+    void removeAll(@NotNull ItemStack item);
 
-    void removeAll(Icon item);
-
-    @NotNull
-    InventoryContents fill(Icon item);
+    void removeAll(@NotNull Icon item);
 
     @NotNull
-    InventoryContents fillRow(int row, Icon item);
+    InventoryContents fill(@NotNull Icon item);
 
     @NotNull
-    InventoryContents fillColumn(int column, Icon item);
+    InventoryContents fillRow(int row, @NotNull Icon item);
 
     @NotNull
-    InventoryContents fillBorders(Icon item);
+    InventoryContents fillColumn(int column, @NotNull Icon item);
 
     @NotNull
-    InventoryContents fillRect(int fromIndex, int toIndex, Icon item);
+    InventoryContents fillBorders(@NotNull Icon item);
 
     @NotNull
-    InventoryContents fillRect(int fromRow, int fromColumn, int toRow, int toColumn, Icon item);
+    InventoryContents fillRect(int fromIndex, int toIndex, @NotNull Icon item);
 
     @NotNull
-    InventoryContents fillRect(SlotPos fromPos, SlotPos toPos, Icon item);
+    InventoryContents fillRect(int fromRow, int fromColumn, int toRow, int toColumn, @NotNull Icon item);
 
     @NotNull
-    InventoryContents fillSquare(int fromIndex, int toIndex, Icon item);
+    InventoryContents fillRect(@NotNull SlotPos fromPos, @NotNull SlotPos toPos, @NotNull Icon item);
 
     @NotNull
-    InventoryContents fillSquare(int fromRow, int fromColumn, int toRow, int toColumn, Icon item);
+    InventoryContents fillSquare(int fromIndex, int toIndex, @NotNull Icon item);
 
     @NotNull
-    InventoryContents fillSquare(SlotPos fromPos, SlotPos toPos, Icon item);
+    InventoryContents fillSquare(int fromRow, int fromColumn, int toRow, int toColumn, @NotNull Icon item);
 
     @NotNull
-    InventoryContents fillPattern(Pattern<Icon> pattern);
+    InventoryContents fillSquare(@NotNull SlotPos fromPos, @NotNull SlotPos toPos, @NotNull Icon item);
 
     @NotNull
-    InventoryContents fillPattern(Pattern<Icon> pattern, int startIndex);
+    InventoryContents fillPattern(@NotNull Pattern<Icon> pattern);
 
     @NotNull
-    InventoryContents fillPattern(Pattern<Icon> pattern, int startRow, int startColumn);
+    InventoryContents fillPattern(@NotNull Pattern<Icon> pattern, int startIndex);
 
     @NotNull
-    InventoryContents fillPattern(Pattern<Icon> pattern, SlotPos startPos);
+    InventoryContents fillPattern(@NotNull Pattern<Icon> pattern, int startRow, int startColumn);
 
     @NotNull
-    InventoryContents fillPatternRepeating(Pattern<Icon> pattern);
+    InventoryContents fillPattern(@NotNull Pattern<Icon> pattern, @NotNull SlotPos startPos);
 
     @NotNull
-    InventoryContents fillPatternRepeating(Pattern<Icon> pattern, int startIndex, int endIndex);
+    InventoryContents fillPatternRepeating(@NotNull Pattern<Icon> pattern);
 
     @NotNull
-    InventoryContents fillPatternRepeating(Pattern<Icon> pattern, int startRow, int startColumn,
+    InventoryContents fillPatternRepeating(@NotNull Pattern<Icon> pattern, int startIndex, int endIndex);
+
+    @NotNull
+    InventoryContents fillPatternRepeating(@NotNull Pattern<Icon> pattern, int startRow, int startColumn,
                                            int endRow, int endColumn);
 
     @NotNull
-    InventoryContents fillPatternRepeating(Pattern<Icon> pattern, SlotPos startPos,
-                                           SlotPos endPos);
+    InventoryContents fillPatternRepeating(@NotNull Pattern<Icon> pattern, @NotNull SlotPos startPos,
+                                           @NotNull SlotPos endPos);
 
-    @NotNull <T> T property(String name);
+    @NotNull <T> T property(@NotNull String name);
 
-    @NotNull <T> T property(String name, T def);
+    @NotNull <T> T property(@NotNull String name, @NotNull T def);
 
     @NotNull
-    InventoryContents setProperty(String name, Object value);
+    InventoryContents setProperty(@NotNull String name, @NotNull Object value);
 
-    void setEditable(SlotPos slot, boolean editable);
+    void setEditable(@NotNull SlotPos slot, boolean editable);
 
-    boolean isEditable(SlotPos slot);
+    boolean isEditable(@NotNull SlotPos slot);
 
     @NotNull
     Player player();
