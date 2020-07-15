@@ -40,6 +40,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Icon {
 
+    Icon EMPTY = Icon.empty();
+
     @NotNull
     static Icon from(@NotNull final ItemStack item) {
         return new BasicIcon(item);

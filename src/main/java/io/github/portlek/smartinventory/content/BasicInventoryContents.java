@@ -35,6 +35,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @RequiredArgsConstructor
 public final class BasicInventoryContents implements InventoryContents {
@@ -60,21 +61,25 @@ public final class BasicInventoryContents implements InventoryContents {
         this(page, player, new Icon[page.row()][page.column()]);
     }
 
+    @NotNull
     @Override
     public Page page() {
         return this.page;
     }
 
+    @NotNull
     @Override
     public Pagination pagination() {
         return this.pagination;
     }
 
+    @NotNull
     @Override
     public Optional<SlotIterator> iterator(@NotNull final String id) {
         return Optional.ofNullable(this.iterators.get(id));
     }
 
+    @NotNull
     @Override
     public SlotIterator newIterator(@NotNull final String id, @NotNull final SlotIterator.Type type,
                                     final int startRow, final int startColumn) {
@@ -83,28 +88,33 @@ public final class BasicInventoryContents implements InventoryContents {
         return iterator;
     }
 
+    @NotNull
     @Override
     public SlotIterator newIterator(@NotNull final SlotIterator.Type type, final int startRow,
                                     final int startColumn) {
         return new BasicSlotIterator(this, type, startRow, startColumn);
     }
 
+    @NotNull
     @Override
     public SlotIterator newIterator(@NotNull final String id, @NotNull final SlotIterator.Type type,
                                     @NotNull final SlotPos startPos) {
         return this.newIterator(id, type, startPos.getRow(), startPos.getColumn());
     }
 
+    @NotNull
     @Override
     public SlotIterator newIterator(@NotNull final SlotIterator.Type type, @NotNull final SlotPos startPos) {
         return this.newIterator(type, startPos.getRow(), startPos.getColumn());
     }
 
+    @NotNull
     @Override
     public Icon[][] all() {
         return this.contents.clone();
     }
 
+    @NotNull
     @Override
     public List<SlotPos> slots() {
         final List<SlotPos> position = new ArrayList<>();
@@ -116,6 +126,7 @@ public final class BasicInventoryContents implements InventoryContents {
         return position;
     }
 
+    @NotNull
     @Override
     public Optional<SlotPos> firstEmpty() {
         for (int row = 0; row < this.contents.length; row++) {
@@ -128,12 +139,14 @@ public final class BasicInventoryContents implements InventoryContents {
         return Optional.empty();
     }
 
+    @NotNull
     @Override
     public Optional<Icon> get(final int index) {
         final int count = this.page.column();
         return this.get(index / count, index % count);
     }
 
+    @NotNull
     @Override
     public Optional<Icon> get(final int row, final int column) {
         if (row < 0 || row >= this.contents.length) {
@@ -142,20 +155,23 @@ public final class BasicInventoryContents implements InventoryContents {
         if (column < 0 || column >= this.contents[row].length) {
             return Optional.empty();
         }
-        return Optional.ofNullable(this.contents[row][column]);
+        return Optional.of(this.contents[row][column]);
     }
 
+    @NotNull
     @Override
     public Optional<Icon> get(@NotNull final SlotPos pos) {
         return this.get(pos.getRow(), pos.getColumn());
     }
 
+    @NotNull
     @Override
     public InventoryContents set(final int index, @NotNull final Icon item) {
         final int columnCount = this.page.column();
         return this.set(index / columnCount, index % columnCount, item);
     }
 
+    @NotNull
     @Override
     public InventoryContents set(final int row, final int column, @NotNull final Icon item) {
         if (row < 0 || row >= this.contents.length) {
@@ -165,24 +181,49 @@ public final class BasicInventoryContents implements InventoryContents {
             return this;
         }
         this.contents[row][column] = item;
-        if (item == null) {
-            this.update(row, column, null);
-        } else {
-            this.update(row, column, item.calculateItem(this));
-        }
+        this.update(row, column, item.calculateItem(this));
         return this;
     }
 
+    @NotNull
     @Override
     public InventoryContents set(@NotNull final SlotPos slotPos, @NotNull final Icon item) {
         return this.set(slotPos.getRow(), slotPos.getColumn(), item);
     }
 
+    @NotNull
+    @Override
+    public InventoryContents remove(final int index) {
+        final int columnCount = this.page.column();
+        return this.remove(index / columnCount, index % columnCount);
+    }
+
+    @NotNull
+    @Override
+    public InventoryContents remove(final int row, final int column) {
+        if (row < 0 || row >= this.contents.length) {
+            return this;
+        }
+        if (column < 0 || column >= this.contents[row].length) {
+            return this;
+        }
+        this.contents[row][column] = Icon.EMPTY;
+        this.removeAndUpdate(row, column);
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public InventoryContents remove(@NotNull final SlotPos slotPos) {
+        return this.remove(slotPos.getRow(), slotPos.getColumn());
+    }
+
+    @NotNull
     @Override
     public InventoryContents add(@NotNull final Icon item) {
         for (int row = 0; row < this.contents.length; row++) {
             for (int column = 0; column < this.contents[0].length; column++) {
-                if (this.contents[row][column] == null) {
+                if (Icon.EMPTY.equals(this.contents[row][column])) {
                     this.set(row, column, item);
                     return this;
                 }
@@ -191,12 +232,13 @@ public final class BasicInventoryContents implements InventoryContents {
         return this;
     }
 
+    @NotNull
     @Override
     public Optional<SlotPos> findItem(@NotNull final ItemStack itemStack) {
         for (int row = 0; row < this.contents.length; row++) {
             for (int column = 0; column < this.contents[0].length; column++) {
                 final Icon item = this.contents[row][column];
-                if (item != null && itemStack.isSimilar(item.calculateItem(this))) {
+                if (itemStack.isSimilar(item.calculateItem(this))) {
                     return Optional.of(SlotPos.of(row, column));
                 }
             }
@@ -204,48 +246,43 @@ public final class BasicInventoryContents implements InventoryContents {
         return Optional.empty();
     }
 
+    @NotNull
     @Override
-    public Optional<SlotPos> findItem(@NotNull final Icon clickableItem) {
-        return this.findItem(clickableItem.calculateItem(this));
+    public Optional<SlotPos> findItem(@NotNull final Icon item) {
+        return this.findItem(item.calculateItem(this));
     }
 
     @Override
     public void removeFirst(@NotNull final ItemStack item) {
-        Preconditions.checkNotNull(item, "The itemstack to remove cannot be null");
-        this.findItem(item).ifPresent(slotPos -> {
-            this.set(slotPos, null);
-        });
+        this.findItem(item).ifPresent(this::remove);
     }
 
     @Override
     public void removeFirst(@NotNull final Icon item) {
-        Preconditions.checkNotNull(item, "The clickableitem to remove cannot be null");
         this.removeFirst(item.calculateItem());
     }
 
     @Override
     public void removeAmount(@NotNull final ItemStack item, int amount) {
-        Preconditions.checkNotNull(item, "The itemstack to remove cannot be null");
         for (int row = 0; row < this.contents.length; row++) {
             for (int column = 0; column < this.contents[row].length; column++) {
                 final Icon icon = this.contents[row][column];
-                if (icon != null &&
-                    item.isSimilar(icon.calculateItem())) {
-                    final ItemStack foundStack = icon.calculateItem();
-                    // if the stack amount is smaller than what needs to be removed, remove the stack and continue
-                    if (foundStack.getAmount() <= amount) {
-                        amount -= foundStack.getAmount();
-                        this.set(row, column, null);
-                        if (amount == 0) {
-                            return;
-                        }
-                    } else if (foundStack.getAmount() > amount) {// but if the stack is bigger that what needs to be removed, shrink the stack and then finish
-                        final ItemStack clonedStack = foundStack.clone();
-                        clonedStack.setAmount(clonedStack.getAmount() - amount);
-                        final Icon clonedIcon = icon.clone(clonedStack);
-                        this.set(row, column, clonedIcon);
+                if (!item.isSimilar(icon.calculateItem())) {
+                    continue;
+                }
+                final ItemStack foundStack = icon.calculateItem();
+                if (foundStack.getAmount() <= amount) {
+                    amount -= foundStack.getAmount();
+                    this.remove(row, column);
+                    if (amount == 0) {
                         return;
                     }
+                } else if (foundStack.getAmount() > amount) {
+                    final ItemStack clonedStack = foundStack.clone();
+                    clonedStack.setAmount(clonedStack.getAmount() - amount);
+                    final Icon clonedIcon = icon.clone(clonedStack);
+                    this.set(row, column, clonedIcon);
+                    return;
                 }
             }
         }
@@ -518,6 +555,13 @@ public final class BasicInventoryContents implements InventoryContents {
         if (this.page.inventory().getOpenedPlayers(this.page).contains(this.player)) {
             final Inventory inv = this.getTopInventory();
             inv.setItem(this.page.column() * row + column, item);
+        }
+    }
+
+    private void removeAndUpdate(final int row, final int column) {
+        if (this.page.inventory().getOpenedPlayers(this.page).contains(this.player)) {
+            final Inventory inv = this.getTopInventory();
+            inv.setItem(this.page.column() * row + column, null);
         }
     }
 

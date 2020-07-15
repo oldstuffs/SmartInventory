@@ -85,6 +85,15 @@ public interface InventoryContents {
     InventoryContents set(@NotNull SlotPos slotPos, @NotNull Icon item);
 
     @NotNull
+    InventoryContents remove(int index);
+
+    @NotNull
+    InventoryContents remove(int row, int column);
+
+    @NotNull
+    InventoryContents remove(@NotNull SlotPos slotPos);
+
+    @NotNull
     InventoryContents add(Icon item);
 
     @NotNull

@@ -27,7 +27,6 @@ package io.github.portlek.smartinventory.util;
 
 import com.google.common.base.Preconditions;
 import java.util.*;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +40,6 @@ public final class Pattern<T> {
     private final boolean wrapAround;
 
     @Nullable
-    @Getter
     private T defaultValue;
 
     public Pattern(@NotNull final String... lines) {
@@ -60,6 +58,11 @@ public final class Pattern<T> {
             this.lines[i] = lines[i];
         }
         this.wrapAround = wrapAround;
+    }
+
+    @NotNull
+    public Optional<T> getDefaultValue() {
+        return Optional.ofNullable(this.defaultValue);
     }
 
     @NotNull

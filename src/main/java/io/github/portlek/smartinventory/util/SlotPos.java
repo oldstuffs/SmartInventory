@@ -40,10 +40,6 @@ public final class SlotPos {
 
     private final int column;
 
-    public static SlotPos of(final int slot) {
-        return SlotPos.of(slot / 9, slot % 9);
-    }
-
     public static SlotPos of(final int row, final int column) {
         return new SlotPos(row, column);
     }

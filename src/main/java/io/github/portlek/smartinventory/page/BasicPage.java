@@ -217,7 +217,7 @@ public final class BasicPage implements Page {
         this.close(player);
         final InventoryContents contents = new BasicInventoryContents(this, player);
         contents.pagination().page(page);
-        properties.forEach(contents::setProperty);
+        properties.forEach(contents::property);
         this.inventory.setContents(player, contents);
         this.provider().init(contents);
         final InventoryOpener opener = this.inventory.findOpener(this.type)
