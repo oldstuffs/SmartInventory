@@ -52,17 +52,15 @@ public interface InventoryOpener {
         }
     }
 
+    @NotNull
     default SlotPos defaultSize(@NotNull final InventoryType type) {
-        switch (type) {
-            case CHEST:
-            case ENDER_CHEST:
-                return SlotPos.of(3, 9);
-            case DISPENSER:
-            case DROPPER:
-                return SlotPos.of(3, 3);
-            default:
-                return SlotPos.of(1, type.getDefaultSize());
+        if (type == InventoryType.CHEST || type == InventoryType.ENDER_CHEST) {
+            return SlotPos.of(3, 9);
         }
+        if (type == InventoryType.DISPENSER || type == InventoryType.DROPPER) {
+            return SlotPos.of(3, 3);
+        }
+        return SlotPos.of(1, type.getDefaultSize());
     }
 
 }

@@ -111,6 +111,16 @@ public interface Page {
     @NotNull <T extends PageEvent> Page target(@NotNull Target<T> target);
 
     @NotNull
+    default Page canOpen(final boolean canOpen) {
+        return this.canOpen(event -> canOpen);
+    }
+
+    @NotNull
+    default Page canClose(final boolean canClose) {
+        return this.canClose(event -> canClose);
+    }
+
+    @NotNull
     Page canOpen(@NotNull Predicate<OpenEvent> predicate);
 
     @NotNull

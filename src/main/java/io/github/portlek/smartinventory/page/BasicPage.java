@@ -205,10 +205,8 @@ public final class BasicPage implements Page {
 
     @Override
     public boolean checkBounds(final int row, final int column) {
-        if (row < 0 || column < 0) {
-            return false;
-        }
-        return row < this.row && column < this.column;
+        return row >= 0 && column >= 0 ||
+            row < this.row && column < this.column;
     }
 
     @NotNull
