@@ -34,12 +34,16 @@ import io.github.portlek.smartinventory.util.SlotPos;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class BasicSlotIterator implements SlotIterator {
 
+    @NotNull
     private final SlotIterator.Type type;
 
+    @NotNull
     private final InventoryContents contents;
 
     private final int startRow;
@@ -64,12 +68,14 @@ public final class BasicSlotIterator implements SlotIterator {
 
     private int patternColumnOffset;
 
+    @Nullable
     private Pattern<Boolean> pattern;
 
     private int blacklistPatternRowOffset;
 
     private int blacklistPatternColumnOffset;
 
+    @Nullable
     private Pattern<Boolean> blacklistPattern;
 
     public BasicSlotIterator(@NotNull final InventoryContents contents, @NotNull final SlotIterator.Type type) {
@@ -310,19 +316,16 @@ public final class BasicSlotIterator implements SlotIterator {
     }
 
     private boolean canPlace() {
-        boolean patternAllows = true;
-        if (this.pattern != null) {
-            patternAllows = this.checkPattern(this.pattern, this.patternRowOffset, this.patternColumnOffset);
-        }
-        boolean blacklistPatternAllows = true;
-        if (this.blacklistPattern != null) {
-            blacklistPatternAllows = !this.checkPattern(this.blacklistPattern, this.blacklistPatternRowOffset,
-                this.blacklistPatternColumnOffset);
-        }
+        final AtomicBoolean patternAllows = new AtomicBoolean(true);
+        Optional.ofNullable(this.pattern).ifPresent(booleanPattern ->
+            patternAllows.set(this.checkPattern(booleanPattern, this.patternRowOffset, this.patternColumnOffset)));
+        final AtomicBoolean blacklistPatternAllows = new AtomicBoolean(true);
+        Optional.ofNullable(this.blacklistPattern).ifPresent(booleanPattern ->
+            blacklistPatternAllows.set(!this.checkPattern(booleanPattern, this.blacklistPatternRowOffset, this.blacklistPatternColumnOffset)));
         return !this.blacklisted.contains(SlotPos.of(this.row, this.column)) &&
             (this.allowOverride || !this.get().isPresent()) &&
-            patternAllows &&
-            blacklistPatternAllows;
+            patternAllows.get() &&
+            blacklistPatternAllows.get();
     }
 
     private boolean checkPattern(@NotNull final Pattern<Boolean> pattern, final int rowOffset,
