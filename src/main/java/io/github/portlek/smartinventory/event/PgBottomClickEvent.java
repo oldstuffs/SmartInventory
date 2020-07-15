@@ -59,7 +59,7 @@ public final class PgBottomClickEvent implements BottomClickEvent {
     @Override
     public void close() {
         Bukkit.getScheduler().runTaskLater(this.plugin, () ->
-            this.contents.player().closeInventory(), 1L);
+            this.contents.page().close(this.contents.player()), 1L);
     }
 
 }

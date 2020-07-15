@@ -59,7 +59,7 @@ public final class PgOpenEvent implements OpenEvent {
     @Override
     public void close() {
         Bukkit.getScheduler().runTaskLater(this.plugin, () ->
-            this.event.getPlayer().closeInventory(), 1L);
+            this.contents.page().close(this.contents.player()), 1L);
     }
 
 }
