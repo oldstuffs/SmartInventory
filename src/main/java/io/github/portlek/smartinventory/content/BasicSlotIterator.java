@@ -34,6 +34,7 @@ import io.github.portlek.smartinventory.util.SlotPos;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 public final class BasicSlotIterator implements SlotIterator {
 
@@ -71,12 +72,12 @@ public final class BasicSlotIterator implements SlotIterator {
 
     private Pattern<Boolean> blacklistPattern;
 
-    public BasicSlotIterator(final InventoryContents contents, final SlotIterator.Type type) {
+    public BasicSlotIterator(@NotNull final InventoryContents contents, @NotNull final SlotIterator.Type type) {
         this(contents, type, 0, 0);
     }
 
-    public BasicSlotIterator(final InventoryContents contents, final SlotIterator.Type type, final int startRow,
-                             final int startColumn) {
+    public BasicSlotIterator(@NotNull final InventoryContents contents, @NotNull final SlotIterator.Type type,
+                             final int startRow, final int startColumn) {
         this.contents = contents;
         this.type = type;
         this.endRow = this.contents.page().row() - 1;
@@ -87,13 +88,15 @@ public final class BasicSlotIterator implements SlotIterator {
         this.column = startColumn;
     }
 
+    @NotNull
     @Override
     public Optional<Icon> get() {
         return this.contents.get(this.row, this.column);
     }
 
+    @NotNull
     @Override
-    public SlotIterator set(final Icon item) {
+    public SlotIterator set(@NotNull final Icon item) {
         if (this.canPlace()) {
             this.contents.set(this.row, this.column, item);
         }
@@ -101,6 +104,7 @@ public final class BasicSlotIterator implements SlotIterator {
         return this;
     }
 
+    @NotNull
     @Override
     public SlotIterator previous() {
         if (this.row == 0 && this.column == 0) {
@@ -136,6 +140,7 @@ public final class BasicSlotIterator implements SlotIterator {
         return this;
     }
 
+    @NotNull
     @Override
     public SlotIterator next() {
         if (this.ended()) {
@@ -172,6 +177,7 @@ public final class BasicSlotIterator implements SlotIterator {
         return this;
     }
 
+    @NotNull
     @Override
     public SlotIterator blacklist(final int index) {
         final int count = this.contents.page().column();
@@ -179,14 +185,16 @@ public final class BasicSlotIterator implements SlotIterator {
         return this;
     }
 
+    @NotNull
     @Override
     public SlotIterator blacklist(final int row, final int column) {
         this.blacklisted.add(SlotPos.of(row, column));
         return this;
     }
 
+    @NotNull
     @Override
-    public SlotIterator blacklist(final SlotPos slotPos) {
+    public SlotIterator blacklist(@NotNull final SlotPos slotPos) {
         return this.blacklist(slotPos.getRow(), slotPos.getColumn());
     }
 
@@ -195,6 +203,7 @@ public final class BasicSlotIterator implements SlotIterator {
         return this.row;
     }
 
+    @NotNull
     @Override
     public SlotIterator row(final int row) {
         this.row = row;
@@ -206,12 +215,14 @@ public final class BasicSlotIterator implements SlotIterator {
         return this.column;
     }
 
+    @NotNull
     @Override
     public SlotIterator column(final int column) {
         this.column = column;
         return this;
     }
 
+    @NotNull
     @Override
     public SlotIterator reset() {
         this.started = false;
@@ -231,6 +242,7 @@ public final class BasicSlotIterator implements SlotIterator {
             && this.column == this.endColumn;
     }
 
+    @NotNull
     @Override
     public SlotIterator endPosition(int row, int column) {
         if (row < 0) {
@@ -246,8 +258,9 @@ public final class BasicSlotIterator implements SlotIterator {
         return this;
     }
 
+    @NotNull
     @Override
-    public SlotIterator endPosition(final SlotPos endPosition) {
+    public SlotIterator endPosition(@NotNull final SlotPos endPosition) {
         return this.endPosition(endPosition.getRow(), endPosition.getColumn());
     }
 
@@ -256,19 +269,22 @@ public final class BasicSlotIterator implements SlotIterator {
         return this.allowOverride;
     }
 
+    @NotNull
     @Override
     public SlotIterator allowOverride(final boolean override) {
         this.allowOverride = override;
         return this;
     }
 
+    @NotNull
     @Override
-    public SlotIterator withPattern(final Pattern<Boolean> pattern) {
+    public SlotIterator withPattern(@NotNull final Pattern<Boolean> pattern) {
         return this.withPattern(pattern, 0, 0);
     }
 
+    @NotNull
     @Override
-    public SlotIterator withPattern(final Pattern<Boolean> pattern, final int rowOffset,
+    public SlotIterator withPattern(@NotNull final Pattern<Boolean> pattern, final int rowOffset,
                                     final int columnOffset) {
         this.patternRowOffset = rowOffset;
         this.patternColumnOffset = columnOffset;
@@ -279,13 +295,15 @@ public final class BasicSlotIterator implements SlotIterator {
         return this;
     }
 
+    @NotNull
     @Override
-    public SlotIterator blacklistPattern(final Pattern<Boolean> pattern) {
+    public SlotIterator blacklistPattern(@NotNull final Pattern<Boolean> pattern) {
         return this.blacklistPattern(pattern, 0, 0);
     }
 
+    @NotNull
     @Override
-    public SlotIterator blacklistPattern(final Pattern<Boolean> pattern, final int rowOffset,
+    public SlotIterator blacklistPattern(@NotNull final Pattern<Boolean> pattern, final int rowOffset,
                                          final int columnOffset) {
         this.blacklistPatternRowOffset = rowOffset;
         this.blacklistPatternColumnOffset = columnOffset;
@@ -312,15 +330,16 @@ public final class BasicSlotIterator implements SlotIterator {
             blacklistPatternAllows;
     }
 
-    private boolean checkPattern(final Pattern<Boolean> pattern, final int rowOffset,
+    private boolean checkPattern(@NotNull final Pattern<Boolean> pattern, final int rowOffset,
                                  final int columnOffset) {
+        final Optional<Boolean> object = pattern.getObject(this.row - rowOffset, this.column - columnOffset);
         if (pattern.isWrapAround()) {
-            return pattern.getObject(this.row - rowOffset, this.column - columnOffset);
+            return object.orElse(false);
         }
         return this.row >= rowOffset && this.column >= columnOffset &&
             this.row < pattern.getRowCount() + rowOffset &&
             this.column < pattern.getColumnCount() + columnOffset &&
-            pattern.getObject(this.row - rowOffset, this.column - columnOffset);
+            object.orElse(false);
     }
 
 }

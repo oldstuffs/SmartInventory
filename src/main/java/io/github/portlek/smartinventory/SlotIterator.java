@@ -36,7 +36,7 @@ public interface SlotIterator {
     Optional<Icon> get();
 
     @NotNull
-    SlotIterator set(Icon item);
+    SlotIterator set(@NotNull Icon item);
 
     @NotNull
     SlotIterator previous();
@@ -51,7 +51,7 @@ public interface SlotIterator {
     SlotIterator blacklist(int row, int column);
 
     @NotNull
-    SlotIterator blacklist(SlotPos slotPos);
+    SlotIterator blacklist(@NotNull SlotPos slotPos);
 
     int row();
 
@@ -74,7 +74,7 @@ public interface SlotIterator {
     SlotIterator endPosition(int row, int column);
 
     @NotNull
-    SlotIterator endPosition(SlotPos endPosition);
+    SlotIterator endPosition(@NotNull SlotPos endPosition);
 
     boolean doesAllowOverride();
 
@@ -82,16 +82,16 @@ public interface SlotIterator {
     SlotIterator allowOverride(boolean override);
 
     @NotNull
-    SlotIterator withPattern(Pattern<Boolean> pattern);
+    SlotIterator withPattern(@NotNull Pattern<Boolean> pattern);
 
     @NotNull
-    SlotIterator withPattern(Pattern<Boolean> pattern, int rowOffset, int columnOffset);
+    SlotIterator withPattern(@NotNull Pattern<Boolean> pattern, int rowOffset, int columnOffset);
 
     @NotNull
-    SlotIterator blacklistPattern(Pattern<Boolean> pattern);
+    SlotIterator blacklistPattern(@NotNull Pattern<Boolean> pattern);
 
     @NotNull
-    SlotIterator blacklistPattern(Pattern<Boolean> pattern, int rowOffset, int columnOffset);
+    SlotIterator blacklistPattern(@NotNull Pattern<Boolean> pattern, int rowOffset, int columnOffset);
 
     enum Type {
 

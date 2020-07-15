@@ -68,8 +68,8 @@ public final class Pattern<T> {
         return this;
     }
 
-    @Nullable
-    public T getObject(final int index) {
+    @NotNull
+    public Optional<T> getObject(final int index) {
         final int count = this.getColumnCount();
         return this.getObject(index / count, index % count);
     }
@@ -78,8 +78,8 @@ public final class Pattern<T> {
         return this.lines[0].length();
     }
 
-    @Nullable
-    public T getObject(final int row, final int column) {
+    @NotNull
+    public Optional<T> getObject(final int row, final int column) {
         int rowclone = row;
         int columnclone = column;
         if (this.wrapAround) {
@@ -95,15 +95,16 @@ public final class Pattern<T> {
             Preconditions.checkElementIndex(rowclone, this.lines.length, "The row must be between 0 and the row count");
             Preconditions.checkElementIndex(columnclone, this.lines[0].length(), "The column must be between 0 and the column size");
         }
-        return this.mapping.getOrDefault(this.lines[rowclone].charAt(columnclone), this.defaultValue);
+        return Optional.ofNullable(
+            this.mapping.getOrDefault(this.lines[rowclone].charAt(columnclone), this.defaultValue));
     }
 
     public int getRowCount() {
         return this.lines.length;
     }
 
-    @Nullable
-    public T getObject(@NotNull final SlotPos slot) {
+    @NotNull
+    public Optional<T> getObject(@NotNull final SlotPos slot) {
         return this.getObject(slot.getRow(), slot.getColumn());
     }
 

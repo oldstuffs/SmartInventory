@@ -163,10 +163,14 @@ public interface InventoryContents {
 
     @NotNull <T> T property(@NotNull String name);
 
-    @NotNull <T> T property(@NotNull String name, @NotNull T def);
+    @NotNull <T> T propertyOrDefault(@NotNull String name, @NotNull T def);
 
     @NotNull
-    InventoryContents setProperty(@NotNull String name, @NotNull Object value);
+    InventoryContents property(@NotNull String name, @NotNull Object value);
+
+    default InventoryContents setEditable(@NotNull final SlotPos slot) {
+        return this.setEditable(slot, true);
+    }
 
     InventoryContents setEditable(@NotNull SlotPos slot, boolean editable);
 

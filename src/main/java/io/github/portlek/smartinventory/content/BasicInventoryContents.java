@@ -393,10 +393,10 @@ public final class BasicInventoryContents implements InventoryContents {
                                          final int startColumn) {
         for (int row = 0; row < pattern.getRowCount(); row++) {
             for (int column = 0; column < pattern.getColumnCount(); column++) {
-                final Icon item = pattern.getObject(row, column);
-                if (item != null) {
-                    this.set(startRow + row, startColumn + column, item);
-                }
+                final int finalRow = startRow + row;
+                final int finalColumn = startColumn + column;
+                pattern.getObject(row, column).ifPresent(icon ->
+                    this.set(finalRow, finalColumn, icon));
             }
         }
         return this;
@@ -442,10 +442,10 @@ public final class BasicInventoryContents implements InventoryContents {
         final int columnDelta = endColumn - startColumn;
         for (int row = 0; row <= rowDelta; row++) {
             for (int column = 0; column <= columnDelta; column++) {
-                final Icon item = pattern.getObject(row, column);
-                if (item != null) {
-                    this.set(startRow + row, startColumn + column, item);
-                }
+                final int finalRow = startRow + row;
+                final int finalColumn = startColumn + column;
+                pattern.getObject(row, column).ifPresent(icon ->
+                    this.set(finalRow, finalColumn, icon));
             }
         }
         return this;
@@ -460,21 +460,18 @@ public final class BasicInventoryContents implements InventoryContents {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T property(final String name) {
+    public <T> T property(@NotNull final String name) {
         return (T) this.properties.get(name);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T property(final String name, final T def) {
-        if (this.properties.containsKey(name)) {
-            return (T) this.properties.get(name);
-        }
-        return def;
+    public <T> T propertyOrDefault(@NotNull final String name, @NotNull final T def) {
+        return (T) this.properties.getOrDefault(name, def);
     }
 
     @Override
-    public InventoryContents setProperty(@NotNull final String name, @NotNull final Object value) {
+    public InventoryContents property(@NotNull final String name, @NotNull final Object value) {
         this.properties.put(name, value);
         return this;
     }
