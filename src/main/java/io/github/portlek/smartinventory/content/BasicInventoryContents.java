@@ -437,8 +437,7 @@ public final class BasicInventoryContents implements InventoryContents {
             endColumn = this.page.column();
         }
         Preconditions.checkArgument(startRow < endRow, "The start row needs to be lower than the end row");
-        Preconditions.checkArgument(startColumn < endColumn,
-            "The start column needs to be lower than the end column");
+        Preconditions.checkArgument(startColumn < endColumn, "The start column needs to be lower than the end column");
         final int rowDelta = endRow - startRow;
         final int columnDelta = endColumn - startColumn;
         for (int row = 0; row <= rowDelta; row++) {

@@ -68,7 +68,7 @@ public final class Pattern<T> {
         return this;
     }
 
-    @NotNull
+    @Nullable
     public T getObject(final int index) {
         final int count = this.getColumnCount();
         return this.getObject(index / count, index % count);
@@ -78,7 +78,7 @@ public final class Pattern<T> {
         return this.lines[0].length();
     }
 
-    @NotNull
+    @Nullable
     public T getObject(final int row, final int column) {
         int rowclone = row;
         int columnclone = column;
@@ -102,7 +102,7 @@ public final class Pattern<T> {
         return this.lines.length;
     }
 
-    @NotNull
+    @Nullable
     public T getObject(@NotNull final SlotPos slot) {
         return this.getObject(slot.getRow(), slot.getColumn());
     }
