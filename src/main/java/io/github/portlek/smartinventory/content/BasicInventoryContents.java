@@ -155,7 +155,7 @@ public final class BasicInventoryContents implements InventoryContents {
         if (column < 0 || column >= this.contents[row].length) {
             return Optional.empty();
         }
-        return Optional.of(this.contents[row][column]);
+        return Optional.ofNullable(this.contents[row][column]);
     }
 
     @NotNull
@@ -173,7 +173,7 @@ public final class BasicInventoryContents implements InventoryContents {
 
     @NotNull
     @Override
-    public InventoryContents set(final int row, final int column, @NotNull final Icon item) {
+    public InventoryContents set(final int row, final int column, @Nullable final Icon item) {
         if (row < 0 || row >= this.contents.length) {
             return this;
         }
@@ -181,7 +181,11 @@ public final class BasicInventoryContents implements InventoryContents {
             return this;
         }
         this.contents[row][column] = item;
-        this.update(row, column, item.calculateItem(this));
+        if (item == null) {
+            this.update(row, column, null);
+        } else {
+            this.update(row, column, item.calculateItem(this));
+        }
         return this;
     }
 
@@ -193,37 +197,10 @@ public final class BasicInventoryContents implements InventoryContents {
 
     @NotNull
     @Override
-    public InventoryContents remove(final int index) {
-        final int columnCount = this.page.column();
-        return this.remove(index / columnCount, index % columnCount);
-    }
-
-    @NotNull
-    @Override
-    public InventoryContents remove(final int row, final int column) {
-        if (row < 0 || row >= this.contents.length) {
-            return this;
-        }
-        if (column < 0 || column >= this.contents[row].length) {
-            return this;
-        }
-        this.contents[row][column] = Icon.EMPTY;
-        this.removeAndUpdate(row, column);
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public InventoryContents remove(@NotNull final SlotPos slotPos) {
-        return this.remove(slotPos.getRow(), slotPos.getColumn());
-    }
-
-    @NotNull
-    @Override
     public InventoryContents add(@NotNull final Icon item) {
         for (int row = 0; row < this.contents.length; row++) {
             for (int column = 0; column < this.contents[0].length; column++) {
-                if (Icon.EMPTY.equals(this.contents[row][column])) {
+                if (this.contents[row][column] == null) {
                     this.set(row, column, item);
                     return this;
                 }
@@ -238,7 +215,7 @@ public final class BasicInventoryContents implements InventoryContents {
         for (int row = 0; row < this.contents.length; row++) {
             for (int column = 0; column < this.contents[0].length; column++) {
                 final Icon item = this.contents[row][column];
-                if (itemStack.isSimilar(item.calculateItem(this))) {
+                if (item != null && itemStack.isSimilar(item.calculateItem(this))) {
                     return Optional.of(SlotPos.of(row, column));
                 }
             }
@@ -254,7 +231,7 @@ public final class BasicInventoryContents implements InventoryContents {
 
     @Override
     public void removeFirst(@NotNull final ItemStack item) {
-        this.findItem(item).ifPresent(this::remove);
+        this.findItem(item).ifPresent(slotPos -> this.set(slotPos, null));
     }
 
     @Override
@@ -273,7 +250,7 @@ public final class BasicInventoryContents implements InventoryContents {
                 final ItemStack foundStack = icon.calculateItem();
                 if (foundStack.getAmount() <= amount) {
                     amount -= foundStack.getAmount();
-                    this.remove(row, column);
+                    this.set(row, column, null);
                     if (amount == 0) {
                         return;
                     }
@@ -576,10 +553,6 @@ public final class BasicInventoryContents implements InventoryContents {
             final Inventory inv = this.getTopInventory();
             inv.setItem(this.page.column() * row + column, item);
         }
-    }
-
-    private void removeAndUpdate(final int row, final int column) {
-        this.update(row, column, null);
     }
 
 }

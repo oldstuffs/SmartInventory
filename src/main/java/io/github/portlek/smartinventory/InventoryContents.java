@@ -77,22 +77,13 @@ public interface InventoryContents {
     Optional<Icon> get(@NotNull SlotPos slotPos);
 
     @NotNull
-    InventoryContents set(int index, Icon item);
+    InventoryContents set(int index, @Nullable Icon item);
 
     @NotNull
-    InventoryContents set(int row, int column, @NotNull Icon item);
+    InventoryContents set(int row, int column, @Nullable Icon item);
 
     @NotNull
-    InventoryContents set(@NotNull SlotPos slotPos, @NotNull Icon item);
-
-    @NotNull
-    InventoryContents remove(int index);
-
-    @NotNull
-    InventoryContents remove(int row, int column);
-
-    @NotNull
-    InventoryContents remove(@NotNull SlotPos slotPos);
+    InventoryContents set(@NotNull SlotPos slotPos, @Nullable Icon item);
 
     @NotNull
     InventoryContents add(Icon item);
