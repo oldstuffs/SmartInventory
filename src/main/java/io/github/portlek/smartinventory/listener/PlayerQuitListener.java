@@ -46,6 +46,7 @@ public final class PlayerQuitListener implements Listener {
         this.inventory.getPage(player).ifPresent(page ->
             this.inventory.getContents(player).ifPresent(contents ->
                 page.accept(new PlyrQuitEvent(contents))));
+        this.inventory.stopTick(player);
         this.inventory.removePage(player);
         this.inventory.removeContent(player);
     }
