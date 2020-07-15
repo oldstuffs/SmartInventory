@@ -313,6 +313,7 @@ public final class BasicInventoryContents implements InventoryContents {
         this.removeAll(item.calculateItem());
     }
 
+    @NotNull
     @Override
     public InventoryContents fill(@NotNull final Icon item) {
         for (int row = 0; row < this.contents.length; row++) {
@@ -323,6 +324,7 @@ public final class BasicInventoryContents implements InventoryContents {
         return this;
     }
 
+    @NotNull
     @Override
     public InventoryContents fillRow(final int row, @NotNull final Icon item) {
         if (row < 0 || row >= this.contents.length) {
