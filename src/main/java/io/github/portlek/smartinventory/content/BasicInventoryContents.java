@@ -336,6 +336,7 @@ public final class BasicInventoryContents implements InventoryContents {
         return this;
     }
 
+    @NotNull
     @Override
     public InventoryContents fillColumn(final int column, @NotNull final Icon item) {
         if (column < 0 || column >= this.contents[0].length) {
@@ -347,12 +348,14 @@ public final class BasicInventoryContents implements InventoryContents {
         return this;
     }
 
+    @NotNull
     @Override
     public InventoryContents fillBorders(@NotNull final Icon item) {
         this.fillRect(0, 0, this.page.row() - 1, this.page.column() - 1, item);
         return this;
     }
 
+    @NotNull
     @Override
     public InventoryContents fillRect(final int fromIndex, final int toIndex, @NotNull final Icon item) {
         final int count = this.page.column();
@@ -363,15 +366,14 @@ public final class BasicInventoryContents implements InventoryContents {
         );
     }
 
+    @NotNull
     @Override
     public InventoryContents fillRect(final int fromRow, final int fromColumn, final int toRow, final int toColumn,
                                       @NotNull final Icon item) {
         for (int row = fromRow; row <= toRow; row++) {
             for (int column = fromColumn; column <= toColumn; column++) {
-                if (row != fromRow &&
-                    row != toRow &&
-                    column != fromColumn &&
-                    column != toColumn) {
+                if (row != fromRow && row != toRow &&
+                    column != fromColumn && column != toColumn) {
                     continue;
                 }
                 this.set(row, column, item);
@@ -380,12 +382,14 @@ public final class BasicInventoryContents implements InventoryContents {
         return this;
     }
 
+    @NotNull
     @Override
     public InventoryContents fillRect(@NotNull final SlotPos fromPos, @NotNull final SlotPos toPos,
                                       @NotNull final Icon item) {
         return this.fillRect(fromPos.getRow(), fromPos.getColumn(), toPos.getRow(), toPos.getColumn(), item);
     }
 
+    @NotNull
     @Override
     public InventoryContents fillSquare(final int fromIndex, final int toIndex, @NotNull final Icon item) {
         final int count = this.page.column();
@@ -396,6 +400,7 @@ public final class BasicInventoryContents implements InventoryContents {
         );
     }
 
+    @NotNull
     @Override
     public InventoryContents fillSquare(final int fromRow, final int fromColumn, final int toRow,
                                         final int toColumn, @NotNull final Icon item) {
@@ -410,23 +415,27 @@ public final class BasicInventoryContents implements InventoryContents {
         return this;
     }
 
+    @NotNull
     @Override
     public InventoryContents fillSquare(@NotNull final SlotPos fromPos, @NotNull final SlotPos toPos,
                                         @NotNull final Icon item) {
         return this.fillSquare(fromPos.getRow(), fromPos.getColumn(), toPos.getRow(), toPos.getColumn(), item);
     }
 
+    @NotNull
     @Override
     public InventoryContents fillPattern(@NotNull final Pattern<Icon> pattern) {
         return this.fillPattern(pattern, 0, 0);
     }
 
+    @NotNull
     @Override
     public InventoryContents fillPattern(@NotNull final Pattern<Icon> pattern, final int startIndex) {
         final int count = this.page.column();
         return this.fillPattern(pattern, startIndex / count, startIndex % count);
     }
 
+    @NotNull
     @Override
     public InventoryContents fillPattern(@NotNull final Pattern<Icon> pattern, final int startRow,
                                          final int startColumn) {
@@ -441,16 +450,19 @@ public final class BasicInventoryContents implements InventoryContents {
         return this;
     }
 
+    @NotNull
     @Override
     public InventoryContents fillPattern(@NotNull final Pattern<Icon> pattern, @NotNull final SlotPos startPos) {
         return this.fillPattern(pattern, startPos.getRow(), startPos.getColumn());
     }
 
+    @NotNull
     @Override
     public InventoryContents fillPatternRepeating(@NotNull final Pattern<Icon> pattern) {
         return this.fillPatternRepeating(pattern, 0, 0, -1, -1);
     }
 
+    @NotNull
     @Override
     public InventoryContents fillPatternRepeating(@NotNull final Pattern<Icon> pattern,
                                                   final int startIndex, final int endIndex) {
@@ -464,6 +476,7 @@ public final class BasicInventoryContents implements InventoryContents {
             endIndex / columnCount, endIndex % columnCount);
     }
 
+    @NotNull
     @Override
     public InventoryContents fillPatternRepeating(@NotNull final Pattern<Icon> pattern, final int startRow,
                                                   final int startColumn, int endRow, int endColumn) {
@@ -490,6 +503,7 @@ public final class BasicInventoryContents implements InventoryContents {
         return this;
     }
 
+    @NotNull
     @Override
     public InventoryContents fillPatternRepeating(@NotNull final Pattern<Icon> pattern,
                                                   @NotNull final SlotPos startPos, @NotNull final SlotPos endPos) {
@@ -498,23 +512,27 @@ public final class BasicInventoryContents implements InventoryContents {
     }
 
     @SuppressWarnings("unchecked")
+    @Nullable
     @Override
     public <T> T property(@NotNull final String name) {
         return (T) this.properties.get(name);
     }
 
     @SuppressWarnings("unchecked")
+    @NotNull
     @Override
     public <T> T propertyOrDefault(@NotNull final String name, @NotNull final T def) {
         return (T) this.properties.getOrDefault(name, def);
     }
 
+    @NotNull
     @Override
     public InventoryContents property(@NotNull final String name, @NotNull final Object value) {
         this.properties.put(name, value);
         return this;
     }
 
+    @NotNull
     @Override
     public InventoryContents setEditable(@NotNull final SlotPos slot, final boolean editable) {
         if (editable) {
@@ -536,14 +554,14 @@ public final class BasicInventoryContents implements InventoryContents {
         return this.player;
     }
 
-    @Override
     @NotNull
+    @Override
     public Inventory getBottomInventory() {
         return this.player.getOpenInventory().getBottomInventory();
     }
 
-    @Override
     @NotNull
+    @Override
     public Inventory getTopInventory() {
         return this.player.getOpenInventory().getTopInventory();
     }
@@ -553,7 +571,7 @@ public final class BasicInventoryContents implements InventoryContents {
         this.page.notifyUpdate(this);
     }
 
-    private void update(final int row, final int column, @NotNull final ItemStack item) {
+    private void update(final int row, final int column, @Nullable final ItemStack item) {
         if (this.page.inventory().getOpenedPlayers(this.page).contains(this.player)) {
             final Inventory inv = this.getTopInventory();
             inv.setItem(this.page.column() * row + column, item);
@@ -561,10 +579,7 @@ public final class BasicInventoryContents implements InventoryContents {
     }
 
     private void removeAndUpdate(final int row, final int column) {
-        if (this.page.inventory().getOpenedPlayers(this.page).contains(this.player)) {
-            final Inventory inv = this.getTopInventory();
-            inv.setItem(this.page.column() * row + column, null);
-        }
+        this.update(row, column, null);
     }
 
 }

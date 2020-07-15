@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface InventoryContents {
 
@@ -170,7 +171,7 @@ public interface InventoryContents {
     InventoryContents fillPatternRepeating(@NotNull Pattern<Icon> pattern, @NotNull SlotPos startPos,
                                            @NotNull SlotPos endPos);
 
-    @NotNull <T> T property(@NotNull String name);
+    @Nullable <T> T property(@NotNull String name);
 
     @NotNull <T> T propertyOrDefault(@NotNull String name, @NotNull T def);
 
