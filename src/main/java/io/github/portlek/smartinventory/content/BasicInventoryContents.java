@@ -518,11 +518,10 @@ public final class BasicInventoryContents implements InventoryContents {
     }
 
     private void update(final int row, final int column, @NotNull final ItemStack item) {
-        if (!this.page.inventory().getOpenedPlayers(this.page).contains(this.player)) {
-            return;
+        if (this.page.inventory().getOpenedPlayers(this.page).contains(this.player)) {
+            final Inventory inv = this.getTopInventory();
+            inv.setItem(this.page.column() * row + column, item);
         }
-        final Inventory inv = this.getTopInventory();
-        inv.setItem(this.page.column() * row + column, item);
     }
 
 }
