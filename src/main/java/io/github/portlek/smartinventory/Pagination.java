@@ -54,10 +54,10 @@ public interface Pagination {
     Pagination last();
 
     @NotNull
-    Pagination addToIterator(SlotIterator iterator);
+    Pagination addToIterator(@NotNull SlotIterator iterator);
 
     @NotNull
-    Pagination setItems(Icon... items);
+    Pagination setItems(@NotNull Icon... items);
 
     @NotNull
     Pagination setItemsPerPage(int itemsPerPage);

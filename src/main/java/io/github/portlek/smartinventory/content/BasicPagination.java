@@ -29,6 +29,7 @@ import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.Pagination;
 import io.github.portlek.smartinventory.SlotIterator;
 import java.util.Arrays;
+import org.jetbrains.annotations.NotNull;
 
 public final class BasicPagination implements Pagination {
 
@@ -96,7 +97,7 @@ public final class BasicPagination implements Pagination {
     }
 
     @Override
-    public Pagination addToIterator(final SlotIterator iterator) {
+    public Pagination addToIterator(@NotNull final SlotIterator iterator) {
         for (final Icon item : this.getPageItems()) {
             iterator.next().set(item);
             if (iterator.ended()) {
@@ -107,7 +108,7 @@ public final class BasicPagination implements Pagination {
     }
 
     @Override
-    public Pagination setItems(final Icon... items) {
+    public Pagination setItems(@NotNull final Icon... items) {
         this.items = items;
         return this;
     }
