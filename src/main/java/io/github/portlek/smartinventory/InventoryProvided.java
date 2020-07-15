@@ -37,7 +37,7 @@ public interface InventoryProvided extends Target<InventoryContents> {
     }
 
     @Override
-    default void update(@NotNull final InventoryContents argument) {
+    default void update(@NotNull final InventoryContents contents) {
     }
 
 }
