@@ -481,12 +481,13 @@ public final class BasicInventoryContents implements InventoryContents {
     }
 
     @Override
-    public void setEditable(@NotNull final SlotPos slot, final boolean editable) {
+    public InventoryContents setEditable(@NotNull final SlotPos slot, final boolean editable) {
         if (editable) {
             this.editableSlots.add(slot);
         } else {
             this.editableSlots.remove(slot);
         }
+        return this;
     }
 
     @Override

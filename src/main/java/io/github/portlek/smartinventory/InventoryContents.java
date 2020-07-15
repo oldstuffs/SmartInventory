@@ -168,7 +168,7 @@ public interface InventoryContents {
     @NotNull
     InventoryContents setProperty(@NotNull String name, @NotNull Object value);
 
-    void setEditable(@NotNull SlotPos slot, boolean editable);
+    InventoryContents setEditable(@NotNull SlotPos slot, boolean editable);
 
     boolean isEditable(@NotNull SlotPos slot);
 
