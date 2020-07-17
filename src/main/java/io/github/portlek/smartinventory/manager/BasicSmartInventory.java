@@ -177,9 +177,9 @@ public final class BasicSmartInventory implements SmartInventory {
             }
         };
         if (page.async()) {
-            task.runTaskTimerAsynchronously(this.plugin, 1L, page.tick());
+            task.runTaskTimerAsynchronously(this.plugin, page.startDelay(), page.tick());
         } else {
-            task.runTaskTimer(this.plugin, 1L, page.tick());
+            task.runTaskTimer(this.plugin, page.startDelay(), page.tick());
         }
         this.tasks.put(player, task);
     }

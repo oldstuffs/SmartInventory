@@ -72,6 +72,8 @@ public final class BasicPage implements Page {
 
     private long tick = 1L;
 
+    private long startDelay = 1L;
+
     private boolean async = false;
 
     @NotNull
@@ -120,6 +122,18 @@ public final class BasicPage implements Page {
     @Override
     public Page tick(final long tick) {
         this.tick = tick;
+        return this;
+    }
+
+    @Override
+    public long startDelay() {
+        return this.startDelay;
+    }
+
+    @NotNull
+    @Override
+    public Page startDelay(final long startDelay) {
+        this.startDelay = startDelay;
         return this;
     }
 

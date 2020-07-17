@@ -59,6 +59,11 @@ public interface Page {
     @NotNull
     Page tick(long tick);
 
+    long startDelay();
+
+    @NotNull
+    Page startDelay(long startDelay);
+
     boolean async();
 
     @NotNull
