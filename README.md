@@ -8,7 +8,8 @@ Advanced Inventory API for your Minecraft Bukkit plugins.
 
 ## Setup
 
-Gradle
+<details>
+<summary>Gradle</summary>
 
 ```gradle
 repositories {
@@ -19,8 +20,10 @@ dependencies {
     implementation("io.github.portlek:SmartInventory:${version}")
 }
 ```
+</details>
 
-Maven
+<details>
+<summary>Maven</summary>
 
 ```xml
 <dependency>
@@ -29,4 +32,4 @@ Maven
     <version>${version}</version>
 </dependency>
 ```
-
+</details>
