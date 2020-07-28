@@ -10,7 +10,7 @@ Advanced Inventory API for your Minecraft Bukkit plugins.
 
 Gradle
 
-```text
+```groovy
 repositories {
     mavenCentral()
 }
