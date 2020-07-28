@@ -37,11 +37,13 @@ import io.github.portlek.smartinventory.opener.InventoryOpener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class BasicPage implements Page {
 
@@ -81,6 +83,9 @@ public final class BasicPage implements Page {
 
     @NotNull
     private Predicate<CloseEvent> canclose = event -> true;
+
+    @Nullable
+    private Page parent;
 
     public BasicPage(@NotNull final SmartInventory inventory, @NotNull final InventoryProvided provided) {
         this.inventory = inventory;
@@ -184,6 +189,19 @@ public final class BasicPage implements Page {
     public Page title(@NotNull final String title) {
         this.title = title;
         return this;
+    }
+
+    @NotNull
+    @Override
+    public Page parent(@NotNull final Page parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public Optional<Page> parent() {
+        return Optional.ofNullable(this.parent);
     }
 
     @NotNull

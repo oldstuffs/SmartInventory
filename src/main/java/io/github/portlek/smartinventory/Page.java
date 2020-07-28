@@ -32,6 +32,7 @@ import io.github.portlek.smartinventory.page.BasicPage;
 import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
@@ -84,6 +85,12 @@ public interface Page {
 
     @NotNull
     Page title(@NotNull String title);
+
+    @NotNull
+    Page parent(@NotNull Page parent);
+
+    @NotNull
+    Optional<Page> parent();
 
     @NotNull
     default Page whenclose(@NotNull final Consumer<CloseEvent> consumer) {
