@@ -10,7 +10,7 @@ Advanced Inventory API for your Minecraft Bukkit plugins.
 
 Gradle
 
-```groovy
+```gradle
 repositories {
     mavenCentral()
 }
@@ -22,7 +22,7 @@ dependencies {
 
 Maven
 
-```markup
+```xml
 <dependency>
     <groupId>io.github.portlek</groupId>
     <artifactId>SmartInventory</artifactId>
