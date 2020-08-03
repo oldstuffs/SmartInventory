@@ -62,3 +62,19 @@ shadowJar {
 </details>
 
 ## Getting Started
+### Registering the library
+```java
+import io.github.portlek.smartinventory.manager.BasicSmartInventory;
+
+public final class Main extends JavaPlugin {
+
+    public static SmartInventory inventory;
+
+    @Override
+    public void onEnable() {
+        Main.inventory = new BasicSmartInventory();
+        Main.inventory.init();
+    }
+
+}
+```
