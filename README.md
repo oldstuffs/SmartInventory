@@ -8,30 +8,59 @@
 
 A smart inventory library for your Minecraft plugins.
 
-## Setup
-
-<details>
-<summary>Gradle</summary>
-
-```gradle
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation("io.github.portlek:SmartInventory:${version}")
-}
-```
-</details>
-
-<details>
-<summary>Maven</summary>
-
+## How to use
 ```xml
 <dependency>
     <groupId>io.github.portlek</groupId>
     <artifactId>SmartInventory</artifactId>
     <version>${version}</version>
 </dependency>
+```
+```groovy
+implementation("io.github.portlek:SmartInventory:${version}")
+```
+**Do not forget to relocate `io.github.portlek.smartinventory` package into your package.**
+Here is the examples for maven and gradle:
+<details>
+<summary>Maven</summary>
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-shade-plugin</artifactId>
+    <version>3.2.4</version>
+    <configuration>
+        <!-- Other settings -->
+        <relocations>
+            <relocation>
+                <pattern>io.github.portlek.smartinventory</pattern>
+                <!-- Replace this -->
+                <shadedPattern>your.package.path.to.relocate</shadedPattern>
+            </relocation>
+        </relocations>
+    </configuration>
+    <executions>
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>shade</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
+</details>
+<details>
+<summary>Gradle</summary>
+
+```groovy
+plugins {
+    id "com.github.johnrengelman.shadow" version "6.0.0"
+}
+
+shadowJar {
+    relocate('io.github.portlek.smartinventory', "your.package.path.to.relocate")
+    // other stuffs.
+}
 ```
 </details>
