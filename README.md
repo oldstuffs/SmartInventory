@@ -16,7 +16,8 @@
 implementation("io.github.portlek:SmartInventory:${version}")
 ```
 **Do not forget to relocate `io.github.portlek.smartinventory` package into your package.**
-Here is the examples for maven and gradle:
+
+Here is the examples for Maven and Gradle:
 <details>
 <summary>Maven</summary>
 
