@@ -68,11 +68,10 @@ import io.github.portlek.smartinventory.manager.BasicSmartInventory;
 
 public final class Main extends JavaPlugin {
 
-    public static SmartInventory inventory;
+    public static SmartInventory inventory = new BasicSmartInventory();
 
     @Override
     public void onEnable() {
-        Main.inventory = new BasicSmartInventory();
         Main.inventory.init();
     }
 
