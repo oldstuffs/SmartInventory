@@ -26,11 +26,11 @@
 package io.github.portlek.smartinventory.manager;
 
 import io.github.portlek.smartinventory.InventoryContents;
+import io.github.portlek.smartinventory.InventoryOpener;
 import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.listener.*;
 import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
-import io.github.portlek.smartinventory.InventoryOpener;
 import java.util.*;
 import java.util.stream.Stream;
 import lombok.Getter;
