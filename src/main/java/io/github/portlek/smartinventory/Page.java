@@ -35,7 +35,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public interface Page {

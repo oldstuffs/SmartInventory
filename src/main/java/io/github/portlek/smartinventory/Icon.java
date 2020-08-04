@@ -30,7 +30,6 @@ import io.github.portlek.smartinventory.event.abs.DragEvent;
 import io.github.portlek.smartinventory.event.abs.IconEvent;
 import io.github.portlek.smartinventory.event.abs.SmartEvent;
 import io.github.portlek.smartinventory.icon.BasicIcon;
-import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
