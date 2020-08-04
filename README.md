@@ -100,7 +100,7 @@ public final class Main extends JavaPlugin {
 import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.InventoryProvided;
-import javax.swing.*;import org.bukkit.Material;import org.jetbrains.annotations.NotNull;
+import io.github.portlek.smartinventory.util.SlotPos;import javax.swing.*;import org.bukkit.Material;import org.jetbrains.annotations.NotNull;
 
 public final class ExampleInventoryProvided implements InventoryProvided {
 
@@ -145,6 +145,11 @@ public final class ExampleInventoryProvided implements InventoryProvided {
                 // If it's returning false, player can't use the icon on the page.
                 return false;
             });
+        // Adding an icon into the inventory.
+        contents.add(anIcon);
+        // Adds to the certain slot.
+        contents.set(SlotPos.of(0, 4), anIcon);
+        // And other tons of methods will help you to make a awesome pages :)
     }
 
     @Override
