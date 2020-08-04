@@ -108,22 +108,22 @@ public final class ExampleInventoryProvided implements InventoryProvided {
     public void init(@NotNull final InventoryContents contents) {
         // Runs when the page opens first.
         // An icon that which is empty(air).
-        Icon.empty();
+        final Icon empty = Icon.empty();
         // An icon that has not any effect.
-        Icon.from(new ItemStack(Material.DIAMOND));
+        final Icon noeffect = Icon.from(new ItemStack(Material.DIAMOND));
         // A simple static icon that player can't click it.
-        Icon.cancel(new ItemStack(Material.DIAMOND));
-        Icon.click(new ItemStack(Material.DIAMOND), clickEvent -> {
+        final Icon cancel = Icon.cancel(new ItemStack(Material.DIAMOND));
+        final Icon click = Icon.click(new ItemStack(Material.DIAMOND), clickEvent -> {
             // Runs when the player click the icon.
         }, clickEvent -> {
             // It's array so, optional.
             // If the predicate is returning true, the consumer that above will run.
             return true;
         });
-        Icon.drag(new ItemStack(Material.DIAMOND), dragEvent -> {
+        final Icon drag = Icon.drag(new ItemStack(Material.DIAMOND), dragEvent -> {
             // Runs when the player drag the icon.
         });
-        Icon.from(new ItemStack(Material.DIAMOND))
+        final Icon anIcon = Icon.from(new ItemStack(Material.DIAMOND))
             .whenClick(clickEvent -> {
                 // Runs when player clicks the icon.
             }, clickEvent -> {
