@@ -66,8 +66,6 @@ shadowJar {
 ### Registering the library
 #### Static version (Not recommending)
 ```java
-import io.github.portlek.smartinventory.manager.BasicSmartInventory;
-
 public final class Main extends JavaPlugin {
 
     public static final SmartInventory inventory = new BasicSmartInventory();
@@ -81,8 +79,6 @@ public final class Main extends JavaPlugin {
 ```
 #### D.I. version (Recommending)
 ```java
-import io.github.portlek.smartinventory.manager.BasicSmartInventory;
-
 public final class Main extends JavaPlugin {
 
     @Override
@@ -97,15 +93,6 @@ public final class Main extends JavaPlugin {
 ```
 ### Creating a Inventory Provider Class
 ```java
-import io.github.portlek.smartinventory.Icon;
-import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.InventoryProvided;
-import io.github.portlek.smartinventory.Pagination;
-import io.github.portlek.smartinventory.util.SlotPos;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-
 public final class ExampleInventoryProvided implements InventoryProvided {
 
     @Override
@@ -193,11 +180,6 @@ public final class ExampleInventoryProvided implements InventoryProvided {
 ```
 ### Creating a Page
 ```java
-import io.github.portlek.smartinventory.InventoryProvided;
-import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.SmartInventory;
-import org.jetbrains.annotations.NotNull;
-
 public final class CreateAPage {
 
     @NotNull
