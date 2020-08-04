@@ -100,8 +100,10 @@ public final class Main extends JavaPlugin {
 import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.InventoryProvided;
+import io.github.portlek.smartinventory.Pagination;
 import io.github.portlek.smartinventory.util.SlotPos;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public final class ExampleInventoryProvided implements InventoryProvided {
@@ -151,6 +153,21 @@ public final class ExampleInventoryProvided implements InventoryProvided {
         contents.add(anIcon);
         // Adds to the certain slot.
         contents.set(SlotPos.of(0, 4), anIcon);
+        // A pagination example.
+        final Pagination pagination = contents.pagination();
+        final Icon[] icons = new Icon[22];
+        for(final int index = 0; index < icons.length; i++) {
+            items[index] = Icon.cancel(new ItemStack(Material.CHORUS_FRUIT, i));
+        }
+        pagination.setItems(items);
+        pagination.setItemsPerPage(7);
+        pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 1));
+        final Icon previousArrow = Icon.click(new ItemStack(Material.ARROW), clickEvent -> 
+            contents.page().open(player, pagination.previous().getPage()));
+        final Icon nextArrow = Icon.click(new ItemStack(Material.ARROW), clickEvent ->
+            contents.page().open(player, pagination.next().getPage()));
+        contents.set(2, 3, previousArrow);
+        contents.set(2, 5, nextArrow);
         // And other tons of methods will help you to make a awesome pages :)
     }
 
