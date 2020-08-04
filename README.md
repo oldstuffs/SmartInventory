@@ -112,7 +112,9 @@ public final class ExampleInventoryProvided implements InventoryProvided {
     public void update(@NotNull final InventoryContents contents) {
         // Runs when the notify update method called by you.
         // SmartInventory#notifyUpdate(Player)
+        // -> Finds the player's page, if it's open, runs the update method.
         // InventoryContents#notifyUpdate()
+        // -> Runs the update method of this class.
     }
 
     @Override
