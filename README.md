@@ -245,13 +245,13 @@ public final class CreateAPage {
             // With properties.
             // You can get the properies with
             // Get a property that can be nullable > contents.getProperty("test-key");
-            // Get a property that can not be nullable > contents.getPropertyOrDefault("test-key-2", "fallback");
+            // Get a property that cannot be nullable > contents.getPropertyOrDefault("test-key-2", "fallback");
             // You can also add a property > contents.setProperty("test-key-2", "test-object");
-            .open(player, properties);
+            // .open(player, properties);
             // With properties and pagination number.
-            .open(player, 2, properties);
+            // .open(player, 2, properties);
             // With pagination number.
-            .open(player, 2)
+            // .open(player, 2)
             // Default open method.
             .open(player);
 
