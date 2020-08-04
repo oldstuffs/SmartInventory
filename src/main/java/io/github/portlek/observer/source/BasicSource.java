@@ -23,10 +23,10 @@
  *
  */
 
-package io.github.portlek.smartinventory.observer.source;
+package io.github.portlek.observer.source;
 
-import io.github.portlek.smartinventory.observer.Source;
-import io.github.portlek.smartinventory.observer.Target;
+import io.github.portlek.observer.Source;
+import io.github.portlek.observer.Target;
 import java.util.Collection;
 import java.util.Vector;
 import org.jetbrains.annotations.NotNull;

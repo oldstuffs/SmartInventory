@@ -23,12 +23,16 @@
  *
  */
 
-package io.github.portlek.smartinventory.observer;
+package io.github.portlek.observer;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface Target<T> {
+public interface Source<T> {
 
-    void update(@NotNull T argument);
+    void subscribe(@NotNull Target<T> target);
+
+    void unsubscribe(@NotNull Target<T> target);
+
+    void notifyTargets(@NotNull T argument);
 
 }

@@ -23,16 +23,32 @@
  *
  */
 
-package io.github.portlek.smartinventory.observer;
+package io.github.portlek.smartinventory;
 
+import io.github.portlek.smartinventory.Icon;
+import io.github.portlek.smartinventory.InventoryContents;
+import io.github.portlek.smartinventory.Page;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-public interface Source<T> {
+public interface InventoryOpener {
 
-    void subscribe(@NotNull Target<T> target);
+    @NotNull
+    Inventory open(@NotNull Page page, @NotNull Player player);
 
-    void unsubscribe(@NotNull Target<T> target);
+    boolean supports(@NotNull InventoryType type);
 
-    void notifyTargets(@NotNull T argument);
+    default void fill(@NotNull final Inventory handle, @NotNull final InventoryContents contents) {
+        final Icon[][] items = contents.all();
+        for (int row = 0; row < items.length; row++) {
+            for (int column = 0; column < items[row].length; column++) {
+                if (items[row][column] != null) {
+                    handle.setItem(9 * row + column, items[row][column].calculateItem(contents));
+                }
+            }
+        }
+    }
 
 }

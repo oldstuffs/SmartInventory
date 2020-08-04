@@ -25,14 +25,13 @@
 
 package io.github.portlek.smartinventory.page;
 
+import io.github.portlek.observer.Source;
+import io.github.portlek.observer.source.BasicSource;
 import io.github.portlek.smartinventory.*;
 import io.github.portlek.smartinventory.content.BasicInventoryContents;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;
-import io.github.portlek.smartinventory.observer.Source;
-import io.github.portlek.smartinventory.observer.source.BasicSource;
-import io.github.portlek.smartinventory.opener.InventoryOpener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -247,6 +246,7 @@ public final class BasicPage implements Page {
         this.inventory.stopTick(player);
         this.inventory.removePage(player);
         this.inventory.removeContent(player);
+        this.source.unsubscribe(this.provided);
         player.closeInventory();
     }
 

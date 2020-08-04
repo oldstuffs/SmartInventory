@@ -25,6 +25,7 @@
 
 package io.github.portlek.smartinventory.opener;
 
+import io.github.portlek.smartinventory.InventoryOpener;
 import io.github.portlek.smartinventory.Page;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

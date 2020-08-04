@@ -25,7 +25,7 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.observer.Target;
+import io.github.portlek.observer.Target;
 import org.jetbrains.annotations.NotNull;
 
 public interface InventoryProvided extends Target<InventoryContents> {
