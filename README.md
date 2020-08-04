@@ -235,7 +235,7 @@ public final class CreateAPage {
                 openEvent.contents().player().sendMessage("The page closed.");
                 closeEvent.contents().player().sendMessage("This message will send to Player.");
             },
-            // These predicates are optional. It's Predicate<OpenEvent>... (array)
+            // These predicates are optional. It's Predicate<CloseEvent>... (array)
             closeEvent -> {
                 return openEvent.contents().player().getName().equals("Player");
             }, closeEvent -> {
