@@ -246,7 +246,7 @@ public final class CreateAPage {
             // You can get the properies with
             // Get a property that can be nullable > contents.getProperty("test-key");
             // Get a property that cannot be nullable > contents.getPropertyOrDefault("test-key-2", "fallback");
-            // You can also add a property > contents.setProperty("test-key-2", "test-object");
+            // You can also set a property > contents.setProperty("test-key-2", "test-object");
             // .open(player, properties);
             // With properties and pagination number.
             // .open(player, 2, properties);
