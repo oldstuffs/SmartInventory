@@ -148,6 +148,13 @@ public final class CreateAPage {
         this.provided =provided;
     }
 
+    public void openASimplePage(@NotNull final Player player) {
+        Page.build(this.inventory, this.provided)
+            .title("Title")
+            .row(3)
+            .open(player);
+    }
+
     public void open(@NotNull final Page parentPage, @NotNull final Player player) {
         final Map<String, Object> properties = new HashMap<>();
         properties.put("test-key", player.getName());
