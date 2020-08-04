@@ -144,7 +144,7 @@ public final class ExampleInventoryProvided implements InventoryProvided {
         final Pagination pagination = contents.pagination();
         final Icon[] icons = new Icon[22];
         for(final int index = 0; index < icons.length; i++) {
-            icons[index] = Icon.cancel(new ItemStack(Material.CHORUS_FRUIT, i));
+            icons[index] = Icon.cancel(new ItemStack(Material.CHORUS_FRUIT, index));
         }
         pagination.setItems(items);
         pagination.setItemsPerPage(7);
