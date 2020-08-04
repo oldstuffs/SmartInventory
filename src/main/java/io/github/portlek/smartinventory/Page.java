@@ -134,8 +134,8 @@ public interface Page {
     boolean checkBounds(int row, int column);
 
     @NotNull
-    default Inventory open(@NotNull final Player player) {
-        return this.open(player, 0);
+    default void open(@NotNull final Player player) {
+        this.open(player, 0);
     }
 
     default void open(@NotNull final Player player, final int page) {

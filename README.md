@@ -97,15 +97,54 @@ public final class Main extends JavaPlugin {
 ```
 ### Creating a Inventory Provider Class
 ```java
+import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.InventoryProvided;
-import org.jetbrains.annotations.NotNull;
+import javax.swing.*;import org.bukkit.Material;import org.jetbrains.annotations.NotNull;
 
 public final class ExampleInventoryProvided implements InventoryProvided {
 
     @Override
     public void init(@NotNull final InventoryContents contents) {
         // Runs when the page opens first.
+        // An icon that which is empty(air).
+        Icon.empty();
+        // An icon that has not any effect.
+        Icon.from(new ItemStack(Material.DIAMOND));
+        // A simple static icon that player can't click it.
+        Icon.cancel(new ItemStack(Material.DIAMOND));
+        Icon.click(new ItemStack(Material.DIAMOND), clickEvent -> {
+            // Runs when the player click the icon.
+        }, clickEvent -> {
+            // It's array so, optional.
+            // If the predicate is returning true, the consumer that above will run.
+            return true;
+        });
+        Icon.drag(new ItemStack(Material.DIAMOND), dragEvent -> {
+            // Runs when the player drag the icon.
+        });
+        Icon.from(new ItemStack(Material.DIAMOND))
+            .whenClick(clickEvent -> {
+                // Runs when player clicks the icon.
+            }, clickEvent -> {
+                // If this predicate returns false, the consumer won't run.
+                return false;
+            })
+            .whenDrag(dragEvent -> {
+                // Runs when player drags the icon.
+            })
+            .whenInteract(dragEvent -> {
+                // Runs when player interact to the icon.
+            })
+            .canSee(contents -> {
+                // If it's returning false, player will see the fallback icon on the page.
+                return false;
+            })
+            .fallback(new ItemStack(Material.AIR))
+            .canUse(contents -> {
+                // If it's returning false, player can't use the icon on the page.
+                return false;
+            });
     }
 
     @Override

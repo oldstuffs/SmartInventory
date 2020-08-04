@@ -75,8 +75,7 @@ public final class BasicIcon implements Icon {
     @Override
     public <T extends IconEvent> void accept(@NotNull final T event) {
         final InventoryContents contents = event.contents();
-        if (this.canSee.test(contents) &&
-            this.canUse.test(contents)) {
+        if (this.canSee.test(contents) && this.canUse.test(contents)) {
             this.targets.stream()
                 .filter(target -> target.getType().isAssignableFrom(event.getClass()))
                 .map(target -> (Target<T>) target)
