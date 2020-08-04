@@ -173,6 +173,7 @@ public final class CreateAPage {
             .tick(1L)
             // Set the page's title. (default is Smart Inventory)
             .title("Title")
+            // Runs after the page opened. If predicates cannot passed, the consumer won't run.
             .whenOpen(openEvent -> {
                 openEvent.contents().player().sendMessage("The page opened.");
                 openEvent.contents().player().sendMessage("This message will send to \"Player\".");
@@ -183,6 +184,7 @@ public final class CreateAPage {
             }, openEvent -> {
                 return openEvent.contents().player().hasPermission("test.perm");
             })
+            // Runs after the page closed. If predicates cannot passed, the consumer won't run.
             .whenClose(closeEvent -> {
                 openEvent.contents().player().sendMessage("The page closed.");
                 closeEvent.contents().player().sendMessage("This message will send to \"Player\".");
