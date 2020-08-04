@@ -155,7 +155,7 @@ public final class CreateAPage {
             // Runs the update method as async. (default is false)
             .async(true)
             // If it's returning false, player's page will close and open immediately. (default is true)
-            // Closing a page cannot be canceled. It's just close and open again method.
+            // Closing a page cannot be canceled. It just closes and opens again method.
             .canClose(true)
             .canClose(closeEvent -> true)
             // Set the page's column. (default is 9)
