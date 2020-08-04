@@ -100,7 +100,9 @@ public final class Main extends JavaPlugin {
 import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.InventoryProvided;
-import io.github.portlek.smartinventory.util.SlotPos;import javax.swing.*;import org.bukkit.Material;import org.jetbrains.annotations.NotNull;
+import io.github.portlek.smartinventory.util.SlotPos;
+import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 
 public final class ExampleInventoryProvided implements InventoryProvided {
 
