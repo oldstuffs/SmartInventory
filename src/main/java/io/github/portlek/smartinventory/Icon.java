@@ -50,7 +50,7 @@ public interface Icon {
     @SafeVarargs
     @NotNull
     static Icon click(@NotNull final ItemStack item, @NotNull final Consumer<ClickEvent> consumer,
-                      @NotNull final Requirement<ClickEvent>... requirements) {
+                      @NotNull final Predicate<ClickEvent>... requirements) {
         return Icon.from(item)
             .whenClick(consumer, requirements);
     }
@@ -58,7 +58,7 @@ public interface Icon {
     @SafeVarargs
     @NotNull
     static Icon drag(@NotNull final ItemStack item, @NotNull final Consumer<DragEvent> consumer,
-                     @NotNull final Requirement<DragEvent>... requirements) {
+                     @NotNull final Predicate<DragEvent>... requirements) {
         return Icon.from(item)
             .whenDrag(consumer, requirements);
     }
@@ -84,41 +84,41 @@ public interface Icon {
 
     @NotNull
     default Icon whenInteract(@NotNull final Consumer<IconEvent> consumer) {
-        return this.whenInteract(consumer, new Requirement[0]);
+        return this.whenInteract(consumer, new Predicate[0]);
     }
 
     @NotNull
     default Icon whenInteract(@NotNull final Consumer<IconEvent> consumer,
-                              @NotNull final Requirement<IconEvent>... requirements) {
+                              @NotNull final Predicate<IconEvent>... requirements) {
         return this.target(IconEvent.class, consumer, requirements);
     }
 
     @NotNull
     default Icon whenDrag(@NotNull final Consumer<DragEvent> consumer) {
-        return this.whenDrag(consumer, new Requirement[0]);
+        return this.whenDrag(consumer, new Predicate[0]);
     }
 
     @NotNull
     default Icon whenDrag(@NotNull final Consumer<DragEvent> consumer,
-                          @NotNull final Requirement<DragEvent>... requirements) {
+                          @NotNull final Predicate<DragEvent>... requirements) {
         return this.target(DragEvent.class, consumer, requirements);
     }
 
     @NotNull
     default Icon whenClick(@NotNull final Consumer<ClickEvent> consumer) {
-        return this.whenClick(consumer, new Requirement[0]);
+        return this.whenClick(consumer, new Predicate[0]);
     }
 
     @NotNull
     default Icon whenClick(@NotNull final Consumer<ClickEvent> consumer,
-                           @NotNull final Requirement<ClickEvent>... requirements) {
+                           @NotNull final Predicate<ClickEvent>... requirements) {
         return this.target(ClickEvent.class, consumer, requirements);
     }
 
     @NotNull
     default <T extends IconEvent> Icon target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                                              @NotNull final Requirement<T>... requirements) {
-        return this.target(new BasicTarget<>(clazz, consumer, requirements));
+                                              @NotNull final Predicate<T>... requirements) {
+        return this.target(Target.from(clazz, consumer, requirements));
     }
 
     @NotNull <T extends IconEvent> Icon target(@NotNull Target<T> target);

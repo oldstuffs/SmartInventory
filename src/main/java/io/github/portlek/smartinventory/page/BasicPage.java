@@ -72,7 +72,7 @@ public final class BasicPage implements Page {
     private boolean async = false;
 
     @NotNull
-    private Predicate<CloseEvent> canclose = event -> true;
+    private Predicate<CloseEvent> canClose = event -> true;
 
     @Nullable
     private Page parent;
@@ -204,13 +204,13 @@ public final class BasicPage implements Page {
     @NotNull
     @Override
     public Page canClose(@NotNull final Predicate<CloseEvent> predicate) {
-        this.canclose = predicate;
+        this.canClose = predicate;
         return this;
     }
 
     @Override
     public boolean canClose(@NotNull final CloseEvent predicate) {
-        return this.canclose.test(predicate);
+        return this.canClose.test(predicate);
     }
 
     @Override
