@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
-public class PlgnDisableEvent implements DisableEvent {
+public final class PlgnDisableEvent implements DisableEvent {
 
     @NotNull
     private final InventoryContents contents;
@@ -40,14 +40,6 @@ public class PlgnDisableEvent implements DisableEvent {
     @Override
     public InventoryContents contents() {
         return this.contents;
-    }
-
-    @Override
-    public void cancel() {
-    }
-
-    @Override
-    public void close() {
     }
 
 }

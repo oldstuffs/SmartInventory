@@ -42,12 +42,4 @@ public final class PlyrQuitEvent implements QuitEvent {
         return this.contents;
     }
 
-    @Override
-    public void cancel() {
-    }
-
-    @Override
-    public void close() {
-    }
-
 }

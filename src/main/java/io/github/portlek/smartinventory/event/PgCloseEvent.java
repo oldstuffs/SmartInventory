@@ -42,12 +42,4 @@ public final class PgCloseEvent implements CloseEvent {
         return this.contents;
     }
 
-    @Override
-    public void cancel() {
-    }
-
-    @Override
-    public void close() {
-    }
-
 }

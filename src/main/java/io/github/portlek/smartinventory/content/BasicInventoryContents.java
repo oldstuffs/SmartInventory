@@ -491,20 +491,20 @@ public final class BasicInventoryContents implements InventoryContents {
     @SuppressWarnings("unchecked")
     @Nullable
     @Override
-    public <T> T property(@NotNull final String name) {
+    public <T> T getProperty(@NotNull final String name) {
         return (T) this.properties.get(name);
     }
 
     @SuppressWarnings("unchecked")
     @NotNull
     @Override
-    public <T> T propertyOrDefault(@NotNull final String name, @NotNull final T def) {
+    public <T> T getPropertyOrDefault(@NotNull final String name, @NotNull final T def) {
         return (T) this.properties.getOrDefault(name, def);
     }
 
     @NotNull
     @Override
-    public InventoryContents property(@NotNull final String name, @NotNull final Object value) {
+    public InventoryContents setProperty(@NotNull final String name, @NotNull final Object value) {
         this.properties.put(name, value);
         return this;
     }

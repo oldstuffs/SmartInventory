@@ -53,7 +53,7 @@ public final class ChestInventoryOpener implements InventoryOpener {
     }
 
     @Override
-    public boolean supports(final InventoryType type) {
+    public boolean supports(@NotNull final InventoryType type) {
         return type == InventoryType.CHEST || type == InventoryType.ENDER_CHEST;
     }
 

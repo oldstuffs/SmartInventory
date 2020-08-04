@@ -121,9 +121,9 @@ public final class ExampleInventoryProvided implements InventoryProvided {
     public void tick(@NotNull final InventoryContents contents) {
         // Runs every tick.
         // You have options that;
-        // -> make it async or not (default false)
-        // -> set the tick's start delay (default 1L)
-        // -> set the tick period (default 1L)
+        // -> make it async or not (default is false)
+        // -> set the tick's start delay (default is 1L)
+        // -> set the tick period (default is 1L)
     }
 
 }
@@ -148,9 +148,65 @@ public final class CreateAPage {
         this.provided =provided;
     }
 
-    public void open(@NotNull final Player player) {
+    public void open(@NotNull final Page parentPage, @NotNull final Player player) {
+        final Map<String, Object> properties = new HashMap<>();
+        properties.put("test-key", player.getName());
         Page.build(this.inventory, this.provided)
+            // Runs the update method as async. (default is false)
+            .async(true)
+            // If it's returning false, player's page will close and open immediately. (default is true)
+            // Closing a page cannot be canceled. It's just close and open again method.
+            .canClose(true)
+            .canClose(closeEvent -> true)
+            // Set the page's column. (default is 9)
+            // There is no any different page type, so it must be 9 for now.
+            .column(9)
+            // Set the page's parent page.(default is empty)
+            // contents.page().parent().ifPresent(page -> ...)
+            .parent(parentPage)
+            // Set the page's row size. (default is 1)
+            // The row's range is 1 to 6
+            .row(3)
+            // Set the page's start delay of the tick method. (default is 1L)
+            .startDelay(10L)
+            // Set the page's period time of the tick method. (default is 1L)
+            .tick(1L)
+            // Set the page's title. (default is Smart Inventory)
+            .title("Title")
+            .whenOpen(openEvent -> {
+                openEvent.contents().player().sendMessage("The page opened.");
+                openEvent.contents().player().sendMessage("This message will send to \"Player\".");
+            },
+            // These predicates are optional. It's Predicate<OpenEvent>... (array)
+            openEvent -> {
+                return openEvent.contents().player().getName().equals("Player");
+            }, openEvent -> {
+                return openEvent.contents().player().hasPermission("test.perm");
+            })
+            .whenClose(closeEvent -> {
+                openEvent.contents().player().sendMessage("The page closed.");
+                closeEvent.contents().player().sendMessage("This message will send to \"Player\".");
+            },
+            // These predicates are optional. It's Predicate<OpenEvent>... (array)
+            closeEvent -> {
+                return openEvent.contents().player().getName().equals("Player");
+            }, closeEvent -> {
+                return openEvent.contents().player().hasPermission("test.perm");
+            })
+            // Opens the page for the player.
+            // With properties.
+            // You can get the properies with
+            // Get a property that can be nullable > contents.getProperty("test-key");
+            // Get a property that can not be nullable > contents.getPropertyOrDefault("test-key-2", "fallback");
+            // You can also add a property > contents.setProperty("test-key-2", "test-object");
+            .open(player, properties);
+            // With properties and pagination number.
+            .this.open(player, 2, properties);
+            // With pagination number.
+            .this.open(player, 2)
+            // Default open method.
             .open(player);
+
     }
 
 }

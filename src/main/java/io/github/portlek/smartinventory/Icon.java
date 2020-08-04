@@ -51,27 +51,27 @@ public interface Icon {
     @NotNull
     static Icon click(@NotNull final ItemStack item, @NotNull final Consumer<ClickEvent> consumer,
                       @NotNull final Requirement<ClickEvent>... requirements) {
-        return new BasicIcon(item)
-            .whenclick(consumer, requirements);
+        return Icon.from(item)
+            .whenClick(consumer, requirements);
     }
 
     @SafeVarargs
     @NotNull
     static Icon drag(@NotNull final ItemStack item, @NotNull final Consumer<DragEvent> consumer,
                      @NotNull final Requirement<DragEvent>... requirements) {
-        return new BasicIcon(item)
-            .whendrag(consumer, requirements);
+        return Icon.from(item)
+            .whenDrag(consumer, requirements);
     }
 
     @NotNull
     static Icon cancel(@NotNull final ItemStack item) {
-        return new BasicIcon(item)
-            .wheninteract(SmartEvent::cancel);
+        return Icon.from(item)
+            .whenInteract(SmartEvent::cancel);
     }
 
     @NotNull
     static Icon empty() {
-        return new BasicIcon(new ItemStack(Material.AIR));
+        return Icon.from(new ItemStack(Material.AIR));
     }
 
     @NotNull
@@ -83,34 +83,34 @@ public interface Icon {
     <T extends IconEvent> void accept(@NotNull T event);
 
     @NotNull
-    default Icon wheninteract(@NotNull final Consumer<IconEvent> consumer) {
-        return this.wheninteract(consumer, new Requirement[0]);
+    default Icon whenInteract(@NotNull final Consumer<IconEvent> consumer) {
+        return this.whenInteract(consumer, new Requirement[0]);
     }
 
     @NotNull
-    default Icon wheninteract(@NotNull final Consumer<IconEvent> consumer,
+    default Icon whenInteract(@NotNull final Consumer<IconEvent> consumer,
                               @NotNull final Requirement<IconEvent>... requirements) {
         return this.target(IconEvent.class, consumer, requirements);
     }
 
     @NotNull
-    default Icon whendrag(@NotNull final Consumer<DragEvent> consumer) {
-        return this.whendrag(consumer, new Requirement[0]);
+    default Icon whenDrag(@NotNull final Consumer<DragEvent> consumer) {
+        return this.whenDrag(consumer, new Requirement[0]);
     }
 
     @NotNull
-    default Icon whendrag(@NotNull final Consumer<DragEvent> consumer,
+    default Icon whenDrag(@NotNull final Consumer<DragEvent> consumer,
                           @NotNull final Requirement<DragEvent>... requirements) {
         return this.target(DragEvent.class, consumer, requirements);
     }
 
     @NotNull
-    default Icon whenclick(@NotNull final Consumer<ClickEvent> consumer) {
-        return this.whenclick(consumer, new Requirement[0]);
+    default Icon whenClick(@NotNull final Consumer<ClickEvent> consumer) {
+        return this.whenClick(consumer, new Requirement[0]);
     }
 
     @NotNull
-    default Icon whenclick(@NotNull final Consumer<ClickEvent> consumer,
+    default Icon whenClick(@NotNull final Consumer<ClickEvent> consumer,
                            @NotNull final Requirement<ClickEvent>... requirements) {
         return this.target(ClickEvent.class, consumer, requirements);
     }

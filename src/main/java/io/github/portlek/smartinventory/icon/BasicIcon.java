@@ -46,10 +46,10 @@ public final class BasicIcon implements Icon {
     private final ItemStack item;
 
     @NotNull
-    private Predicate<InventoryContents> cansee = contents -> true;
+    private Predicate<InventoryContents> canSee = contents -> true;
 
     @NotNull
-    private Predicate<InventoryContents> canuse = contents -> true;
+    private Predicate<InventoryContents> canUse = contents -> true;
 
     @NotNull
     private ItemStack fallback = new ItemStack(Material.AIR);
@@ -64,7 +64,7 @@ public final class BasicIcon implements Icon {
     @Override
     public ItemStack calculateItem(@NotNull final InventoryContents contents) {
         final ItemStack calculated;
-        if (this.cansee.test(contents)) {
+        if (this.canSee.test(contents)) {
             calculated = this.item;
         } else {
             calculated = this.fallback;
@@ -75,8 +75,8 @@ public final class BasicIcon implements Icon {
     @Override
     public <T extends IconEvent> void accept(@NotNull final T event) {
         final InventoryContents contents = event.contents();
-        if (this.cansee.test(contents) &&
-            this.canuse.test(contents)) {
+        if (this.canSee.test(contents) &&
+            this.canUse.test(contents)) {
             this.targets.stream()
                 .filter(target -> target.getType().isAssignableFrom(event.getClass()))
                 .map(target -> (Target<T>) target)
@@ -101,14 +101,14 @@ public final class BasicIcon implements Icon {
     @NotNull
     @Override
     public Icon canSee(@NotNull final Predicate<InventoryContents> predicate) {
-        this.cansee = predicate;
+        this.canSee = predicate;
         return this;
     }
 
     @NotNull
     @Override
     public Icon canUse(@NotNull final Predicate<InventoryContents> predicate) {
-        this.canuse = predicate;
+        this.canUse = predicate;
         return this;
     }
 
@@ -123,8 +123,8 @@ public final class BasicIcon implements Icon {
     @Override
     public Icon clone(@NotNull final ItemStack newitem) {
         return Icon.from(newitem)
-            .canSee(this.cansee)
-            .canUse(this.canuse)
+            .canSee(this.canSee)
+            .canUse(this.canUse)
             .fallback(this.fallback)
             .targets(this.targets);
     }

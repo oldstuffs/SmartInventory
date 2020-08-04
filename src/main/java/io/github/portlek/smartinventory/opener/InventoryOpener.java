@@ -52,15 +52,4 @@ public interface InventoryOpener {
         }
     }
 
-    @NotNull
-    default SlotPos defaultSize(@NotNull final InventoryType type) {
-        if (type == InventoryType.CHEST || type == InventoryType.ENDER_CHEST) {
-            return SlotPos.of(3, 9);
-        }
-        if (type == InventoryType.DISPENSER || type == InventoryType.DROPPER) {
-            return SlotPos.of(3, 3);
-        }
-        return SlotPos.of(1, type.getDefaultSize());
-    }
-
 }

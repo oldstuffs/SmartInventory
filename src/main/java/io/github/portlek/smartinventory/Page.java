@@ -29,7 +29,6 @@ import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.OpenEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;
 import io.github.portlek.smartinventory.page.BasicPage;
-import io.github.portlek.smartinventory.target.BasicTarget;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -93,39 +92,34 @@ public interface Page {
     Optional<Page> parent();
 
     @NotNull
-    default Page whenclose(@NotNull final Consumer<CloseEvent> consumer) {
-        return this.whenclose(consumer, new Requirement[0]);
+    default Page whenClose(@NotNull final Consumer<CloseEvent> consumer) {
+        return this.whenClose(consumer, new Predicate[0]);
     }
 
     @NotNull
-    default Page whenclose(@NotNull final Consumer<CloseEvent> consumer,
-                           @NotNull final Requirement<CloseEvent>... requirements) {
+    default Page whenClose(@NotNull final Consumer<CloseEvent> consumer,
+                           @NotNull final Predicate<CloseEvent>... requirements) {
         return this.target(CloseEvent.class, consumer, requirements);
     }
 
     @NotNull
-    default Page whenopen(@NotNull final Consumer<OpenEvent> consumer) {
-        return this.whenopen(consumer, new Requirement[0]);
+    default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer) {
+        return this.whenOpen(consumer, new Predicate[0]);
     }
 
     @NotNull
-    default Page whenopen(@NotNull final Consumer<OpenEvent> consumer,
-                          @NotNull final Requirement<OpenEvent>... requirements) {
+    default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer,
+                          @NotNull final Predicate<OpenEvent>... requirements) {
         return this.target(OpenEvent.class, consumer, requirements);
     }
 
     @NotNull
     default <T extends PageEvent> Page target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                                              @NotNull final Requirement<T>... requirements) {
-        return this.target(new BasicTarget<>(clazz, consumer, requirements));
+                                              @NotNull final Predicate<T>... requirements) {
+        return this.target(Target.from(clazz, consumer, requirements));
     }
 
     @NotNull <T extends PageEvent> Page target(@NotNull Target<T> target);
-
-    @NotNull
-    default Page canOpen(final boolean canOpen) {
-        return this.canOpen(event -> canOpen);
-    }
 
     @NotNull
     default Page canClose(final boolean canClose) {
@@ -133,12 +127,7 @@ public interface Page {
     }
 
     @NotNull
-    Page canOpen(@NotNull Predicate<OpenEvent> predicate);
-
-    @NotNull
     Page canClose(@NotNull Predicate<CloseEvent> predicate);
-
-    boolean canOpen(@NotNull OpenEvent predicate);
 
     boolean canClose(@NotNull CloseEvent predicate);
 
@@ -149,18 +138,15 @@ public interface Page {
         return this.open(player, 0);
     }
 
-    @NotNull
-    default Inventory open(@NotNull final Player player, final int page) {
-        return this.open(player, page, Collections.emptyMap());
+    default void open(@NotNull final Player player, final int page) {
+        this.open(player, page, Collections.emptyMap());
     }
 
-    @NotNull
-    default Inventory open(@NotNull final Player player, @NotNull final Map<String, Object> properties) {
-        return this.open(player, 0, properties);
+    default void open(@NotNull final Player player, @NotNull final Map<String, Object> properties) {
+        this.open(player, 0, properties);
     }
 
-    @NotNull
-    Inventory open(@NotNull Player player, int page, @NotNull Map<String, Object> properties);
+    void open(@NotNull Player player, int page, @NotNull Map<String, Object> properties);
 
     void close(@NotNull Player player);
 

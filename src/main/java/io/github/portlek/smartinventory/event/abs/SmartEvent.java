@@ -33,8 +33,10 @@ public interface SmartEvent {
     @NotNull
     InventoryContents contents();
 
-    void cancel();
+    default void cancel() {
+    }
 
-    void close();
+    default void close() {
+    }
 
 }

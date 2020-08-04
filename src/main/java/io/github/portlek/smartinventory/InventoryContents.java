@@ -162,12 +162,12 @@ public interface InventoryContents {
     InventoryContents fillPatternRepeating(@NotNull Pattern<Icon> pattern, @NotNull SlotPos startPos,
                                            @NotNull SlotPos endPos);
 
-    @Nullable <T> T property(@NotNull String name);
+    @Nullable <T> T getProperty(@NotNull String name);
 
-    @NotNull <T> T propertyOrDefault(@NotNull String name, @NotNull T def);
+    @NotNull <T> T getPropertyOrDefault(@NotNull String name, @NotNull T def);
 
     @NotNull
-    InventoryContents property(@NotNull String name, @NotNull Object value);
+    InventoryContents setProperty(@NotNull String name, @NotNull Object value);
 
     default InventoryContents setEditable(@NotNull final SlotPos slot) {
         return this.setEditable(slot, true);

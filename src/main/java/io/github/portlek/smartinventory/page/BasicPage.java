@@ -29,7 +29,6 @@ import io.github.portlek.smartinventory.*;
 import io.github.portlek.smartinventory.content.BasicInventoryContents;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
-import io.github.portlek.smartinventory.event.abs.OpenEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;
 import io.github.portlek.smartinventory.observer.Source;
 import io.github.portlek.smartinventory.observer.source.BasicSource;
@@ -41,7 +40,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,16 +48,6 @@ public final class BasicPage implements Page {
     private final Source<InventoryContents> source = new BasicSource<>();
 
     private final Collection<Target<? extends PageEvent>> targets = new ArrayList<>();
-
-    private final Predicate<PageEvent> control = event -> {
-        if (event instanceof CloseEvent) {
-            return this.canClose((CloseEvent) event);
-        }
-        if (event instanceof OpenEvent) {
-            return this.canOpen((OpenEvent) event);
-        }
-        return true;
-    };
 
     @NotNull
     private final SmartInventory inventory;
@@ -84,9 +72,6 @@ public final class BasicPage implements Page {
     private boolean async = false;
 
     @NotNull
-    private Predicate<OpenEvent> canopen = event -> true;
-
-    @NotNull
     private Predicate<CloseEvent> canclose = event -> true;
 
     @Nullable
@@ -108,7 +93,6 @@ public final class BasicPage implements Page {
         this.targets.stream()
             .filter(target -> target.getType().isAssignableFrom(event.getClass()))
             .map(target -> (Target<T>) target)
-            .filter(tTarget -> this.control.test(event))
             .forEach(target -> target.accept(event));
     }
 
@@ -219,21 +203,9 @@ public final class BasicPage implements Page {
 
     @NotNull
     @Override
-    public Page canOpen(@NotNull final Predicate<OpenEvent> predicate) {
-        this.canopen = predicate;
-        return this;
-    }
-
-    @NotNull
-    @Override
     public Page canClose(@NotNull final Predicate<CloseEvent> predicate) {
         this.canclose = predicate;
         return this;
-    }
-
-    @Override
-    public boolean canOpen(@NotNull final OpenEvent predicate) {
-        return this.canopen.test(predicate);
     }
 
     @Override
@@ -243,25 +215,28 @@ public final class BasicPage implements Page {
 
     @Override
     public boolean checkBounds(final int row, final int column) {
-        return row >= 0 && column >= 0 ||
-            row < this.row && column < this.column;
+        if (row >= 0) {
+            return column >= 0;
+        }
+        if (row < this.row) {
+            return column < this.column;
+        }
+        return false;
     }
 
-    @NotNull
     @Override
-    public Inventory open(@NotNull final Player player, final int page, @NotNull final Map<String, Object> properties) {
+    public void open(@NotNull final Player player, final int page, @NotNull final Map<String, Object> properties) {
         this.close(player);
-        final InventoryContents contents = new BasicInventoryContents(this, player);
-        contents.pagination().page(page);
-        properties.forEach(contents::property);
-        this.inventory.setContents(player, contents);
-        this.provider().init(contents);
         final InventoryOpener opener = this.inventory.findOpener(this.type).orElseThrow(() ->
             new IllegalStateException("No opener found for the inventory type " + this.type.name()));
-        final Inventory handle = opener.open(this, player);
+        final InventoryContents contents = new BasicInventoryContents(this, player);
+        contents.pagination().page(page);
+        properties.forEach(contents::setProperty);
+        this.inventory.setContents(player, contents);
+        this.provider().init(contents);
+        opener.open(this, player);
         this.inventory.setPage(player, this);
         this.inventory.tick(player, this);
-        return handle;
     }
 
     @Override
