@@ -95,3 +95,61 @@ public final class Main extends JavaPlugin {
 
 }
 ```
+### Creating a Inventory Provider Class
+```java
+import io.github.portlek.smartinventory.InventoryContents;
+import io.github.portlek.smartinventory.InventoryProvided;
+import org.jetbrains.annotations.NotNull;
+
+public final class ExampleInventoryProvided implements InventoryProvided {
+
+    @Override
+    public void init(@NotNull final InventoryContents contents) {
+        // Runs when the page opens first.
+    }
+
+    @Override
+    public void update(@NotNull final InventoryContents contents) {
+        // Runs when the notify update method called by you.
+        // SmartInventory#notifyUpdate(Player)
+        // InventoryContents#notifyUpdate()
+    }
+
+    @Override
+    public void tick(@NotNull final InventoryContents contents) {
+        // Runs every tick.
+        // You have options that;
+        // -> make it async or not (default false)
+        // -> set the tick's start delay (default 1L)
+        // -> set the tick period (default 1L)
+    }
+
+}
+```
+### Creating a Page
+```java
+import io.github.portlek.smartinventory.InventoryProvided;
+import io.github.portlek.smartinventory.Page;
+import io.github.portlek.smartinventory.SmartInventory;
+import org.jetbrains.annotations.NotNull;
+
+public final class CreateAPage {
+
+    @NotNull
+    private final SmartInventory inventory;
+    
+    @NotNull
+    private final InventoryProvided provided;
+
+    public CreateAPage(@NotNull final SmartInventory inventory, @NotNull final InventoryProvided provided) {
+        this.inventory = inventory;
+        this.provided =provided;
+    }
+
+    public void open(@NotNull final Player player) {
+        Page.build(this.inventory, this.provided)
+            .open(player);
+    }
+
+}
+```

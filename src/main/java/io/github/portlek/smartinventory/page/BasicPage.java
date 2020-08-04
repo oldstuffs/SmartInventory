@@ -51,10 +51,15 @@ public final class BasicPage implements Page {
 
     private final Collection<Target<? extends PageEvent>> targets = new ArrayList<>();
 
-    // TODO ???
-    private final Predicate<PageEvent> control = event ->
-        event instanceof CloseEvent && this.canClose((CloseEvent) event) ||
-            event instanceof OpenEvent && this.canOpen((OpenEvent) event);
+    private final Predicate<PageEvent> control = event -> {
+        if (event instanceof CloseEvent) {
+            return this.canClose((CloseEvent) event);
+        }
+        if (event instanceof OpenEvent) {
+            return this.canOpen((OpenEvent) event);
+        }
+        return true;
+    };
 
     @NotNull
     private final SmartInventory inventory;
@@ -103,6 +108,7 @@ public final class BasicPage implements Page {
         this.targets.stream()
             .filter(target -> target.getType().isAssignableFrom(event.getClass()))
             .map(target -> (Target<T>) target)
+            .filter(tTarget -> this.control.test(event))
             .forEach(target -> target.accept(event));
     }
 
@@ -250,10 +256,8 @@ public final class BasicPage implements Page {
         properties.forEach(contents::property);
         this.inventory.setContents(player, contents);
         this.provider().init(contents);
-        final InventoryOpener opener = this.inventory.findOpener(this.type)
-            .orElseThrow(() ->
-                new IllegalStateException("No opener found for the inventory type " + this.type.name())
-            );
+        final InventoryOpener opener = this.inventory.findOpener(this.type).orElseThrow(() ->
+            new IllegalStateException("No opener found for the inventory type " + this.type.name()));
         final Inventory handle = opener.open(this, player);
         this.inventory.setPage(player, this);
         this.inventory.tick(player, this);
