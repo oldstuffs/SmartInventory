@@ -201,9 +201,9 @@ public final class CreateAPage {
             // You can also add a property > contents.setProperty("test-key-2", "test-object");
             .open(player, properties);
             // With properties and pagination number.
-            .this.open(player, 2, properties);
+            .open(player, 2, properties);
             // With pagination number.
-            .this.open(player, 2)
+            .open(player, 2)
             // Default open method.
             .open(player);
 
