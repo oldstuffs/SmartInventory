@@ -176,7 +176,7 @@ public final class CreateAPage {
             // Runs after the page opened. If predicates cannot passed, the consumer won't run.
             .whenOpen(openEvent -> {
                 openEvent.contents().player().sendMessage("The page opened.");
-                openEvent.contents().player().sendMessage("This message will send to \"Player\".");
+                openEvent.contents().player().sendMessage("This message will send to Player.");
             },
             // These predicates are optional. It's Predicate<OpenEvent>... (array)
             openEvent -> {
@@ -187,7 +187,7 @@ public final class CreateAPage {
             // Runs after the page closed. If predicates cannot passed, the consumer won't run.
             .whenClose(closeEvent -> {
                 openEvent.contents().player().sendMessage("The page closed.");
-                closeEvent.contents().player().sendMessage("This message will send to \"Player\".");
+                closeEvent.contents().player().sendMessage("This message will send to Player.");
             },
             // These predicates are optional. It's Predicate<OpenEvent>... (array)
             closeEvent -> {
