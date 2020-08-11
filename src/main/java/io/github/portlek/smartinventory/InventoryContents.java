@@ -29,6 +29,8 @@ import io.github.portlek.smartinventory.util.Pattern;
 import io.github.portlek.smartinventory.util.SlotPos;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -161,6 +163,13 @@ public interface InventoryContents {
     @NotNull
     InventoryContents fillPatternRepeating(@NotNull Pattern<Icon> pattern, @NotNull SlotPos startPos,
                                            @NotNull SlotPos endPos);
+
+    @NotNull
+    InventoryContents applyRect(int fromRow, int fromColumn, int toRow, int toColumn,
+                                @NotNull BiConsumer<Integer, Integer> apply);
+
+    @NotNull
+    InventoryContents applyRect(int fromRow, int fromColumn, int toRow, int toColumn, @NotNull Consumer<Icon> apply);
 
     @Nullable <T> T getProperty(@NotNull String name);
 

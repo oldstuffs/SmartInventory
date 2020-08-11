@@ -30,6 +30,8 @@ import io.github.portlek.smartinventory.*;
 import io.github.portlek.smartinventory.util.Pattern;
 import io.github.portlek.smartinventory.util.SlotPos;
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -347,16 +349,12 @@ public final class BasicInventoryContents implements InventoryContents {
     @Override
     public InventoryContents fillRect(final int fromRow, final int fromColumn, final int toRow, final int toColumn,
                                       @NotNull final Icon item) {
-        for (int row = fromRow; row <= toRow; row++) {
-            for (int column = fromColumn; column <= toColumn; column++) {
-                if (row != fromRow && row != toRow &&
-                    column != fromColumn && column != toColumn) {
-                    continue;
-                }
+        return this.applyRect(fromRow, fromColumn, toRow, toColumn, (row, column) -> {
+            if (row == fromRow || row == toRow ||
+                column == fromColumn || column == toColumn) {
                 this.set(row, column, item);
             }
-        }
-        return this;
+        });
     }
 
     @NotNull
@@ -486,6 +484,26 @@ public final class BasicInventoryContents implements InventoryContents {
                                                   @NotNull final SlotPos startPos, @NotNull final SlotPos endPos) {
         return this.fillPatternRepeating(pattern, startPos.getRow(), startPos.getColumn(), endPos.getRow(),
             endPos.getColumn());
+    }
+
+    @NotNull
+    @Override
+    public InventoryContents applyRect(final int fromRow, final int fromColumn, final int toRow, final int toColumn,
+                                       @NotNull final BiConsumer<Integer, Integer> apply) {
+        for (int row = fromRow; row <= toRow; row++) {
+            for (int column = fromColumn; column <= toColumn; column++) {
+                apply.accept(row, column);
+            }
+        }
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public InventoryContents applyRect(final int fromRow, final int fromColumn, final int toRow, final int toColumn,
+                                       @NotNull final Consumer<Icon> apply) {
+        return this.applyRect(fromRow, fromColumn, toRow, toColumn, (row, column) ->
+            this.get(row, column).ifPresent(apply));
     }
 
     @SuppressWarnings("unchecked")
