@@ -70,6 +70,8 @@ public final class BasicPage implements Page {
 
     private boolean async = false;
 
+    private boolean tickEnable = true;
+
     @NotNull
     private Predicate<CloseEvent> canClose = event -> true;
 
@@ -140,6 +142,18 @@ public final class BasicPage implements Page {
     @Override
     public Page async(final boolean async) {
         this.async = async;
+        return this;
+    }
+
+    @Override
+    public boolean tickEnable() {
+        return this.tickEnable;
+    }
+
+    @NotNull
+    @Override
+    public Page tickEnable(final boolean tickEnable) {
+        this.tickEnable = tickEnable;
         return this;
     }
 
@@ -235,7 +249,9 @@ public final class BasicPage implements Page {
         this.provider().init(contents);
         opener.open(this, player);
         this.inventory.setPage(player, this);
-        this.inventory.tick(player, this);
+        if (this.tickEnable()) {
+            this.inventory.tick(player, this);
+        }
     }
 
     @Override

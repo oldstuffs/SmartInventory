@@ -68,6 +68,11 @@ public interface Page {
     @NotNull
     Page async(boolean async);
 
+    boolean tickEnable();
+
+    @NotNull
+    Page tickEnable( boolean tickEnable);
+
     int row();
 
     @NotNull
