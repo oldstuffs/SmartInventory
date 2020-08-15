@@ -37,11 +37,13 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@RequiredArgsConstructor
 public final class BasicPage implements Page {
 
     private final Source<InventoryContents> source = new BasicSource<>();
@@ -77,12 +79,6 @@ public final class BasicPage implements Page {
 
     @Nullable
     private Page parent;
-
-    public BasicPage(@NotNull final SmartInventory inventory, @NotNull final InventoryProvided provided) {
-        this.inventory = inventory;
-        this.provided = provided;
-        this.source.subscribe(provided);
-    }
 
     @Override
     public void notifyUpdate(@NotNull final InventoryContents contents) {
@@ -240,6 +236,7 @@ public final class BasicPage implements Page {
     @Override
     public void open(@NotNull final Player player, final int page, @NotNull final Map<String, Object> properties) {
         this.close(player);
+        this.source.subscribe(this.provided);
         final InventoryOpener opener = this.inventory.findOpener(this.type).orElseThrow(() ->
             new IllegalStateException("No opener found for the inventory type " + this.type.name()));
         final InventoryContents contents = new BasicInventoryContents(this, player);
