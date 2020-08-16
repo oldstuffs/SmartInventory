@@ -53,6 +53,7 @@ public final class BasicPage implements Page {
     @NotNull
     private final SmartInventory inventory;
 
+    // TODO Add a method to change the type of the inventory.
     @NotNull
     private final InventoryType type = InventoryType.CHEST;
 
