@@ -30,6 +30,9 @@ import org.jetbrains.annotations.NotNull;
 
 public interface InventoryProvided extends Target<InventoryContents> {
 
+    InventoryProvided EMPTY = new InventoryProvided() {
+    };
+
     default void init(@NotNull final InventoryContents contents) {
     }
 

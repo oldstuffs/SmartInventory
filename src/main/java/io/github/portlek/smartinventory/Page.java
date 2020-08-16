@@ -41,15 +41,22 @@ public interface Page {
         return new BasicPage(inventory, provided);
     }
 
+    static Page build(@NotNull final SmartInventory inventory) {
+        return new BasicPage(inventory);
+    }
+
     void notifyUpdate(@NotNull InventoryContents contents);
 
     <T extends PageEvent> void accept(@NotNull T event);
 
     @NotNull
+    SmartInventory inventory();
+
+    @NotNull
     InventoryProvided provider();
 
     @NotNull
-    SmartInventory inventory();
+    Page provider(@NotNull InventoryProvided provided);
 
     long tick();
 
@@ -69,7 +76,7 @@ public interface Page {
     boolean tickEnable();
 
     @NotNull
-    Page tickEnable( boolean tickEnable);
+    Page tickEnable(boolean tickEnable);
 
     int row();
 
@@ -133,7 +140,7 @@ public interface Page {
 
     @NotNull
     default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer,
-                          @NotNull final Predicate<UpdateEvent>... requirements) {
+                            @NotNull final Predicate<UpdateEvent>... requirements) {
         return this.target(UpdateEvent.class, consumer, requirements);
     }
 
@@ -144,7 +151,7 @@ public interface Page {
 
     @NotNull
     default Page whenTick(@NotNull final Consumer<TickEvent> consumer,
-                            @NotNull final Predicate<TickEvent>... requirements) {
+                          @NotNull final Predicate<TickEvent>... requirements) {
         return this.target(TickEvent.class, consumer, requirements);
     }
 

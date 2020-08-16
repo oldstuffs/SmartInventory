@@ -39,13 +39,11 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@RequiredArgsConstructor
 public final class BasicPage implements Page {
 
     private final Source<InventoryContents> source = new BasicSource<>();
@@ -56,10 +54,10 @@ public final class BasicPage implements Page {
     private final SmartInventory inventory;
 
     @NotNull
-    private final InventoryProvided provided;
+    private final InventoryType type = InventoryType.CHEST;
 
     @NotNull
-    private final InventoryType type = InventoryType.CHEST;
+    private InventoryProvided provided;
 
     @NotNull
     private String title = "Smart Inventory";
@@ -82,6 +80,15 @@ public final class BasicPage implements Page {
     @Nullable
     private Page parent;
 
+    public BasicPage(@NotNull final SmartInventory inventory, @NotNull final InventoryProvided provided) {
+        this.inventory = inventory;
+        this.provided = provided;
+    }
+
+    public BasicPage(@NotNull final SmartInventory inventory) {
+        this(inventory, InventoryProvided.EMPTY);
+    }
+
     @Override
     public void notifyUpdate(@NotNull final InventoryContents contents) {
         this.accept(new PgUpdateEvent(contents));
@@ -98,14 +105,21 @@ public final class BasicPage implements Page {
 
     @NotNull
     @Override
+    public SmartInventory inventory() {
+        return this.inventory;
+    }
+
+    @NotNull
+    @Override
     public InventoryProvided provider() {
         return this.provided;
     }
 
     @NotNull
     @Override
-    public SmartInventory inventory() {
-        return this.inventory;
+    public Page provider(@NotNull final InventoryProvided provided) {
+        this.provided = provided;
+        return this;
     }
 
     @Override
