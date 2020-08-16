@@ -50,13 +50,13 @@ public interface Page {
     <T extends PageEvent> void accept(@NotNull T event);
 
     @NotNull
-    SmartInventory inventory();
-
-    @NotNull
     InventoryProvided provider();
 
     @NotNull
     Page provider(@NotNull InventoryProvided provided);
+
+    @NotNull
+    SmartInventory inventory();
 
     long tick();
 

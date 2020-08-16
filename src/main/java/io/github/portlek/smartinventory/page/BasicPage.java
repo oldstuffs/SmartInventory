@@ -105,12 +105,6 @@ public final class BasicPage implements Page {
 
     @NotNull
     @Override
-    public SmartInventory inventory() {
-        return this.inventory;
-    }
-
-    @NotNull
-    @Override
     public InventoryProvided provider() {
         return this.provided;
     }
@@ -120,6 +114,12 @@ public final class BasicPage implements Page {
     public Page provider(@NotNull final InventoryProvided provided) {
         this.provided = provided;
         return this;
+    }
+
+    @NotNull
+    @Override
+    public SmartInventory inventory() {
+        return this.inventory;
     }
 
     @Override
