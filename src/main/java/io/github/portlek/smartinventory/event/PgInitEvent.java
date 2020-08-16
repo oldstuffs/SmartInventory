@@ -27,11 +27,7 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.InitEvent;
-import io.github.portlek.smartinventory.event.abs.OpenEvent;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Bukkit;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
