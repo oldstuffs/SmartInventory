@@ -30,6 +30,8 @@ import io.github.portlek.observer.source.BasicSource;
 import io.github.portlek.smartinventory.*;
 import io.github.portlek.smartinventory.content.BasicInventoryContents;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
+import io.github.portlek.smartinventory.event.PgInitEvent;
+import io.github.portlek.smartinventory.event.PgUpdateEvent;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;
 import java.util.ArrayList;
@@ -82,6 +84,7 @@ public final class BasicPage implements Page {
 
     @Override
     public void notifyUpdate(@NotNull final InventoryContents contents) {
+        this.accept(new PgUpdateEvent(contents));
         this.source.notifyTargets(contents);
     }
 
@@ -243,6 +246,7 @@ public final class BasicPage implements Page {
         contents.pagination().page(page);
         properties.forEach(contents::setProperty);
         this.inventory.setContents(player, contents);
+        this.accept(new PgInitEvent(contents));
         this.provider().init(contents);
         opener.open(this, player);
         this.inventory.setPage(player, this);

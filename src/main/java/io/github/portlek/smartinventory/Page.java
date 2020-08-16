@@ -25,9 +25,7 @@
 
 package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.event.abs.CloseEvent;
-import io.github.portlek.smartinventory.event.abs.OpenEvent;
-import io.github.portlek.smartinventory.event.abs.PageEvent;
+import io.github.portlek.smartinventory.event.abs.*;
 import io.github.portlek.smartinventory.page.BasicPage;
 import java.util.Collections;
 import java.util.Map;
@@ -115,6 +113,39 @@ public interface Page {
     default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer,
                           @NotNull final Predicate<OpenEvent>... requirements) {
         return this.target(OpenEvent.class, consumer, requirements);
+    }
+
+    @NotNull
+    default Page whenInit(@NotNull final Consumer<InitEvent> consumer) {
+        return this.whenInit(consumer, new Predicate[0]);
+    }
+
+    @NotNull
+    default Page whenInit(@NotNull final Consumer<InitEvent> consumer,
+                          @NotNull final Predicate<InitEvent>... requirements) {
+        return this.target(InitEvent.class, consumer, requirements);
+    }
+
+    @NotNull
+    default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer) {
+        return this.whenUpdate(consumer, new Predicate[0]);
+    }
+
+    @NotNull
+    default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer,
+                          @NotNull final Predicate<UpdateEvent>... requirements) {
+        return this.target(UpdateEvent.class, consumer, requirements);
+    }
+
+    @NotNull
+    default Page whenTick(@NotNull final Consumer<TickEvent> consumer) {
+        return this.whenTick(consumer, new Predicate[0]);
+    }
+
+    @NotNull
+    default Page whenTick(@NotNull final Consumer<TickEvent> consumer,
+                            @NotNull final Predicate<TickEvent>... requirements) {
+        return this.target(TickEvent.class, consumer, requirements);
     }
 
     @NotNull

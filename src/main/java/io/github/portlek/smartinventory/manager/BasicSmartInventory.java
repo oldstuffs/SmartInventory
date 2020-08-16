@@ -29,6 +29,7 @@ import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.InventoryOpener;
 import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;
+import io.github.portlek.smartinventory.event.PgTickEvent;
 import io.github.portlek.smartinventory.listener.*;
 import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
 import java.util.*;
@@ -173,7 +174,10 @@ public final class BasicSmartInventory implements SmartInventory {
         final BukkitRunnable task = new BukkitRunnable() {
             @Override
             public void run() {
-                page.provider().tick(BasicSmartInventory.this.contents.get(player));
+                Optional.ofNullable(BasicSmartInventory.this.contents.get(player)).ifPresent(contents -> {
+                    page.accept(new PgTickEvent(contents));
+                    page.provider().tick(contents);
+                });
             }
         };
         if (page.async()) {
