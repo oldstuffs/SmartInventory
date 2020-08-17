@@ -52,6 +52,9 @@ public interface SmartInventory {
     @NotNull
     Optional<Page> getPage(@NotNull Player player);
 
+    @NotNull
+    Optional<Page> getLastPage(@NotNull Player player);
+
     void notifyUpdate(@NotNull Player player);
 
     @NotNull
@@ -64,6 +67,8 @@ public interface SmartInventory {
     Map<Player, InventoryContents> getContents();
 
     void removePage(@NotNull Player player);
+
+    void removeLastPage(@NotNull Player player);
 
     void removeContent(@NotNull Player player);
 

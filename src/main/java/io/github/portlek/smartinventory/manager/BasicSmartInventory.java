@@ -46,6 +46,8 @@ import org.jetbrains.annotations.NotNull;
 @RequiredArgsConstructor
 public final class BasicSmartInventory implements SmartInventory {
 
+    private final Map<Player, Page> lastpages = new HashMap<>();
+
     private final Map<Player, Page> pages = new HashMap<>();
 
     private final Map<Player, InventoryContents> contents = new HashMap<>();
@@ -108,6 +110,12 @@ public final class BasicSmartInventory implements SmartInventory {
         return Optional.ofNullable(this.pages.get(player));
     }
 
+    @NotNull
+    @Override
+    public Optional<Page> getLastPage(@NotNull final Player player) {
+        return Optional.ofNullable(this.lastpages.get(player));
+    }
+
     @Override
     public void notifyUpdate(@NotNull final Player player) {
         this.getContents(player).ifPresent(InventoryContents::notifyUpdate);
@@ -137,6 +145,11 @@ public final class BasicSmartInventory implements SmartInventory {
     }
 
     @Override
+    public void removeLastPage(@NotNull final Player player) {
+        this.lastpages.remove(player);
+    }
+
+    @Override
     public void removeContent(@NotNull final Player player) {
         this.contents.remove(player);
     }
@@ -162,6 +175,7 @@ public final class BasicSmartInventory implements SmartInventory {
     @Override
     public void setPage(@NotNull final Player player, @NotNull final Page page) {
         this.pages.put(player, page);
+        this.lastpages.put(player, page);
     }
 
     @Override

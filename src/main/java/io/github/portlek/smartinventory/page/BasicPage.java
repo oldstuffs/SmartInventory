@@ -254,9 +254,9 @@ public final class BasicPage implements Page {
     @Override
     public void open(@NotNull final Player player, final int page, @NotNull final Map<String, Object> properties) {
         this.close(player);
-        this.source.subscribe(this.provided);
         final InventoryOpener opener = this.inventory.findOpener(this.type).orElseThrow(() ->
             new IllegalStateException("No opener found for the inventory type " + this.type.name()));
+        this.source.subscribe(this.provided);
         final InventoryContents contents = new BasicInventoryContents(this, player);
         contents.pagination().page(page);
         properties.forEach(contents::setProperty);
