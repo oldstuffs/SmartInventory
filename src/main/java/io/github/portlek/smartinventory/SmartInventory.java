@@ -28,6 +28,8 @@ package io.github.portlek.smartinventory;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
@@ -52,6 +54,9 @@ public interface SmartInventory {
     @NotNull
     Optional<Page> getPage(@NotNull Player player);
 
+    @NotNull
+    Optional<Page> getLastPage(@NotNull Player player);
+
     void notifyUpdate(@NotNull Player player);
 
     @NotNull
@@ -65,9 +70,17 @@ public interface SmartInventory {
 
     void removePage(@NotNull Player player);
 
+    void removeLastPage(@NotNull Player player);
+
     void removeContent(@NotNull Player player);
 
+    void clearPages(@NotNull Predicate<InventoryContents> predicate);
+
     void clearPages();
+
+    void clearLastPages(@NotNull Predicate<Player> predicate);
+
+    void clearLastPages();
 
     void clearContents();
 

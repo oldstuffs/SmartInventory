@@ -33,6 +33,7 @@ import io.github.portlek.smartinventory.event.PgTickEvent;
 import io.github.portlek.smartinventory.listener.*;
 import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,8 @@ import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
 public final class BasicSmartInventory implements SmartInventory {
+
+    private final Map<Player, Page> lastpages = new HashMap<>();
 
     private final Map<Player, Page> pages = new HashMap<>();
 
@@ -108,6 +111,12 @@ public final class BasicSmartInventory implements SmartInventory {
         return Optional.ofNullable(this.pages.get(player));
     }
 
+    @NotNull
+    @Override
+    public Optional<Page> getLastPage(@NotNull final Player player) {
+        return Optional.ofNullable(this.lastpages.get(player));
+    }
+
     @Override
     public void notifyUpdate(@NotNull final Player player) {
         this.getContents(player).ifPresent(InventoryContents::notifyUpdate);
@@ -137,13 +146,44 @@ public final class BasicSmartInventory implements SmartInventory {
     }
 
     @Override
+    public void removeLastPage(@NotNull final Player player) {
+        this.lastpages.remove(player);
+    }
+
+    @Override
     public void removeContent(@NotNull final Player player) {
         this.contents.remove(player);
     }
 
     @Override
+    public void clearPages(@NotNull final Predicate<InventoryContents> predicate) {
+        final Map<Player, Page> temp = new HashMap<>(this.pages);
+        temp.forEach((player, page) ->
+            Optional.ofNullable(this.contents.get(player))
+                .filter(predicate)
+                .ifPresent(contents -> {
+                    this.pages.remove(player);
+                }));
+    }
+
+    @Override
     public void clearPages() {
         this.pages.clear();
+    }
+
+    @Override
+    public void clearLastPages(@NotNull final Predicate<Player> predicate) {
+        final Map<Player, Page> temp = new HashMap<>(this.lastpages);
+        temp.forEach((player, page) -> {
+            if (predicate.test(player)) {
+                this.pages.remove(player);
+            }
+        });
+    }
+
+    @Override
+    public void clearLastPages() {
+        this.lastpages.clear();
     }
 
     @Override
@@ -162,6 +202,7 @@ public final class BasicSmartInventory implements SmartInventory {
     @Override
     public void setPage(@NotNull final Player player, @NotNull final Page page) {
         this.pages.put(player, page);
+        this.lastpages.put(player, page);
     }
 
     @Override
