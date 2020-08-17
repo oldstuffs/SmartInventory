@@ -74,6 +74,8 @@ public interface SmartInventory {
 
     void clearPages();
 
+    void clearLastPages();
+
     void clearContents();
 
     void stopTick(Player player);

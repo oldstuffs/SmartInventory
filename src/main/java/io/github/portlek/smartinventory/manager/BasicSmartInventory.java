@@ -160,6 +160,11 @@ public final class BasicSmartInventory implements SmartInventory {
     }
 
     @Override
+    public void clearLastPages() {
+        this.lastpages.clear();
+    }
+
+    @Override
     public void clearContents() {
         this.contents.clear();
     }
