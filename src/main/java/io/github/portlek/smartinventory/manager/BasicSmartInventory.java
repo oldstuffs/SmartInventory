@@ -33,6 +33,7 @@ import io.github.portlek.smartinventory.event.PgTickEvent;
 import io.github.portlek.smartinventory.listener.*;
 import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -155,8 +156,29 @@ public final class BasicSmartInventory implements SmartInventory {
     }
 
     @Override
+    public void clearPages(@NotNull final Predicate<InventoryContents> predicate) {
+        final Map<Player, Page> temp = new HashMap<>(this.pages);
+        temp.forEach((player, page) ->
+            Optional.ofNullable(this.contents.get(player))
+                .filter(predicate)
+                .ifPresent(contents -> {
+                    this.pages.remove(player);
+                }));
+    }
+
+    @Override
     public void clearPages() {
         this.pages.clear();
+    }
+
+    @Override
+    public void clearLastPages(@NotNull final Predicate<Player> predicate) {
+        final Map<Player, Page> temp = new HashMap<>(this.lastpages);
+        temp.forEach((player, page) -> {
+            if (predicate.test(player)) {
+                this.pages.remove(player);
+            }
+        });
     }
 
     @Override
