@@ -28,7 +28,6 @@ package io.github.portlek.smartinventory;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -58,6 +57,8 @@ public interface SmartInventory {
     Optional<Page> getLastPage(@NotNull Player player);
 
     void notifyUpdate(@NotNull Player player);
+
+    <T extends InventoryProvided> void notifyUpdateForAll(@NotNull Class<T> providerClass);
 
     @NotNull
     Optional<InventoryContents> getContents(@NotNull Player player);

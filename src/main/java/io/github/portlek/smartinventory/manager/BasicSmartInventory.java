@@ -25,10 +25,7 @@
 
 package io.github.portlek.smartinventory.manager;
 
-import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.InventoryOpener;
-import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.SmartInventory;
+import io.github.portlek.smartinventory.*;
 import io.github.portlek.smartinventory.event.PgTickEvent;
 import io.github.portlek.smartinventory.listener.*;
 import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
@@ -120,6 +117,13 @@ public final class BasicSmartInventory implements SmartInventory {
     @Override
     public void notifyUpdate(@NotNull final Player player) {
         this.getContents(player).ifPresent(InventoryContents::notifyUpdate);
+    }
+
+    @Override
+    public <T extends InventoryProvided> void notifyUpdateForAll(@NotNull final Class<T> providerClass) {
+        this.contents.values().stream()
+            .filter(contents -> providerClass.isInstance(contents.page().provider()))
+            .forEach(InventoryContents::notifyUpdate);
     }
 
     @NotNull
