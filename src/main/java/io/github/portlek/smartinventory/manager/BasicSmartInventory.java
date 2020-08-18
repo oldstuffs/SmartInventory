@@ -122,7 +122,7 @@ public final class BasicSmartInventory implements SmartInventory {
     @Override
     public <T extends InventoryProvided> void notifyUpdateForAll(@NotNull final Class<T> provider) {
         this.contents.values().stream()
-            .filter(contents -> provider.isInstance(contents.page().provider()))
+            .filter(contents -> provider.equals(contents.page().provider().getClass()))
             .forEach(InventoryContents::notifyUpdate);
     }
 
