@@ -47,6 +47,8 @@ public interface Page {
 
     void notifyUpdate(@NotNull InventoryContents contents);
 
+    void notifyUpdateForAll();
+
     <T extends PageEvent> void accept(@NotNull T event);
 
     @NotNull

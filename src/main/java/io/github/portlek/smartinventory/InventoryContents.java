@@ -197,4 +197,6 @@ public interface InventoryContents {
 
     void notifyUpdate();
 
+    void notifyUpdateForAll();
+
 }

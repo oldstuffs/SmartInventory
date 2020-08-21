@@ -97,6 +97,11 @@ public final class BasicPage implements Page {
     }
 
     @Override
+    public void notifyUpdateForAll() {
+        this.inventory.notifyUpdateForAll(this.provided.getClass());
+    }
+
+    @Override
     public <T extends PageEvent> void accept(@NotNull final T event) {
         this.targets.stream()
             .filter(target -> target.getType().isAssignableFrom(event.getClass()))

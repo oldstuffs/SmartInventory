@@ -566,6 +566,11 @@ public final class BasicInventoryContents implements InventoryContents {
         this.page.notifyUpdate(this);
     }
 
+    @Override
+    public void notifyUpdateForAll() {
+        this.page.notifyUpdateForAll();
+    }
+
     private void update(final int row, final int column, @Nullable final ItemStack item) {
         if (this.page.inventory().getOpenedPlayers(this.page).contains(this.player)) {
             final Inventory inv = this.getTopInventory();
