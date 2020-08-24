@@ -113,8 +113,8 @@ public final class IcClickEvent implements ClickEvent {
 
     @Override
     public void close() {
-        Bukkit.getScheduler().runTaskLater(this.plugin, () ->
-            this.contents.page().close(this.contents.player()), 1L);
+        Bukkit.getScheduler().runTask(this.plugin, () ->
+            this.contents.page().close(this.contents.player()));
     }
 
 }
