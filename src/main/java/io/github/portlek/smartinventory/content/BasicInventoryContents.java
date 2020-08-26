@@ -288,7 +288,6 @@ public final class BasicInventoryContents implements InventoryContents {
 
     @Override
     public void removeAll(@NotNull final Icon item) {
-        Preconditions.checkNotNull(item, "The clickableitem to remove cannot be null");
         this.removeAll(item.calculateItem());
     }
 
@@ -298,6 +297,19 @@ public final class BasicInventoryContents implements InventoryContents {
         for (int row = 0; row < this.contents.length; row++) {
             for (int column = 0; column < this.contents[row].length; column++) {
                 this.set(row, column, item);
+            }
+        }
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public InventoryContents fillEmpties(@NotNull final Icon item) {
+        for (int row = 0; row < this.contents.length; row++) {
+            for (int column = 0; column < this.contents[row].length; column++) {
+                if (this.contents[row][column] == null) {
+                    this.set(row, column, item);
+                }
             }
         }
         return this;

@@ -112,6 +112,9 @@ public interface InventoryContents {
     InventoryContents fill(@NotNull Icon item);
 
     @NotNull
+    InventoryContents fillEmpties(@NotNull Icon item);
+
+    @NotNull
     InventoryContents fillRow(int row, @NotNull Icon item);
 
     @NotNull
