@@ -33,6 +33,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -193,7 +194,7 @@ public final class BasicInventoryContents implements InventoryContents {
 
     @NotNull
     @Override
-    public InventoryContents set(@NotNull final SlotPos slotPos, @NotNull final Icon item) {
+    public InventoryContents set(@NotNull final SlotPos slotPos, @Nullable final Icon item) {
         return this.set(slotPos.getRow(), slotPos.getColumn(), item);
     }
 
@@ -269,13 +270,11 @@ public final class BasicInventoryContents implements InventoryContents {
 
     @Override
     public void removeAmount(@NotNull final Icon item, final int amount) {
-        Preconditions.checkNotNull(item, "The clickableitem to remove cannot be null");
         this.removeAmount(item.calculateItem(), amount);
     }
 
     @Override
     public void removeAll(@NotNull final ItemStack item) {
-        Preconditions.checkNotNull(item, "The itemstack to remove cannot be null");
         for (int row = 0; row < this.contents.length; row++) {
             for (int column = 0; column < this.contents[row].length; column++) {
                 if (this.contents[row][column] != null &&
@@ -307,7 +306,8 @@ public final class BasicInventoryContents implements InventoryContents {
     public InventoryContents fillEmpties(@NotNull final Icon item) {
         for (int row = 0; row < this.contents.length; row++) {
             for (int column = 0; column < this.contents[row].length; column++) {
-                if (this.contents[row][column] == null) {
+                if (this.contents[row][column] == null ||
+                    this.contents[row][column].calculateItem().getType() == Material.AIR) {
                     this.set(row, column, item);
                 }
             }
