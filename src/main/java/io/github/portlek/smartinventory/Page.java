@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public interface Page {
@@ -190,7 +191,8 @@ public interface Page {
         this.open(player, 0, properties);
     }
 
-    void open(@NotNull Player player, int page, @NotNull Map<String, Object> properties);
+    @NotNull
+    Inventory open(@NotNull Player player, int page, @NotNull Map<String, Object> properties);
 
     void close(@NotNull Player player);
 

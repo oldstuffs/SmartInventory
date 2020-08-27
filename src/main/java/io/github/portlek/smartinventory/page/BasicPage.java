@@ -41,6 +41,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -256,8 +257,9 @@ public final class BasicPage implements Page {
         return false;
     }
 
+    @NotNull
     @Override
-    public void open(@NotNull final Player player, final int page, @NotNull final Map<String, Object> properties) {
+    public Inventory open(@NotNull final Player player, final int page, @NotNull final Map<String, Object> properties) {
         this.close(player);
         final InventoryOpener opener = this.inventory.findOpener(this.type).orElseThrow(() ->
             new IllegalStateException("No opener found for the inventory type " + this.type.name()));
@@ -268,11 +270,13 @@ public final class BasicPage implements Page {
         this.inventory.setContents(player, contents);
         this.accept(new PgInitEvent(contents));
         this.provider().init(contents);
-        opener.open(this, player);
+        final Inventory inventory = opener.open(this, player);
+        this.inventory.setContentsByInventory(inventory, contents);
         this.inventory.setPage(player, this);
         if (this.tickEnable()) {
             this.inventory.tick(player, this);
         }
+        return inventory;
     }
 
     @Override
@@ -283,6 +287,7 @@ public final class BasicPage implements Page {
         this.inventory.stopTick(player);
         this.inventory.removePage(player);
         this.inventory.removeContent(player);
+        this.inventory.removeContentByInventory(player.getOpenInventory().getTopInventory());
         this.source.unsubscribe(this.provided);
         player.closeInventory();
     }

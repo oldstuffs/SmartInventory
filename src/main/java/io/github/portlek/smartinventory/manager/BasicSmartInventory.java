@@ -37,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +50,8 @@ public final class BasicSmartInventory implements SmartInventory {
     private final Map<Player, Page> pages = new HashMap<>();
 
     private final Map<Player, InventoryContents> contents = new HashMap<>();
+
+    private final Map<Inventory, InventoryContents> contentsByInventory = new HashMap<>();
 
     private final Map<Player, BukkitRunnable> tasks = new HashMap<>();
 
@@ -134,6 +137,12 @@ public final class BasicSmartInventory implements SmartInventory {
 
     @NotNull
     @Override
+    public Optional<InventoryContents> getContentsByInventory(@NotNull final Inventory inventory) {
+        return Optional.ofNullable(this.contentsByInventory.get(inventory));
+    }
+
+    @NotNull
+    @Override
     public Map<Player, Page> getPages() {
         return Collections.unmodifiableMap(this.pages);
     }
@@ -142,6 +151,12 @@ public final class BasicSmartInventory implements SmartInventory {
     @Override
     public Map<Player, InventoryContents> getContents() {
         return Collections.unmodifiableMap(this.contents);
+    }
+
+    @NotNull
+    @Override
+    public Map<Inventory, InventoryContents> getContentsByInventory() {
+        return Collections.unmodifiableMap(this.contentsByInventory);
     }
 
     @Override
@@ -160,14 +175,17 @@ public final class BasicSmartInventory implements SmartInventory {
     }
 
     @Override
+    public void removeContentByInventory(@NotNull final Inventory inventory) {
+        this.contentsByInventory.remove(inventory);
+    }
+
+    @Override
     public void clearPages(@NotNull final Predicate<InventoryContents> predicate) {
-        final Map<Player, Page> temp = new HashMap<>(this.pages);
-        temp.forEach((player, page) ->
+        new HashMap<>(this.pages).keySet().forEach(player ->
             Optional.ofNullable(this.contents.get(player))
                 .filter(predicate)
-                .ifPresent(contents -> {
-                    this.pages.remove(player);
-                }));
+                .ifPresent(contents ->
+                    this.pages.remove(player)));
     }
 
     @Override
@@ -196,6 +214,11 @@ public final class BasicSmartInventory implements SmartInventory {
     }
 
     @Override
+    public void clearContentsByInventory() {
+        this.contentsByInventory.clear();
+    }
+
+    @Override
     public void stopTick(final Player player) {
         Optional.ofNullable(this.tasks.get(player)).ifPresent(runnable -> {
             Bukkit.getScheduler().cancelTask(runnable.getTaskId());
@@ -212,6 +235,11 @@ public final class BasicSmartInventory implements SmartInventory {
     @Override
     public void setContents(@NotNull final Player player, @NotNull final InventoryContents contest) {
         this.contents.put(player, contest);
+    }
+
+    @Override
+    public void setContentsByInventory(@NotNull final Inventory inventory, @NotNull final InventoryContents contest) {
+        this.contentsByInventory.put(inventory, contest);
     }
 
     @Override

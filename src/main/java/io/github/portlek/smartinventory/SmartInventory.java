@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,16 +65,24 @@ public interface SmartInventory {
     Optional<InventoryContents> getContents(@NotNull Player player);
 
     @NotNull
+    Optional<InventoryContents> getContentsByInventory(@NotNull Inventory inventory);
+
+    @NotNull
     Map<Player, Page> getPages();
 
     @NotNull
     Map<Player, InventoryContents> getContents();
+
+    @NotNull
+    Map<Inventory, InventoryContents> getContentsByInventory();
 
     void removePage(@NotNull Player player);
 
     void removeLastPage(@NotNull Player player);
 
     void removeContent(@NotNull Player player);
+
+    void removeContentByInventory(@NotNull Inventory inventory);
 
     void clearPages(@NotNull Predicate<InventoryContents> predicate);
 
@@ -85,11 +94,15 @@ public interface SmartInventory {
 
     void clearContents();
 
+    void clearContentsByInventory();
+
     void stopTick(Player player);
 
     void setPage(@NotNull Player player, @NotNull Page page);
 
     void setContents(@NotNull Player player, @NotNull InventoryContents contest);
+
+    void setContentsByInventory(@NotNull Inventory inventory, @NotNull InventoryContents contest);
 
     void tick(@NotNull Player player, @NotNull Page page);
 

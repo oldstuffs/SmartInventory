@@ -29,6 +29,7 @@ import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
+import java.util.HashMap;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
@@ -52,11 +53,11 @@ public final class InventoryCloseListener implements Listener {
             return;
         }
         final Player player = (Player) human;
-        final Optional<InventoryContents> contentsoptional = this.inventory.getContents(player);
-        if (!contentsoptional.isPresent()) {
+        final Optional<InventoryContents> optional = this.inventory.getContents(player);
+        if (!optional.isPresent()) {
             return;
         }
-        final InventoryContents contents = contentsoptional.get();
+        final InventoryContents contents = optional.get();
         final Page page = contents.page();
         final PgCloseEvent close = new PgCloseEvent(contents);
         page.accept(close);
@@ -69,6 +70,11 @@ public final class InventoryCloseListener implements Listener {
         this.inventory.stopTick(player);
         this.inventory.removePage(player);
         this.inventory.removeContent(player);
+        new HashMap<>(this.inventory.getContentsByInventory()).forEach((inventory1, contents1) -> {
+            if (contents.equals(contents1)) {
+                this.inventory.removeContentByInventory(inventory1);
+            }
+        });
     }
 
 }

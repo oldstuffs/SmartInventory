@@ -40,7 +40,7 @@ public final class PluginDisableListener implements Listener {
     @NotNull
     private final SmartInventory inventory;
 
-    {
+    static {
         PlgnDisableEvent.class.getSimpleName();
     }
 
@@ -53,6 +53,7 @@ public final class PluginDisableListener implements Listener {
         });
         this.inventory.clearPages();
         this.inventory.clearContents();
+        this.inventory.clearContentsByInventory();
     }
 
 }

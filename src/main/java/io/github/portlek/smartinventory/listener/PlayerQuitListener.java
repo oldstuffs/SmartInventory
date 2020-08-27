@@ -49,6 +49,7 @@ public final class PlayerQuitListener implements Listener {
         this.inventory.stopTick(player);
         this.inventory.removePage(player);
         this.inventory.removeContent(player);
+        this.inventory.removeContentByInventory(player.getOpenInventory().getTopInventory());
     }
 
 }
