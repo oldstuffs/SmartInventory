@@ -170,6 +170,17 @@ public interface Page {
     }
 
     @NotNull
+    default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer) {
+        return this.whenOutsideClick(consumer, new Predicate[0]);
+    }
+
+    @NotNull
+    default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer,
+                                  @NotNull final Predicate<OutsideClickEvent>... requirements) {
+        return this.target(OutsideClickEvent.class, consumer, requirements);
+    }
+
+    @NotNull
     default <T extends PageEvent> Page target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
                                               @NotNull final Predicate<T>... requirements) {
         return this.target(Target.from(clazz, consumer, requirements));
