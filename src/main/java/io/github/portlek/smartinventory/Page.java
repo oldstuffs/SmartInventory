@@ -159,6 +159,17 @@ public interface Page {
     }
 
     @NotNull
+    default Page whenBottomClick(@NotNull final Consumer<BottomClickEvent> consumer) {
+        return this.whenBottomClick(consumer, new Predicate[0]);
+    }
+
+    @NotNull
+    default Page whenBottomClick(@NotNull final Consumer<BottomClickEvent> consumer,
+                                 @NotNull final Predicate<BottomClickEvent>... requirements) {
+        return this.target(BottomClickEvent.class, consumer, requirements);
+    }
+
+    @NotNull
     default <T extends PageEvent> Page target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
                                               @NotNull final Predicate<T>... requirements) {
         return this.target(Target.from(clazz, consumer, requirements));
