@@ -181,6 +181,17 @@ public interface Page {
     }
 
     @NotNull
+    default Page whenEmptyClick(@NotNull final Consumer<PageClickEvent> consumer) {
+        return this.whenEmptyClick(consumer, new Predicate[0]);
+    }
+
+    @NotNull
+    default Page whenEmptyClick(@NotNull final Consumer<PageClickEvent> consumer,
+                                @NotNull final Predicate<PageClickEvent>... requirements) {
+        return this.target(PageClickEvent.class, consumer, requirements);
+    }
+
+    @NotNull
     default <T extends PageEvent> Page target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
                                               @NotNull final Predicate<T>... requirements) {
         return this.target(Target.from(clazz, consumer, requirements));
