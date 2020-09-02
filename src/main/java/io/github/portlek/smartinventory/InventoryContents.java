@@ -202,4 +202,6 @@ public interface InventoryContents {
 
     void notifyUpdateForAll();
 
+    void notifyUpdateForAllById();
+
 }

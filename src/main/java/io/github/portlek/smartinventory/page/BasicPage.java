@@ -77,6 +77,9 @@ public final class BasicPage implements Page {
     private boolean tickEnable = true;
 
     @NotNull
+    private String id = "none";
+
+    @NotNull
     private Predicate<CloseEvent> canClose = event -> true;
 
     @Nullable
@@ -100,6 +103,11 @@ public final class BasicPage implements Page {
     @Override
     public void notifyUpdateForAll() {
         this.inventory.notifyUpdateForAll(this.provided.getClass());
+    }
+
+    @Override
+    public void notifyUpdateForAllById() {
+        this.inventory.notifyUpdateForAllById(this.id);
     }
 
     @Override
@@ -225,6 +233,19 @@ public final class BasicPage implements Page {
     @Override
     public Optional<Page> parent() {
         return Optional.ofNullable(this.parent);
+    }
+
+    @NotNull
+    @Override
+    public Page id(@NotNull final String id) {
+        this.id = id;
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public String id() {
+        return this.id;
     }
 
     @NotNull

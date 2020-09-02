@@ -61,6 +61,8 @@ public interface SmartInventory {
 
     <T extends InventoryProvided> void notifyUpdateForAll(@NotNull Class<T> provider);
 
+    <T extends InventoryProvided> void notifyUpdateForAllById(@NotNull String id);
+
     @NotNull
     Optional<InventoryContents> getContents(@NotNull Player player);
 

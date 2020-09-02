@@ -129,6 +129,13 @@ public final class BasicSmartInventory implements SmartInventory {
             .forEach(InventoryContents::notifyUpdate);
     }
 
+    @Override
+    public <T extends InventoryProvided> void notifyUpdateForAllById(@NotNull final String id) {
+        this.pages.values().stream()
+            .filter(page -> page.id().equals(id))
+            .forEach(Page::notifyUpdateForAll);
+    }
+
     @NotNull
     @Override
     public Optional<InventoryContents> getContents(@NotNull final Player player) {

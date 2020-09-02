@@ -50,6 +50,8 @@ public interface Page {
 
     void notifyUpdateForAll();
 
+    void notifyUpdateForAllById();
+
     <T extends PageEvent> void accept(@NotNull T event);
 
     @NotNull
@@ -102,6 +104,12 @@ public interface Page {
 
     @NotNull
     Optional<Page> parent();
+
+    @NotNull
+    Page id(@NotNull String id);
+
+    @NotNull
+    String id();
 
     @NotNull
     default Page whenClose(@NotNull final Consumer<CloseEvent> consumer) {
