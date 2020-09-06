@@ -6,14 +6,18 @@
 
 ## How to use
 ```xml
+<!-- For Bukkit and containers -->
+<!-- Includes all conteiner inventory types.-->
 <dependency>
     <groupId>io.github.portlek</groupId>
-    <artifactId>SmartInventory</artifactId>
+    <artifactId>smartui-bukkit-container</artifactId>
     <version>${version}</version>
 </dependency>
 ```
 ```groovy
-implementation("io.github.portlek:SmartInventory:${version}")
+// For Bukkit and containers
+// Includes all conteiner inventory types.
+implementation("io.github.portlek:smartui-bukkit-container:${version}")
 ```
 ## Getting Started
 ### Registering the library
