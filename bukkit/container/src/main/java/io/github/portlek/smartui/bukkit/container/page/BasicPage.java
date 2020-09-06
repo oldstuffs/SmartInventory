@@ -26,7 +26,6 @@
 package io.github.portlek.smartui.bukkit.container.page;
 
 import io.github.portlek.smartui.Source;
-import io.github.portlek.smartui.source.BasicSource;
 import io.github.portlek.smartui.bukkit.container.*;
 import io.github.portlek.smartui.bukkit.container.content.BasicInventoryContents;
 import io.github.portlek.smartui.bukkit.container.event.PgCloseEvent;
@@ -34,6 +33,7 @@ import io.github.portlek.smartui.bukkit.container.event.PgInitEvent;
 import io.github.portlek.smartui.bukkit.container.event.PgUpdateEvent;
 import io.github.portlek.smartui.bukkit.container.event.abs.CloseEvent;
 import io.github.portlek.smartui.bukkit.container.event.abs.PageEvent;
+import io.github.portlek.smartui.source.BasicSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;

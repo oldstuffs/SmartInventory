@@ -37,12 +37,12 @@ import org.jetbrains.annotations.NotNull;
 @RequiredArgsConstructor
 public final class PluginDisableListener implements Listener {
 
-    @NotNull
-    private final SmartInventory inventory;
-
     static {
         PlgnDisableEvent.class.getSimpleName();
     }
+
+    @NotNull
+    private final SmartInventory inventory;
 
     @EventHandler
     public void onPluginDisable(final PluginDisableEvent event) {
