@@ -574,6 +574,11 @@ public final class BasicInventoryContents implements InventoryContents {
     }
 
     @Override
+    public void reopen() {
+        this.page.open(this.player);
+    }
+
+    @Override
     public void notifyUpdate() {
         this.page.notifyUpdate(this);
     }

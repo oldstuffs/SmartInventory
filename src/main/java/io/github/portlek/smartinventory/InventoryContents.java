@@ -198,6 +198,8 @@ public interface InventoryContents {
     @NotNull
     Inventory getTopInventory();
 
+    void reopen();
+
     void notifyUpdate();
 
     void notifyUpdateForAll();
