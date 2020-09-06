@@ -27,7 +27,6 @@ implementation("io.github.portlek:smartui-bukkit-container:${version}")
 #### D.I. version (Recommending)
 ### Creating a Inventory Provider Class
 ### Creating a Page
-
 ## Useful libraries with SmartInventory
 ### Simple Bukkit item builder library with builder pattern.
 [ItemBuilder](https://github.com/portlek/BukkitItemBuilder)
