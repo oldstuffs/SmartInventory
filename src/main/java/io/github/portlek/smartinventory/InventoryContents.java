@@ -200,6 +200,10 @@ public interface InventoryContents {
 
     void reopen();
 
+    void openNext();
+
+    void openPrevious();
+
     void notifyUpdate();
 
     void notifyUpdateForAll();

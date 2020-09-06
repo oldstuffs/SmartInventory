@@ -579,6 +579,16 @@ public final class BasicInventoryContents implements InventoryContents {
     }
 
     @Override
+    public void openNext() {
+        this.page.open(this.player, this.pagination.next().getPage());
+    }
+
+    @Override
+    public void openPrevious() {
+        this.page.open(this.player, this.pagination.previous().getPage());
+    }
+
+    @Override
     public void notifyUpdate() {
         this.page.notifyUpdate(this);
     }
