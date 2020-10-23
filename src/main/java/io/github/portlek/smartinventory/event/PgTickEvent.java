@@ -27,19 +27,20 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.TickEvent;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
 public final class PgTickEvent implements TickEvent {
 
-    @NotNull
-    private final InventoryContents contents;
+  @NotNull
+  private final InventoryContents contents;
 
-    @NotNull
-    @Override
-    public InventoryContents contents() {
-        return this.contents;
-    }
+  public PgTickEvent(@NotNull final InventoryContents contents) {
+    this.contents = contents;
+  }
 
+  @NotNull
+  @Override
+  public InventoryContents contents() {
+    return this.contents;
+  }
 }

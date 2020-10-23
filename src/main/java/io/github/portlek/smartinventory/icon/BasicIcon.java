@@ -25,107 +25,131 @@
 
 package io.github.portlek.smartinventory.icon;
 
+import io.github.portlek.smartinventory.Handle;
 import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.Target;
 import io.github.portlek.smartinventory.event.abs.IconEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Predicate;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
+/**
+ * an implementation for {@link Icon}.
+ */
 public final class BasicIcon implements Icon {
 
-    private final Collection<Target<? extends IconEvent>> targets = new ArrayList<>();
+  /**
+   * the handle list.
+   */
+  private final Collection<Handle<? extends IconEvent>> handles = new ArrayList<>();
 
-    @NotNull
-    private final ItemStack item;
+  /**
+   * the item.
+   */
+  @NotNull
+  private ItemStack item;
 
-    @NotNull
-    private Predicate<InventoryContents> canSee = contents -> true;
+  /**
+   * the can see.
+   */
+  @NotNull
+  private Predicate<InventoryContents> canSee = contents -> true;
 
-    @NotNull
-    private Predicate<InventoryContents> canUse = contents -> true;
+  /**
+   * the can use.
+   */
+  @NotNull
+  private Predicate<InventoryContents> canUse = contents -> true;
 
-    @NotNull
-    private ItemStack fallback = new ItemStack(Material.AIR);
+  /**
+   * the fallback.
+   */
+  @NotNull
+  private ItemStack fallback = new ItemStack(Material.AIR);
 
-    @NotNull
-    @Override
-    public ItemStack calculateItem() {
-        return this.item;
+  /**
+   * ctor.
+   *
+   * @param item the item.
+   */
+  public BasicIcon(@NotNull final ItemStack item) {
+    this.item = item;
+  }
+
+  @NotNull
+  @Override
+  public ItemStack getItem() {
+    return this.item;
+  }
+
+  @NotNull
+  @Override
+  public ItemStack calculateItem(@NotNull final InventoryContents contents) {
+    final ItemStack calculated;
+    if (this.canSee.test(contents)) {
+      calculated = this.getItem();
+    } else {
+      calculated = this.fallback;
     }
+    return calculated;
+  }
 
-    @NotNull
-    @Override
-    public ItemStack calculateItem(@NotNull final InventoryContents contents) {
-        final ItemStack calculated;
-        if (this.canSee.test(contents)) {
-            calculated = this.item;
-        } else {
-            calculated = this.fallback;
-        }
-        return calculated;
+  @Override
+  public <T extends IconEvent> void accept(@NotNull final T event) {
+    final InventoryContents contents = event.contents();
+    if (this.canSee.test(contents) && this.canUse.test(contents)) {
+      this.handles.stream()
+        .filter(target -> {
+//        return target.getType().isAssignableFrom(event.getClass())
+          return true;
+        })
+        .map(target -> (Handle<T>) target)
+        .forEach(target -> target.accept(event));
     }
+  }
 
-    @Override
-    public <T extends IconEvent> void accept(@NotNull final T event) {
-        final InventoryContents contents = event.contents();
-        if (this.canSee.test(contents) && this.canUse.test(contents)) {
-            this.targets.stream()
-                .filter(target -> target.getType().isAssignableFrom(event.getClass()))
-                .map(target -> (Target<T>) target)
-                .forEach(target -> target.accept(event));
-        }
-    }
+  @NotNull
+  @Override
+  public <T extends IconEvent> Icon handle(@NotNull final Handle<T> handle) {
+    this.handles.add(handle);
+    return this;
+  }
 
-    @NotNull
-    @Override
-    public <T extends IconEvent> Icon target(@NotNull final Target<T> target) {
-        this.targets.add(target);
-        return this;
-    }
+  @NotNull
+  @Override
+  public Icon handles(@NotNull final Collection<Handle<? extends IconEvent>> handles) {
+    this.handles.addAll(handles);
+    return this;
+  }
 
-    @NotNull
-    @Override
-    public Icon targets(@NotNull final Collection<Target<? extends IconEvent>> targets) {
-        this.targets.addAll(targets);
-        return this;
-    }
+  @NotNull
+  @Override
+  public Icon canSee(@NotNull final Predicate<InventoryContents> predicate) {
+    this.canSee = predicate;
+    return this;
+  }
 
-    @NotNull
-    @Override
-    public Icon canSee(@NotNull final Predicate<InventoryContents> predicate) {
-        this.canSee = predicate;
-        return this;
-    }
+  @NotNull
+  @Override
+  public Icon canUse(@NotNull final Predicate<InventoryContents> predicate) {
+    this.canUse = predicate;
+    return this;
+  }
 
-    @NotNull
-    @Override
-    public Icon canUse(@NotNull final Predicate<InventoryContents> predicate) {
-        this.canUse = predicate;
-        return this;
-    }
+  @NotNull
+  @Override
+  public Icon fallback(@NotNull final ItemStack fallback) {
+    this.fallback = fallback;
+    return this;
+  }
 
-    @NotNull
-    @Override
-    public Icon fallback(@NotNull final ItemStack fallback) {
-        this.fallback = fallback;
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public Icon clone(@NotNull final ItemStack newitem) {
-        return Icon.from(newitem)
-            .canSee(this.canSee)
-            .canUse(this.canUse)
-            .fallback(this.fallback)
-            .targets(this.targets);
-    }
-
+  @NotNull
+  @Override
+  public Icon item(@NotNull final ItemStack item) {
+    this.item = item;
+    return this;
+  }
 }

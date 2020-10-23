@@ -23,46 +23,32 @@
  *
  */
 
-package io.github.portlek.smartinventory.target;
+package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.Target;
 import io.github.portlek.smartinventory.event.abs.SmartEvent;
-import java.util.Arrays;
+import io.github.portlek.smartinventory.handle.BasicHandle;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
-public final class BasicTarget<T extends SmartEvent> implements Target<T> {
+/**
+ * a class that handles and runs the given consumer after checking the requirements.
+ */
+public interface Handle<T extends SmartEvent> extends Consumer<T> {
 
-    @NotNull
-    private final Class<T> clazz;
-
-    @NotNull
-    private final Consumer<T> consumer;
-
-    @NotNull
-    private final List<Predicate<T>> requirements;
-
-    @SafeVarargs
-    public BasicTarget(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                       @NotNull final Predicate<T>... requirements) {
-        this(clazz, consumer, Arrays.asList(requirements));
-    }
-
-    @Override
-    public void accept(@NotNull final T event) {
-        if (this.requirements.stream().allMatch(req -> req.test(event))) {
-            this.consumer.accept(event);
-        }
-    }
-
-    @NotNull
-    @Override
-    public Class<T> getType() {
-        return this.clazz;
-    }
-
+  /**
+   * creates a simple handler.
+   *
+   * @param consumer the consumer to run.
+   * @param requirements the requirements to check.
+   * @param <T> type of the {@link SmartEvent}.
+   *
+   * @return a simple handler instance.
+   */
+  @NotNull
+  static <T extends SmartEvent> Handle<T> from(@NotNull final Consumer<T> consumer,
+                                               @NotNull final List<Predicate<T>> requirements) {
+    return new BasicHandle<>(consumer, requirements);
+  }
 }

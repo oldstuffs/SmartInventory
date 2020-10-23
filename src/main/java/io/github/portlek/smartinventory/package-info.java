@@ -22,26 +22,7 @@
  * SOFTWARE.
  *
  */
-
-package io.github.portlek.smartinventory.event;
-
-import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.event.abs.QuitEvent;
-import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-
-public final class PlyrQuitEvent implements QuitEvent {
-
-  @NotNull
-  private final InventoryContents contents;
-
-  public PlyrQuitEvent(@NotNull final InventoryContents contents) {
-    this.contents = contents;
-  }
-
-  @NotNull
-  @Override
-  public InventoryContents contents() {
-    return this.contents;
-  }
-}
+/**
+ * the package that contains common interfaces.
+ */
+package io.github.portlek.smartinventory;

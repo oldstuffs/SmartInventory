@@ -34,23 +34,22 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ClickEvent extends IconEvent {
 
-    int row();
+  int row();
 
-    int column();
+  int column();
 
-    @NotNull
-    ClickType click();
+  @NotNull
+  ClickType click();
 
-    @NotNull
-    InventoryAction action();
+  @NotNull
+  InventoryAction action();
 
-    @NotNull
-    InventoryType.SlotType slot();
+  @NotNull
+  InventoryType.SlotType slot();
 
-    @NotNull
-    Optional<ItemStack> cursor();
+  @NotNull
+  Optional<ItemStack> cursor();
 
-    @NotNull
-    Optional<ItemStack> current();
-
+  @NotNull
+  Optional<ItemStack> current();
 }

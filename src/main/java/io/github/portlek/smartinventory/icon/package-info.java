@@ -22,22 +22,7 @@
  * SOFTWARE.
  *
  */
-
-package io.github.portlek.smartinventory;
-
-import io.github.portlek.smartinventory.event.abs.SmartEvent;
-import io.github.portlek.smartinventory.target.BasicTarget;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import org.jetbrains.annotations.NotNull;
-
-public interface Target<T extends SmartEvent> extends Type<T>, Consumer<T> {
-
-    @SafeVarargs
-    @NotNull
-    static <T extends SmartEvent> Target<T> from(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                                                 @NotNull final Predicate<T>... requirements) {
-        return new BasicTarget<>(clazz, consumer, requirements);
-    }
-
-}
+/**
+ * the package that contains {@link io.github.portlek.smartinventory.Icon} implementations.
+ */
+package io.github.portlek.smartinventory.icon;

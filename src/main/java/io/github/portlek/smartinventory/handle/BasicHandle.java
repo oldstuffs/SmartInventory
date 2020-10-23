@@ -23,25 +23,51 @@
  *
  */
 
-package io.github.portlek.smartinventory.event;
+package io.github.portlek.smartinventory.handle;
 
-import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.event.abs.QuitEvent;
-import lombok.RequiredArgsConstructor;
+import io.github.portlek.smartinventory.Handle;
+import io.github.portlek.smartinventory.event.abs.SmartEvent;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 
-public final class PlyrQuitEvent implements QuitEvent {
+/**
+ * an implementation for {@link Handle}.
+ *
+ * @param <T> type of the event.
+ */
+public final class BasicHandle<T extends SmartEvent> implements Handle<T> {
 
+  /**
+   * the consumer.
+   */
   @NotNull
-  private final InventoryContents contents;
+  private final Consumer<T> consumer;
 
-  public PlyrQuitEvent(@NotNull final InventoryContents contents) {
-    this.contents = contents;
+  /**
+   * the requirements.
+   */
+  @NotNull
+  private final List<Predicate<T>> requirements;
+
+  /**
+   * ctor.
+   *
+   * @param consumer the consumer.
+   * @param requirements the requirements.
+   */
+  public BasicHandle(@NotNull final Consumer<T> consumer, @NotNull final List<Predicate<T>> requirements) {
+    this.consumer = consumer;
+    this.requirements = Objects.requireNonNull(requirements);
   }
 
-  @NotNull
   @Override
-  public InventoryContents contents() {
-    return this.contents;
+  public void accept(@NotNull final T t) {
+    if (this.requirements.stream().allMatch(req -> req.test(t))) {
+      this.consumer.accept(t);
+    }
   }
 }

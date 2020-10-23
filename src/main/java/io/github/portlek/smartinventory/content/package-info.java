@@ -22,14 +22,7 @@
  * SOFTWARE.
  *
  */
-
-package io.github.portlek.smartinventory;
-
-import org.jetbrains.annotations.NotNull;
-
-public interface Type<T> {
-
-    @NotNull
-    Class<T> getType();
-
-}
+/**
+ * the package that contains {@link io.github.portlek.smartinventory.Page}'s contents.
+ */
+package io.github.portlek.smartinventory.content;

@@ -31,7 +31,6 @@ import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
 import java.util.HashMap;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -40,41 +39,43 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
 public final class InventoryCloseListener implements Listener {
 
-    @NotNull
-    private final SmartInventory inventory;
+  @NotNull
+  private final SmartInventory inventory;
 
-    @EventHandler
-    public void onInventoryClose(final InventoryCloseEvent event) {
-        final HumanEntity human = event.getPlayer();
-        if (!(human instanceof Player)) {
-            return;
-        }
-        final Player player = (Player) human;
-        final Optional<InventoryContents> optional = this.inventory.getContents(player);
-        if (!optional.isPresent()) {
-            return;
-        }
-        final InventoryContents contents = optional.get();
-        final Page page = contents.page();
-        final PgCloseEvent close = new PgCloseEvent(contents);
-        page.accept(close);
-        if (!page.canClose(close)) {
-            Bukkit.getScheduler().runTask(this.inventory.getPlugin(), () ->
-                player.openInventory(event.getInventory()));
-            return;
-        }
-        event.getInventory().clear();
-        this.inventory.stopTick(player);
-        this.inventory.removePage(player);
-        this.inventory.removeContent(player);
-        new HashMap<>(this.inventory.getContentsByInventory()).forEach((inventory1, contents1) -> {
-            if (contents.equals(contents1)) {
-                this.inventory.removeContentByInventory(inventory1);
-            }
-        });
+  public InventoryCloseListener(@NotNull final SmartInventory inventory) {
+    this.inventory = inventory;
+  }
+
+  @EventHandler
+  public void onInventoryClose(final InventoryCloseEvent event) {
+    final HumanEntity human = event.getPlayer();
+    if (!(human instanceof Player)) {
+      return;
     }
-
+    final Player player = (Player) human;
+    final Optional<InventoryContents> optional = this.inventory.getContents(player);
+    if (!optional.isPresent()) {
+      return;
+    }
+    final InventoryContents contents = optional.get();
+    final Page page = contents.page();
+    final PgCloseEvent close = new PgCloseEvent(contents);
+    page.accept(close);
+    if (!page.canClose(close)) {
+      Bukkit.getScheduler().runTask(this.inventory.getPlugin(), () ->
+        player.openInventory(event.getInventory()));
+      return;
+    }
+    event.getInventory().clear();
+    this.inventory.stopTick(player);
+    this.inventory.removePage(player);
+    this.inventory.removeContent(player);
+    new HashMap<>(this.inventory.getContentsByInventory()).forEach((inventory1, contents1) -> {
+      if (contents.equals(contents1)) {
+        this.inventory.removeContentByInventory(inventory1);
+      }
+    });
+  }
 }

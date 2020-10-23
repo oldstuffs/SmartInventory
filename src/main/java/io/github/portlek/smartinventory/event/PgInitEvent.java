@@ -27,19 +27,20 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.InitEvent;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
 public final class PgInitEvent implements InitEvent {
 
-    @NotNull
-    private final InventoryContents contents;
+  @NotNull
+  private final InventoryContents contents;
 
-    @NotNull
-    @Override
-    public InventoryContents contents() {
-        return this.contents;
-    }
+  public PgInitEvent(@NotNull final InventoryContents contents) {
+    this.contents = contents;
+  }
 
+  @NotNull
+  @Override
+  public InventoryContents contents() {
+    return this.contents;
+  }
 }

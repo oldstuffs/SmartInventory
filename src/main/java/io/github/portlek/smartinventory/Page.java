@@ -28,6 +28,7 @@ package io.github.portlek.smartinventory;
 import io.github.portlek.smartinventory.event.abs.*;
 import io.github.portlek.smartinventory.page.BasicPage;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -38,203 +39,213 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Page {
 
-    static Page build(@NotNull final SmartInventory inventory, @NotNull final InventoryProvided provided) {
-        return new BasicPage(inventory, provided);
+  static Page build(@NotNull final SmartInventory inventory, @NotNull final InventoryProvider provided) {
+    return new BasicPage(inventory, provided);
+  }
+
+  static Page build(@NotNull final SmartInventory inventory) {
+    return new BasicPage(inventory);
+  }
+
+  @NotNull
+  default Page whenClose(@NotNull final Consumer<CloseEvent> consumer) {
+    return this.whenClose(consumer, Collections.emptyList());
+  }
+
+  @NotNull
+  default Page whenClose(@NotNull final Consumer<CloseEvent> consumer,
+                         @NotNull final List<Predicate<CloseEvent>> requirements) {
+    return this.target(consumer, requirements);
+  }
+
+  @NotNull
+  default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer) {
+    return this.whenOpen(consumer, Collections.emptyList());
+  }
+
+  @NotNull
+  default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer,
+                        @NotNull final List<Predicate<OpenEvent>> requirements) {
+    return this.target(consumer, requirements);
+  }
+
+  @NotNull
+  default Page whenInit(@NotNull final Consumer<InitEvent> consumer) {
+    return this.whenInit(consumer, Collections.emptyList());
+  }
+
+  @NotNull
+  default Page whenInit(@NotNull final Consumer<InitEvent> consumer,
+                        @NotNull final List<Predicate<InitEvent>> requirements) {
+    return this.target(consumer, requirements);
+  }
+
+  @NotNull
+  default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer) {
+    return this.whenUpdate(consumer, Collections.emptyList());
+  }
+
+  @NotNull
+  default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer,
+                          @NotNull final List<Predicate<UpdateEvent>> requirements) {
+    return this.target(consumer, requirements);
+  }
+
+  @NotNull
+  default Page whenTick(@NotNull final Consumer<TickEvent> consumer) {
+    return this.whenTick(consumer, Collections.emptyList());
+  }
+
+  @NotNull
+  default Page whenTick(@NotNull final Consumer<TickEvent> consumer,
+                        @NotNull final List<Predicate<TickEvent>> requirements) {
+    return this.target(consumer, requirements);
+  }
+
+  @NotNull
+  default Page whenBottomClick(@NotNull final Consumer<BottomClickEvent> consumer) {
+    return this.whenBottomClick(consumer, Collections.emptyList());
+  }
+
+  @NotNull
+  default Page whenBottomClick(@NotNull final Consumer<BottomClickEvent> consumer,
+                               @NotNull final List<Predicate<BottomClickEvent>> requirements) {
+    return this.target(consumer, requirements);
+  }
+
+  @NotNull
+  default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer) {
+    return this.whenOutsideClick(consumer, Collections.emptyList());
+  }
+
+  @NotNull
+  default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer,
+                                @NotNull final List<Predicate<OutsideClickEvent>> requirements) {
+    return this.target(consumer, requirements);
+  }
+
+  @NotNull
+  default Page whenEmptyClick(@NotNull final Consumer<PageClickEvent> consumer) {
+    return this.whenEmptyClick(consumer, Collections.emptyList());
+  }
+
+  @NotNull
+  default Page whenEmptyClick(@NotNull final Consumer<PageClickEvent> consumer,
+                              @NotNull final List<Predicate<PageClickEvent>> requirements) {
+    return this.target(consumer, requirements);
+  }
+
+  @NotNull
+  default <T extends PageEvent> Page target(@NotNull final Consumer<T> consumer,
+                                            @NotNull final List<Predicate<T>> requirements) {
+    return this.target(Handle.from(consumer, requirements));
+  }
+
+  @NotNull <T extends PageEvent> Page target(@NotNull Handle<T> handle);
+
+  @NotNull
+  default Page canClose(final boolean canClose) {
+    return this.canClose(event -> canClose);
+  }
+
+  default void open(@NotNull final Player player) {
+    this.open(player, 0);
+  }
+
+  default void open(@NotNull final Player player, final int page) {
+    this.open(player, page, Collections.emptyMap());
+  }
+
+  default void open(@NotNull final Player player, @NotNull final Map<String, Object> properties) {
+    this.open(player, 0, properties);
+  }
+
+  default boolean checkBounds(int row, int column) {
+    if (row >= 0) {
+      return column >= 0;
     }
-
-    static Page build(@NotNull final SmartInventory inventory) {
-        return new BasicPage(inventory);
+    if (row < this.row()) {
+      return column < this.column();
     }
+    return false;
+  }
 
-    void notifyUpdate(@NotNull InventoryContents contents);
+  default void notifyUpdateForAll() {
+    this.inventory().notifyUpdateForAll(this.provider().getClass());
+  }
 
-    void notifyUpdateForAll();
+  default void notifyUpdateForAllById() {
+    this.inventory().notifyUpdateForAllById(this.id());
+  }
 
-    void notifyUpdateForAllById();
+  void notifyUpdate(@NotNull InventoryContents contents);
 
-    <T extends PageEvent> void accept(@NotNull T event);
+  <T extends PageEvent> void accept(@NotNull T event);
 
-    @NotNull
-    InventoryProvided provider();
+  @NotNull
+  InventoryProvider provider();
 
-    @NotNull
-    Page provider(@NotNull InventoryProvided provided);
+  @NotNull
+  Page provider(@NotNull InventoryProvider provided);
 
-    @NotNull
-    SmartInventory inventory();
+  @NotNull
+  SmartInventory inventory();
 
-    long tick();
+  long tick();
 
-    @NotNull
-    Page tick(long tick);
+  @NotNull
+  Page tick(long tick);
 
-    long startDelay();
+  long startDelay();
 
-    @NotNull
-    Page startDelay(long startDelay);
+  @NotNull
+  Page startDelay(long startDelay);
 
-    boolean async();
+  boolean async();
 
-    @NotNull
-    Page async(boolean async);
+  @NotNull
+  Page async(boolean async);
 
-    boolean tickEnable();
+  boolean tickEnable();
 
-    @NotNull
-    Page tickEnable(boolean tickEnable);
+  @NotNull
+  Page tickEnable(boolean tickEnable);
 
-    int row();
+  int row();
 
-    @NotNull
-    Page row(int row);
+  @NotNull
+  Page row(int row);
 
-    int column();
+  int column();
 
-    @NotNull
-    Page column(int column);
+  @NotNull
+  Page column(int column);
 
-    @NotNull
-    String title();
+  @NotNull
+  String title();
 
-    @NotNull
-    Page title(@NotNull String title);
+  @NotNull
+  Page title(@NotNull String title);
 
-    @NotNull
-    Page parent(@NotNull Page parent);
+  @NotNull
+  Page parent(@NotNull Page parent);
 
-    @NotNull
-    Optional<Page> parent();
+  @NotNull
+  Optional<Page> parent();
 
-    @NotNull
-    Page id(@NotNull String id);
+  @NotNull
+  Page id(@NotNull String id);
 
-    @NotNull
-    String id();
+  @NotNull
+  String id();
 
-    @NotNull
-    default Page whenClose(@NotNull final Consumer<CloseEvent> consumer) {
-        return this.whenClose(consumer, new Predicate[0]);
-    }
+  @NotNull
+  Page canClose(@NotNull Predicate<CloseEvent> predicate);
 
-    @NotNull
-    default Page whenClose(@NotNull final Consumer<CloseEvent> consumer,
-                           @NotNull final Predicate<CloseEvent>... requirements) {
-        return this.target(CloseEvent.class, consumer, requirements);
-    }
+  boolean canClose(@NotNull CloseEvent predicate);
 
-    @NotNull
-    default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer) {
-        return this.whenOpen(consumer, new Predicate[0]);
-    }
+  @NotNull
+  Inventory open(@NotNull Player player, int page, @NotNull Map<String, Object> properties);
 
-    @NotNull
-    default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer,
-                          @NotNull final Predicate<OpenEvent>... requirements) {
-        return this.target(OpenEvent.class, consumer, requirements);
-    }
-
-    @NotNull
-    default Page whenInit(@NotNull final Consumer<InitEvent> consumer) {
-        return this.whenInit(consumer, new Predicate[0]);
-    }
-
-    @NotNull
-    default Page whenInit(@NotNull final Consumer<InitEvent> consumer,
-                          @NotNull final Predicate<InitEvent>... requirements) {
-        return this.target(InitEvent.class, consumer, requirements);
-    }
-
-    @NotNull
-    default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer) {
-        return this.whenUpdate(consumer, new Predicate[0]);
-    }
-
-    @NotNull
-    default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer,
-                            @NotNull final Predicate<UpdateEvent>... requirements) {
-        return this.target(UpdateEvent.class, consumer, requirements);
-    }
-
-    @NotNull
-    default Page whenTick(@NotNull final Consumer<TickEvent> consumer) {
-        return this.whenTick(consumer, new Predicate[0]);
-    }
-
-    @NotNull
-    default Page whenTick(@NotNull final Consumer<TickEvent> consumer,
-                          @NotNull final Predicate<TickEvent>... requirements) {
-        return this.target(TickEvent.class, consumer, requirements);
-    }
-
-    @NotNull
-    default Page whenBottomClick(@NotNull final Consumer<BottomClickEvent> consumer) {
-        return this.whenBottomClick(consumer, new Predicate[0]);
-    }
-
-    @NotNull
-    default Page whenBottomClick(@NotNull final Consumer<BottomClickEvent> consumer,
-                                 @NotNull final Predicate<BottomClickEvent>... requirements) {
-        return this.target(BottomClickEvent.class, consumer, requirements);
-    }
-
-    @NotNull
-    default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer) {
-        return this.whenOutsideClick(consumer, new Predicate[0]);
-    }
-
-    @NotNull
-    default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer,
-                                  @NotNull final Predicate<OutsideClickEvent>... requirements) {
-        return this.target(OutsideClickEvent.class, consumer, requirements);
-    }
-
-    @NotNull
-    default Page whenEmptyClick(@NotNull final Consumer<PageClickEvent> consumer) {
-        return this.whenEmptyClick(consumer, new Predicate[0]);
-    }
-
-    @NotNull
-    default Page whenEmptyClick(@NotNull final Consumer<PageClickEvent> consumer,
-                                @NotNull final Predicate<PageClickEvent>... requirements) {
-        return this.target(PageClickEvent.class, consumer, requirements);
-    }
-
-    @NotNull
-    default <T extends PageEvent> Page target(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                                              @NotNull final Predicate<T>... requirements) {
-        return this.target(Target.from(clazz, consumer, requirements));
-    }
-
-    @NotNull <T extends PageEvent> Page target(@NotNull Target<T> target);
-
-    @NotNull
-    default Page canClose(final boolean canClose) {
-        return this.canClose(event -> canClose);
-    }
-
-    @NotNull
-    Page canClose(@NotNull Predicate<CloseEvent> predicate);
-
-    boolean canClose(@NotNull CloseEvent predicate);
-
-    boolean checkBounds(int row, int column);
-
-    @NotNull
-    default void open(@NotNull final Player player) {
-        this.open(player, 0);
-    }
-
-    default void open(@NotNull final Player player, final int page) {
-        this.open(player, page, Collections.emptyMap());
-    }
-
-    default void open(@NotNull final Player player, @NotNull final Map<String, Object> properties) {
-        this.open(player, 0, properties);
-    }
-
-    @NotNull
-    Inventory open(@NotNull Player player, int page, @NotNull Map<String, Object> properties);
-
-    void close(@NotNull Player player);
-
+  void close(@NotNull Player player);
 }

@@ -32,20 +32,40 @@ import org.jetbrains.annotations.NotNull;
 
 public interface InventoryOpener {
 
-    @NotNull
-    Inventory open(@NotNull Page page, @NotNull Player player);
+  /**
+   * opens the page for the given player.
+   *
+   * @param page the page to open.
+   * @param player the player to open.
+   *
+   * @return opened inventory itself.
+   */
+  @NotNull
+  Inventory open(@NotNull Page page, @NotNull Player player);
 
-    boolean supports(@NotNull InventoryType type);
+  /**
+   * checks if the inventory type is supporting for {@code this}.
+   *
+   * @param type the type to check.
+   *
+   * @return {@code true} if the type supports the type..
+   */
+  boolean supports(@NotNull InventoryType type);
 
-    default void fill(@NotNull final Inventory handle, @NotNull final InventoryContents contents) {
-        final Icon[][] items = contents.all();
-        for (int row = 0; row < items.length; row++) {
-            for (int column = 0; column < items[row].length; column++) {
-                if (items[row][column] != null) {
-                    handle.setItem(9 * row + column, items[row][column].calculateItem(contents));
-                }
-            }
+  /**
+   * fills the given contents to the given inventory.
+   *
+   * @param inventory the inventory to fill.
+   * @param contents the contents to fill.
+   */
+  default void fill(@NotNull final Inventory inventory, @NotNull final InventoryContents contents) {
+    final Icon[][] items = contents.all();
+    for (int row = 0; row < items.length; row++) {
+      for (int column = 0; column < items[row].length; column++) {
+        if (items[row][column] != null) {
+          inventory.setItem(9 * row + column, items[row][column].calculateItem(contents));
         }
+      }
     }
-
+  }
 }

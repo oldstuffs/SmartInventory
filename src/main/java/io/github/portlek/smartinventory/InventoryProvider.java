@@ -28,19 +28,41 @@ package io.github.portlek.smartinventory;
 import io.github.portlek.observer.Target;
 import org.jetbrains.annotations.NotNull;
 
-public interface InventoryProvided extends Target<InventoryContents> {
+/**
+ * a class that allows to manage player's inventory contents.
+ */
+public interface InventoryProvider extends Target<InventoryContents> {
 
-    InventoryProvided EMPTY = new InventoryProvided() {
-    };
+  /**
+   * an empty inventory provider.
+   */
+  InventoryProvider EMPTY = new InventoryProvider() {
+  };
 
-    default void init(@NotNull final InventoryContents contents) {
-    }
+  /**
+   * runs when the page has just opened.
+   *
+   * @param contents the contents to initiate.
+   */
+  default void init(@NotNull final InventoryContents contents) {
+  }
 
-    default void tick(@NotNull final InventoryContents contents) {
-    }
+  /**
+   * runs every tick.
+   *
+   * @param contents the contents to tick.
+   */
+  default void tick(@NotNull final InventoryContents contents) {
+  }
 
-    @Override
-    default void update(@NotNull final InventoryContents contents) {
-    }
-
+  /**
+   * runs when {@link InventoryContents#notifyUpdate()} runs.
+   * <p>
+   * came from {@link Target}'s method.
+   *
+   * @param contents the contents to update.
+   */
+  @Override
+  default void update(@NotNull final InventoryContents contents) {
+  }
 }

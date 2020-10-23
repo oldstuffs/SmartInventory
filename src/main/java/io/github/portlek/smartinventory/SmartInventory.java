@@ -25,87 +25,373 @@
 
 package io.github.portlek.smartinventory;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import io.github.portlek.smartinventory.event.PgTickEvent;
+import io.github.portlek.smartinventory.listener.*;
+import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
+import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that manages all smart inventories.
+ */
 public interface SmartInventory {
 
-    @NotNull
-    void init();
+  /**
+   * all listener to register.
+   */
+  Function<SmartInventory, List<Listener>> LISTENERS = inventory -> Arrays.asList(
+    new InventoryClickListener(inventory),
+    new InventoryOpenListener(inventory),
+    new InventoryCloseListener(inventory),
+    new PlayerQuitListener(inventory),
+    new PluginDisableListener(inventory),
+    new InventoryDragListener(inventory));
 
-    @NotNull
-    Plugin getPlugin();
+  /**
+   * default inventory openers.
+   */
+  List<InventoryOpener> DEFAULT_OPENERS = Collections.singletonList(
+    new ChestInventoryOpener());
 
-    @NotNull
-    Optional<InventoryOpener> findOpener(@NotNull InventoryType type);
+  /**
+   * initiates the manager.
+   */
+  default void init() {
+    SmartInventory.LISTENERS.apply(this).forEach(listener ->
+      Bukkit.getPluginManager().registerEvents(listener, this.getPlugin()));
+  }
 
-    void registerOpeners(@NotNull InventoryOpener... openers);
+  /**
+   * obtains the players that see the given page.
+   *
+   * @param page the page to obtain.
+   *
+   * @return a player list.
+   */
+  @NotNull
+  default List<Player> getOpenedPlayers(@NotNull final Page page) {
+    final List<Player> list = new ArrayList<>();
+    this.getPages().forEach((player, playerInv) -> {
+      if (page.equals(playerInv)) {
+        list.add(player);
+      }
+    });
+    return list;
+  }
 
-    @NotNull
-    List<Player> getOpenedPlayers(@NotNull Page inv);
+  /**
+   * runs {@link InventoryProvider#update(InventoryContents)} method of the player's page.
+   *
+   * @param player the player to notify.
+   */
+  default void notifyUpdate(@NotNull final Player player) {
+    this.getContents(player).ifPresent(InventoryContents::notifyUpdate);
+  }
 
-    @NotNull
-    Optional<Page> getPage(@NotNull Player player);
+  /**
+   * runs {@link InventoryProvider#update(InventoryContents)} method of the given provider's class.
+   *
+   * @param provider the provider to notify.
+   * @param <T> type of the class.
+   */
+  default <T extends InventoryProvider> void notifyUpdateForAll(@NotNull final Class<T> provider) {
+    this.getContents().values().stream()
+      .filter(inventoryContents -> provider.equals(inventoryContents.page().provider().getClass()))
+      .forEach(InventoryContents::notifyUpdate);
+  }
 
-    @NotNull
-    Optional<Page> getLastPage(@NotNull Player player);
+  /**
+   * runs {@link InventoryProvider#update(InventoryContents)} method of the page called the given id.
+   *
+   * @param id the id to find and run the update method.
+   */
+  default void notifyUpdateForAllById(@NotNull final String id) {
+    this.getPages().values().stream()
+      .filter(page -> page.id().equals(id))
+      .forEach(Page::notifyUpdateForAll);
+  }
 
-    void notifyUpdate(@NotNull Player player);
+  /**
+   * stops the ticking of the given player.
+   *
+   * @param player the player to stop.
+   */
+  default void stopTick(@NotNull final Player player) {
+    this.getTask(player).ifPresent(runnable -> {
+      Bukkit.getScheduler().cancelTask(runnable.getTaskId());
+      this.removeTask(player);
+    });
+  }
 
-    <T extends InventoryProvided> void notifyUpdateForAll(@NotNull Class<T> provider);
+  /**
+   * starts the ticking of the given player with the given page.
+   *
+   * @param player the player to start.
+   * @param page the page to start.
+   */
+  default void tick(@NotNull final Player player, @NotNull final Page page) {
+    final BukkitRunnable task = new BukkitRunnable() {
+      @Override
+      public void run() {
+        SmartInventory.this.getContents(player).ifPresent(inventoryContents -> {
+          page.accept(new PgTickEvent(inventoryContents));
+          page.provider().tick(inventoryContents);
+        });
+      }
+    };
+    if (page.async()) {
+      task.runTaskTimerAsynchronously(this.getPlugin(), page.startDelay(), page.tick());
+    } else {
+      task.runTaskTimer(this.getPlugin(), page.startDelay(), page.tick());
+    }
+    this.setTask(player, task);
+  }
 
-    <T extends InventoryProvided> void notifyUpdateForAllById(@NotNull String id);
+  /**
+   * finds a {@link InventoryOpener} from the given {@link InventoryType}.
+   *
+   * @param type the type to find.
+   *
+   * @return the inventory opener from the given type.
+   */
+  @NotNull
+  default Optional<InventoryOpener> findOpener(@NotNull final InventoryType type) {
+    return Stream.of(this.getOpeners(), SmartInventory.DEFAULT_OPENERS)
+      .flatMap(Collection::stream)
+      .filter(opener -> opener.supports(type))
+      .findAny();
+  }
 
-    @NotNull
-    Optional<InventoryContents> getContents(@NotNull Player player);
+  /**
+   * clears {@link Page}s if the given predicate returns {@code true}.
+   *
+   * @param predicate the predicate to check.
+   */
+  default void clearPages(@NotNull final Predicate<InventoryContents> predicate) {
+    new HashMap<>(this.getPages()).keySet().forEach(player ->
+      this.getContents(player)
+        .filter(predicate)
+        .ifPresent(inventoryContents ->
+          this.removePage(player)));
+  }
 
-    @NotNull
-    Optional<InventoryContents> getContentsByInventory(@NotNull Inventory inventory);
+  /**
+   * clears all the latest opened pages if the predicate returns {@code true}.
+   *
+   * @param predicate the predicate to check.
+   */
+  default void clearLastPages(@NotNull final Predicate<Player> predicate) {
+    new HashMap<>(this.getLastPages()).forEach((player, page) -> {
+      if (predicate.test(player)) {
+        this.removePage(player);
+      }
+    });
+  }
 
-    @NotNull
-    Map<Player, Page> getPages();
+  /**
+   * obtains the plugin.
+   *
+   * @return the plugin.
+   */
+  @NotNull
+  Plugin getPlugin();
 
-    @NotNull
-    Map<Player, InventoryContents> getContents();
+  /**
+   * obtains inventory openers.
+   *
+   * @return inventory openers.
+   */
+  @NotNull
+  Collection<InventoryOpener> getOpeners();
 
-    @NotNull
-    Map<Inventory, InventoryContents> getContentsByInventory();
+  /**
+   * obtains the latest opened pages.
+   *
+   * @return the latest opened pages.
+   */
+  @NotNull
+  Map<Player, Page> getLastPages();
 
-    void removePage(@NotNull Player player);
+  /**
+   * obtains all opened {@link Page}.
+   *
+   * @return all the pages.
+   */
+  @NotNull
+  Map<Player, Page> getPages();
 
-    void removeLastPage(@NotNull Player player);
+  /**
+   * obtains all {@link InventoryContents}.
+   *
+   * @return all the inventory contents.
+   */
+  @NotNull
+  Map<Player, InventoryContents> getContents();
 
-    void removeContent(@NotNull Player player);
+  /**
+   * obtains a map that contains {@link Inventory} and {@link InventoryContents} as key and value.
+   *
+   * @return a map that contains inventory and contents as key and value.
+   */
+  @NotNull
+  Map<Inventory, InventoryContents> getContentsByInventory();
 
-    void removeContentByInventory(@NotNull Inventory inventory);
+  /**
+   * obtains the page that seeing by the given player.
+   *
+   * @param player the player to obtain.
+   *
+   * @return a {@link Page} instance.
+   */
+  @NotNull
+  Optional<Page> getPage(@NotNull Player player);
 
-    void clearPages(@NotNull Predicate<InventoryContents> predicate);
+  /**
+   * obtains the latest opened page of the given player.
+   *
+   * @param player the player to obtain.
+   *
+   * @return a {@link Page} instance.
+   */
+  @NotNull
+  Optional<Page> getLastPage(@NotNull Player player);
 
-    void clearPages();
+  /**
+   * obtains {@link InventoryContents} of the given player.
+   *
+   * @param player the player to obtain.
+   *
+   * @return an {@link InventoryContents} instance.
+   */
+  @NotNull
+  Optional<InventoryContents> getContents(@NotNull Player player);
 
-    void clearLastPages(@NotNull Predicate<Player> predicate);
+  /**
+   * obtains {@link InventoryContents} from the given inventory.
+   *
+   * @param inventory the inventory to obtain.
+   *
+   * @return an {@link InventoryContents} instance.
+   */
+  @NotNull
+  Optional<InventoryContents> getContentsByInventory(@NotNull Inventory inventory);
 
-    void clearLastPages();
+  /**
+   * obtains the given player's task.
+   *
+   * @param player the player to obtain.
+   *
+   * @return a {@link BukkitRunnable} instance.
+   */
+  @NotNull
+  Optional<BukkitRunnable> getTask(@NotNull Player player);
 
-    void clearContents();
+  /**
+   * sets the given player of the page to the given page.
+   *
+   * @param player the player to set.
+   * @param page the page to set.
+   */
+  void setPage(@NotNull Player player, @NotNull Page page);
 
-    void clearContentsByInventory();
+  /**
+   * sets the given player of the contents to the given contents.
+   *
+   * @param player the player to set.
+   * @param contest the contest to set.
+   */
+  void setContents(@NotNull Player player, @NotNull InventoryContents contest);
 
-    void stopTick(Player player);
+  /**
+   * sets the given inventory of the contents to the given contents.
+   *
+   * @param inventory the inventory to set.
+   * @param contest the contest to set.
+   */
+  void setContentsByInventory(@NotNull Inventory inventory, @NotNull InventoryContents contest);
 
-    void setPage(@NotNull Player player, @NotNull Page page);
+  /**
+   * sets the given player of the ticking task to the given task.
+   *
+   * @param player the player to set.
+   * @param task the task to set.
+   */
+  void setTask(@NotNull Player player, @NotNull BukkitRunnable task);
 
-    void setContents(@NotNull Player player, @NotNull InventoryContents contest);
+  /**
+   * removes the given player's {@link Page}.
+   *
+   * @param player the player to remove.
+   */
+  void removePage(@NotNull Player player);
 
-    void setContentsByInventory(@NotNull Inventory inventory, @NotNull InventoryContents contest);
+  /**
+   * removes the given player's latest opened {@link Page}.
+   *
+   * @param player the player to remove.
+   */
+  void removeLastPage(@NotNull Player player);
 
-    void tick(@NotNull Player player, @NotNull Page page);
+  /**
+   * removes the given player's {@link InventoryContents}.
+   *
+   * @param player the player to remove.
+   */
+  void removeContent(@NotNull Player player);
 
+  /**
+   * removes the given inventory's {@link InventoryContents}.
+   *
+   * @param inventory the inventory to remove.
+   */
+  void removeContentByInventory(@NotNull Inventory inventory);
+
+  /**
+   * removes given player of the ticking task.
+   *
+   * @param player the player to set.
+   */
+  void removeTask(@NotNull Player player);
+
+  /**
+   * clears all pages.
+   */
+  void clearPages();
+
+  /**
+   * clears all the latest opened pages.
+   */
+  void clearLastPages();
+
+  /**
+   * clears all contents.
+   */
+  void clearContents();
+
+  /**
+   * clears all contents by inventory
+   */
+  void clearContentsByInventory();
+
+  /**
+   * clears all tasks.
+   */
+  void clearTask();
+
+  /**
+   * registers the given inventory openers.
+   *
+   * @param openers the openers to register.
+   */
+  void registerOpeners(@NotNull InventoryOpener... openers);
 }

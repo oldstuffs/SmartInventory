@@ -27,7 +27,6 @@ package io.github.portlek.smartinventory.listener;
 
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PgOpenEvent;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,23 +34,25 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
 public final class InventoryOpenListener implements Listener {
 
-    @NotNull
-    private final SmartInventory inventory;
+  @NotNull
+  private final SmartInventory inventory;
 
-    @EventHandler
-    public void onInventoryOpen(final InventoryOpenEvent event) {
-        final HumanEntity human = event.getPlayer();
-        if (!(human instanceof Player)) {
-            return;
-        }
-        final Player player = (Player) human;
-        this.inventory.getPage(player).ifPresent(page ->
-            this.inventory.getContents(player)
-                .map(contents -> new PgOpenEvent(this.inventory.getPlugin(), event, contents))
-                .ifPresent(page::accept));
+  public InventoryOpenListener(@NotNull final SmartInventory inventory) {
+    this.inventory = inventory;
+  }
+
+  @EventHandler
+  public void onInventoryOpen(final InventoryOpenEvent event) {
+    final HumanEntity human = event.getPlayer();
+    if (!(human instanceof Player)) {
+      return;
     }
-
+    final Player player = (Player) human;
+    this.inventory.getPage(player).ifPresent(page ->
+      this.inventory.getContents(player)
+        .map(contents -> new PgOpenEvent(this.inventory.getPlugin(), event, contents))
+        .ifPresent(page::accept));
+  }
 }
