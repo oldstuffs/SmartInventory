@@ -28,7 +28,7 @@ package io.github.portlek.observer;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that is observer's source.
+ * a class that is the observer's source.
  *
  * @param <T> type of the arguments.
  */

@@ -27,7 +27,6 @@ package io.github.portlek.smartinventory.handle;
 
 import io.github.portlek.smartinventory.Handle;
 import io.github.portlek.smartinventory.event.abs.SmartEvent;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;

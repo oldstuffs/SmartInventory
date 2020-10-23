@@ -160,7 +160,7 @@ public interface Page {
     this.open(player, 0, properties);
   }
 
-  default boolean checkBounds(int row, int column) {
+  default boolean checkBounds(final int row, final int column) {
     if (row >= 0) {
       return column >= 0;
     }

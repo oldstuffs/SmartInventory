@@ -79,6 +79,8 @@ public interface InventoryContents {
    * @param id the id of the iterator.
    * @param type the type of the iterator.
    * @param startPos the starting position of the iterator.
+   *
+   * @return the newly created iterator.
    */
   @NotNull
   default SlotIterator newIterator(@NotNull final String id, @NotNull final SlotIterator.Type type,
@@ -92,6 +94,8 @@ public interface InventoryContents {
    *
    * @param type the type of the iterator.
    * @param startPos the starting position of the iterator.
+   *
+   * @return the newly created iterator.
    */
   @NotNull
   default SlotIterator newIterator(@NotNull final SlotIterator.Type type, @NotNull final SlotPos startPos) {
@@ -192,6 +196,10 @@ public interface InventoryContents {
    * the given <b>from slot index</b> and its bottom-right position at
    * the given <b>to slot index</b>.
    *
+   * @param fromColumn the from column to apply.
+   * @param fromRow the from row to apply.
+   * @param toColumn the to column to apply.
+   * @param toRow the to row to apply.
    * @param apply the apply to accept row and column
    *
    * @return {@code this}, for chained calls
@@ -215,6 +223,10 @@ public interface InventoryContents {
    * the given <b>from slot index</b> and its bottom-right position at
    * the given <b>to slot index</b>.
    *
+   * @param fromColumn the from column to apply.
+   * @param fromRow the from row to apply.
+   * @param toColumn the to column to apply.
+   * @param toRow the to row to apply.
    * @param apply the apply to accept each slot
    *
    * @return {@code this}, for chained calls
@@ -247,6 +259,8 @@ public interface InventoryContents {
    *
    * @param slotPos the slotPos to set.
    * @param item the item to set.
+   *
+   * @return {@code this}, for chained calls.
    */
   @NotNull
   default InventoryContents set(@NotNull final SlotPos slotPos, @Nullable final Icon item) {
@@ -941,6 +955,8 @@ public interface InventoryContents {
    * specified slot.
    *
    * @param slot the slot to set editable.
+   *
+   * @return {@code this}, for chained calls.
    */
   default InventoryContents setEditable(@NotNull final SlotPos slot) {
     return this.setEditable(slot, true);
@@ -1039,6 +1055,8 @@ public interface InventoryContents {
    * @param row the row to set.
    * @param column the column to set.
    * @param item the item to set.
+   *
+   * @return {@code this}, for chained calls.
    */
   @NotNull
   InventoryContents set(int row, int column, @Nullable Icon item);
@@ -1065,6 +1083,8 @@ public interface InventoryContents {
    * @param slot the slot to set editable.
    * @param editable {@code true} to make a slot editable, {@code false}
    *   to make it 'static' again.
+   *
+   * @return {@code this}, for chained calls.
    */
   InventoryContents setEditable(@NotNull SlotPos slot, boolean editable);
 

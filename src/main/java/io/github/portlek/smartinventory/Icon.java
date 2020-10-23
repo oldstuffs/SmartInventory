@@ -213,7 +213,7 @@ public interface Icon {
   /**
    * calculates and returns the item of the icon.
    * tests the {@code canSee} with the given contents, and if it returns {@code true},
-   * returns {@link this#getItem()} else, returns the fallback.
+   * returns {@link #getItem()} else, returns the fallback.
    *
    * @param contents the contents to calculate.
    *

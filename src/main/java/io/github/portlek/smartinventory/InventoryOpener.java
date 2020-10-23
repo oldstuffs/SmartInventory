@@ -30,6 +30,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that opens {@link Inventory}s from the given {@link InventoryType}s.
+ */
 public interface InventoryOpener {
 
   /**
