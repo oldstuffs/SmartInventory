@@ -37,6 +37,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * an interface to determine {@link Inventory}.
+ */
 public interface Page {
 
   static Page build(@NotNull final SmartInventory inventory, @NotNull final InventoryProvider provided) {
