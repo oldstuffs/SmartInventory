@@ -384,7 +384,9 @@ public interface Page {
 
   /**
    * sets the provider to the given provider
+   *
    * @param provider the provider to set.
+   *
    * @return {@code this}, for 
    */
   @NotNull
@@ -392,6 +394,7 @@ public interface Page {
 
   /**
    * obtains the page's inventory manager.
+   *
    * @return an inventory manager instance.
    */
   @NotNull
