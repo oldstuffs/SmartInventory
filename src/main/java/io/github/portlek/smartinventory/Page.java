@@ -59,7 +59,7 @@ public interface Page {
    *
    * @param inventory the inventory to create.
    *
-   * @return a simple page instnce.
+   * @return a simple page instance.
    */
   static Page build(@NotNull final SmartInventory inventory) {
     return new BasicPage(inventory);
