@@ -28,7 +28,6 @@ package io.github.portlek.smartinventory.listener;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.IcDragEvent;
 import io.github.portlek.smartinventory.util.SlotPos;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,28 +35,30 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
 public final class InventoryDragListener implements Listener {
 
-    @NotNull
-    private final SmartInventory inventory;
+  @NotNull
+  private final SmartInventory inventory;
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onInventoryDrag(final InventoryDragEvent event) {
-        final Player player = (Player) event.getWhoClicked();
-        this.inventory.getContents(player).ifPresent(contents -> {
-            for (final int slot : event.getRawSlots()) {
-                final SlotPos pos = SlotPos.of(slot / 9, slot % 9);
-                contents.get(pos).ifPresent(icon ->
-                    icon.accept(new IcDragEvent(this.inventory.getPlugin(), event, contents, icon)));
-                if (slot >= player.getOpenInventory().getTopInventory().getSize() ||
-                    contents.isEditable(pos)) {
-                    continue;
-                }
-                event.setCancelled(true);
-                break;
-            }
-        });
-    }
+  public InventoryDragListener(@NotNull final SmartInventory inventory) {
+    this.inventory = inventory;
+  }
 
+  @EventHandler(priority = EventPriority.LOW)
+  public void onInventoryDrag(final InventoryDragEvent event) {
+    final Player player = (Player) event.getWhoClicked();
+    this.inventory.getContents(player).ifPresent(contents -> {
+      for (final int slot : event.getRawSlots()) {
+        final SlotPos pos = SlotPos.of(slot / 9, slot % 9);
+        contents.get(pos).ifPresent(icon ->
+          icon.accept(new IcDragEvent(this.inventory.getPlugin(), event, contents, icon)));
+        if (slot >= player.getOpenInventory().getTopInventory().getSize() ||
+          contents.isEditable(pos)) {
+          continue;
+        }
+        event.setCancelled(true);
+        break;
+      }
+    });
+  }
 }

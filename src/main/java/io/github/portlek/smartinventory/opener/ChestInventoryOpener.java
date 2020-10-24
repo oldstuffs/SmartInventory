@@ -33,29 +33,32 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * an {@link InventoryType#CHEST} implementation for {@link InventoryOpener}.
+ */
 public final class ChestInventoryOpener implements InventoryOpener {
 
-    @Override
-    public Inventory open(@NotNull final Page page, @NotNull final Player player) {
-        if (page.column() != 9) {
-            throw new IllegalArgumentException(
-                String.format("The column count for the chest inventory must be 9, found: %s.", page.column()));
-        }
-        if (page.row() < 1 && page.row() > 6) {
-            throw new IllegalArgumentException(
-                String.format("The row count for the chest inventory must be between 1 and 6, found: %s", page.row()));
-        }
-        final Inventory handle = Bukkit.createInventory(player, page.row() * page.column(), page.title());
-        page.inventory().getContents(player).ifPresent(contents -> {
-            this.fill(handle, contents);
-            player.openInventory(handle);
-        });
-        return handle;
+  @NotNull
+  @Override
+  public Inventory open(@NotNull final Page page, @NotNull final Player player) {
+    if (page.column() != 9) {
+      throw new IllegalArgumentException(
+        String.format("The column count for the chest inventory must be 9, found: %s.", page.column()));
     }
-
-    @Override
-    public boolean supports(@NotNull final InventoryType type) {
-        return type == InventoryType.CHEST || type == InventoryType.ENDER_CHEST;
+    if (page.row() < 1 && page.row() > 6) {
+      throw new IllegalArgumentException(
+        String.format("The row count for the chest inventory must be between 1 and 6, found: %s", page.row()));
     }
+    final Inventory handle = Bukkit.createInventory(player, page.row() * page.column(), page.title());
+    page.inventory().getContents(player).ifPresent(contents -> {
+      this.fill(handle, contents);
+      player.openInventory(handle);
+    });
+    return handle;
+  }
 
+  @Override
+  public boolean supports(@NotNull final InventoryType type) {
+    return type == InventoryType.CHEST || type == InventoryType.ENDER_CHEST;
+  }
 }

@@ -30,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 
 public interface IconEvent extends SmartEvent {
 
-    @NotNull
-    Icon icon();
-
+  @NotNull
+  Icon icon();
 }

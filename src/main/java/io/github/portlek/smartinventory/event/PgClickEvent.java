@@ -27,39 +27,43 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.PageClickEvent;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
 public final class PgClickEvent implements PageClickEvent {
 
-    @NotNull
-    private final Plugin plugin;
+  @NotNull
+  private final Plugin plugin;
 
-    @NotNull
-    private final InventoryClickEvent event;
+  @NotNull
+  private final InventoryClickEvent event;
 
-    @NotNull
-    private final InventoryContents contents;
+  @NotNull
+  private final InventoryContents contents;
 
-    @NotNull
-    @Override
-    public InventoryContents contents() {
-        return this.contents;
-    }
+  public PgClickEvent(@NotNull final Plugin plugin, @NotNull final InventoryClickEvent event,
+                      @NotNull final InventoryContents contents) {
+    this.plugin = plugin;
+    this.event = event;
+    this.contents = contents;
+  }
 
-    @Override
-    public void cancel() {
-        this.event.setCancelled(true);
-    }
+  @NotNull
+  @Override
+  public InventoryContents contents() {
+    return this.contents;
+  }
 
-    @Override
-    public void close() {
-        Bukkit.getScheduler().runTask(this.plugin, () ->
-            this.contents.page().close(this.contents.player()));
-    }
+  @Override
+  public void cancel() {
+    this.event.setCancelled(true);
+  }
 
+  @Override
+  public void close() {
+    Bukkit.getScheduler().runTask(this.plugin, () ->
+      this.contents.page().close(this.contents.player()));
+  }
 }

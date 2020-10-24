@@ -25,23 +25,88 @@
 
 package io.github.portlek.smartinventory.util;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
-@Getter
-@ToString
-@EqualsAndHashCode
+/**
+ * represents the position (row + column) of a slot in an inventory.
+ */
 public final class SlotPos {
 
-    private final int row;
+  /**
+   * the row.
+   */
+  private final int row;
 
-    private final int column;
+  /**
+   * the column.
+   */
+  private final int column;
 
-    public static SlotPos of(final int row, final int column) {
-        return new SlotPos(row, column);
+  /**
+   * ctor.
+   *
+   * @param row the row.
+   * @param column the column.
+   */
+  public SlotPos(final int row, final int column) {
+    this.row = row;
+    this.column = column;
+  }
+
+  /**
+   * creats a simple slot position instance.
+   *
+   * @param row the row to create.
+   * @param column the column to create.
+   *
+   * @return a simple slot position instance.
+   */
+  @NotNull
+  public static SlotPos of(final int row, final int column) {
+    return new SlotPos(row, column);
+  }
+
+  /**
+   * obtains the row row of {@code this}
+   *
+   * @return the row.
+   */
+  public int getRow() {
+    return this.row;
+  }
+
+  /**
+   * obtains the column row of {@code this}
+   *
+   * @return the column.
+   */
+  public int getColumn() {
+    return this.column;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.row, this.column);
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
     }
+    if (o == null || this.getClass() != o.getClass()) {
+      return false;
+    }
+    final SlotPos slotPos = (SlotPos) o;
+    return this.row == slotPos.row && this.column == slotPos.column;
+  }
 
+  @Override
+  public String toString() {
+    return "SlotPos{" +
+      "row=" + this.row +
+      ", column=" + this.column +
+      '}';
+  }
 }

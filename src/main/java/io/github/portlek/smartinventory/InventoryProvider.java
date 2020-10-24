@@ -23,46 +23,46 @@
  *
  */
 
-package io.github.portlek.smartinventory.target;
+package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.Target;
-import io.github.portlek.smartinventory.event.abs.SmartEvent;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import lombok.RequiredArgsConstructor;
+import io.github.portlek.observer.Target;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
-public final class BasicTarget<T extends SmartEvent> implements Target<T> {
+/**
+ * a class that allows to manage player's inventory contents.
+ */
+public interface InventoryProvider extends Target<InventoryContents> {
 
-    @NotNull
-    private final Class<T> clazz;
+  /**
+   * an empty inventory provider.
+   */
+  InventoryProvider EMPTY = new InventoryProvider() {
+  };
 
-    @NotNull
-    private final Consumer<T> consumer;
+  /**
+   * runs when the page has just opened.
+   *
+   * @param contents the contents to initiate.
+   */
+  default void init(@NotNull final InventoryContents contents) {
+  }
 
-    @NotNull
-    private final List<Predicate<T>> requirements;
+  /**
+   * runs every tick.
+   *
+   * @param contents the contents to tick.
+   */
+  default void tick(@NotNull final InventoryContents contents) {
+  }
 
-    @SafeVarargs
-    public BasicTarget(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                       @NotNull final Predicate<T>... requirements) {
-        this(clazz, consumer, Arrays.asList(requirements));
-    }
-
-    @Override
-    public void accept(@NotNull final T event) {
-        if (this.requirements.stream().allMatch(req -> req.test(event))) {
-            this.consumer.accept(event);
-        }
-    }
-
-    @NotNull
-    @Override
-    public Class<T> getType() {
-        return this.clazz;
-    }
-
+  /**
+   * runs when {@link InventoryContents#notifyUpdate()} runs.
+   * <p>
+   * came from {@link Target}'s method.
+   *
+   * @param contents the contents to update.
+   */
+  @Override
+  default void update(@NotNull final InventoryContents contents) {
+  }
 }

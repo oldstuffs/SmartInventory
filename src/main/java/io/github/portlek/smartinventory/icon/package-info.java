@@ -22,25 +22,7 @@
  * SOFTWARE.
  *
  */
-
-package io.github.portlek.smartinventory;
-
-import io.github.portlek.observer.Target;
-import org.jetbrains.annotations.NotNull;
-
-public interface InventoryProvided extends Target<InventoryContents> {
-
-    InventoryProvided EMPTY = new InventoryProvided() {
-    };
-
-    default void init(@NotNull final InventoryContents contents) {
-    }
-
-    default void tick(@NotNull final InventoryContents contents) {
-    }
-
-    @Override
-    default void update(@NotNull final InventoryContents contents) {
-    }
-
-}
+/**
+ * the package that contains {@link io.github.portlek.smartinventory.Icon} implementations.
+ */
+package io.github.portlek.smartinventory.icon;

@@ -27,9 +27,35 @@ package io.github.portlek.smartinventory;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface Type<T> {
+/**
+ * an interface to determine type of the classes at runtime.
+ *
+ * @param <T> type of the class.
+ */
+public abstract class Type<T> {
 
-    @NotNull
-    Class<T> getType();
+  /**
+   * the type.
+   */
+  @NotNull
+  private final Class<T> clazz;
 
+  /**
+   * ctor.
+   *
+   * @param clazz the clazz.
+   */
+  protected Type(@NotNull final Class<T> clazz) {
+    this.clazz = clazz;
+  }
+
+  /**
+   * obtains the type of the class.
+   *
+   * @return the type of the class.
+   */
+  @NotNull
+  protected final Class<T> getType() {
+    return this.clazz;
+  }
 }

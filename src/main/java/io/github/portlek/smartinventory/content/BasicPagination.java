@@ -27,96 +27,102 @@ package io.github.portlek.smartinventory.content;
 
 import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.Pagination;
-import io.github.portlek.smartinventory.SlotIterator;
 import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * an implementation for {@link Pagination}.
+ */
 public final class BasicPagination implements Pagination {
 
-    private int currentPage;
+  /**
+   * the current page.
+   */
+  private int currentPage;
 
-    private Icon[] items = new Icon[0];
+  /**
+   * the icons.
+   */
+  @NotNull
+  private Icon[] icons = new Icon[0];
 
-    private int itemsPerPage = 5;
+  /**
+   * the icons per page.
+   */
+  private int iconsPerPage = 5;
 
-    @Override
-    public Icon[] getPageItems() {
-        return Arrays.copyOfRange(this.items,
-            this.currentPage * this.itemsPerPage,
-            (this.currentPage + 1) * this.itemsPerPage);
+  @NotNull
+  @Override
+  public Icon[] getPageIcons() {
+    return Arrays.copyOfRange(this.icons,
+      this.currentPage * this.iconsPerPage,
+      (this.currentPage + 1) * this.iconsPerPage);
+  }
+
+  @Override
+  public int getPage() {
+    return this.currentPage;
+  }
+
+  @NotNull
+  @Override
+  public Pagination page(final int page) {
+    this.currentPage = page;
+    return this;
+  }
+
+  @Override
+  public boolean isFirst() {
+    return this.currentPage == 0;
+  }
+
+  @Override
+  public boolean isLast() {
+    return this.currentPage >= (int) Math.ceil((double) this.icons.length / (double) this.iconsPerPage) - 1;
+  }
+
+  @NotNull
+  @Override
+  public Pagination first() {
+    this.currentPage = 0;
+    return this;
+  }
+
+  @NotNull
+  @Override
+  public Pagination previous() {
+    if (!this.isFirst()) {
+      this.currentPage--;
     }
+    return this;
+  }
 
-    @Override
-    public int getPage() {
-        return this.currentPage;
+  @NotNull
+  @Override
+  public Pagination next() {
+    if (!this.isLast()) {
+      this.currentPage++;
     }
+    return this;
+  }
 
-    @Override
-    public Pagination page(final int page) {
-        this.currentPage = page;
-        return this;
-    }
+  @NotNull
+  @Override
+  public Pagination last() {
+    return this.page(this.getPageIcons().length / this.iconsPerPage);
+  }
 
-    @Override
-    public boolean isFirst() {
-        return this.currentPage == 0;
-    }
+  @NotNull
+  @Override
+  public Pagination setIcons(@NotNull final Icon... icons) {
+    this.icons = icons.clone();
+    return this;
+  }
 
-    @Override
-    public boolean isLast() {
-        final int pageCount = (int) Math.ceil((double) this.items.length / (double) this.itemsPerPage);
-        return this.currentPage >= pageCount - 1;
-    }
-
-    @Override
-    public Pagination first() {
-        this.currentPage = 0;
-        return this;
-    }
-
-    @Override
-    public Pagination previous() {
-        if (!this.isFirst()) {
-            this.currentPage--;
-        }
-        return this;
-    }
-
-    @Override
-    public Pagination next() {
-        if (!this.isLast()) {
-            this.currentPage++;
-        }
-        return this;
-    }
-
-    @Override
-    public Pagination last() {
-        this.currentPage = this.items.length / this.itemsPerPage;
-        return this;
-    }
-
-    @Override
-    public Pagination addToIterator(@NotNull final SlotIterator iterator) {
-        for (final Icon item : this.getPageItems()) {
-            iterator.next().set(item);
-            if (iterator.ended()) {
-                break;
-            }
-        }
-        return this;
-    }
-
-    @Override
-    public Pagination setItems(@NotNull final Icon... items) {
-        this.items = items;
-        return this;
-    }
-
-    @Override
-    public Pagination setItemsPerPage(final int itemsPerPage) {
-        this.itemsPerPage = itemsPerPage;
-        return this;
-    }
-
+  @NotNull
+  @Override
+  public Pagination setIconsPerPage(final int iconsPerPage) {
+    this.iconsPerPage = iconsPerPage;
+    return this;
+  }
 }
