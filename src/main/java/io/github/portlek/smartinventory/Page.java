@@ -334,8 +334,7 @@ public interface Page {
    * @param row the row to check.
    * @param column the column to check.
    *
-   * @return {@code true} if the given row equals or bigger than zero and column too, or
-   * the page's row bigger than the given row and
+   * @return {@code true} if the given row and column are correct for the page size.
    */
   default boolean checkBounds(final int row, final int column) {
     if (row >= 0) {
@@ -386,11 +385,15 @@ public interface Page {
   /**
    * sets the provider to the given provider
    * @param provider the provider to set.
-   * @return
+   * @return {@code this}, for 
    */
   @NotNull
   Page provider(@NotNull InventoryProvider provider);
 
+  /**
+   * obtains the page's inventory manager.
+   * @return an inventory manager instance.
+   */
   @NotNull
   SmartInventory inventory();
 
