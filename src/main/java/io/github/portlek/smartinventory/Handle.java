@@ -27,6 +27,7 @@ package io.github.portlek.smartinventory;
 
 import io.github.portlek.smartinventory.event.abs.SmartEvent;
 import io.github.portlek.smartinventory.handle.BasicHandle;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -50,5 +51,21 @@ public interface Handle<T extends SmartEvent> extends Consumer<T> {
   static <T extends SmartEvent> Handle<T> from(@NotNull final Consumer<T> consumer,
                                                @NotNull final List<Predicate<T>> requirements) {
     return new BasicHandle<>(consumer, requirements);
+  }
+
+  /**
+   * creates a simple handler.
+   *
+   * @param consumer the consumer to run.
+   * @param requirements the requirements to check.
+   * @param <T> type of the {@link SmartEvent}.
+   *
+   * @return a simple handler instance.
+   */
+  @SafeVarargs
+  @NotNull
+  static <T extends SmartEvent> Handle<T> from(@NotNull final Consumer<T> consumer,
+                                               @NotNull final Predicate<T>... requirements) {
+    return Handle.from(consumer, Arrays.asList(requirements));
   }
 }

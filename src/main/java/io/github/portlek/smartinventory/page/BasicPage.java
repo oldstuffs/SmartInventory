@@ -34,6 +34,7 @@ import io.github.portlek.smartinventory.event.PgInitEvent;
 import io.github.portlek.smartinventory.event.PgUpdateEvent;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;
+import io.github.portlek.smartinventory.event.abs.SmartEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -169,12 +170,12 @@ public final class BasicPage implements Page {
   @Override
   public <T extends PageEvent> void accept(@NotNull final T event) {
     this.handles.stream()
-      .filter(target -> {
-//        return target.getType().isAssignableFrom(event.getClass());
+      .filter(handle -> {
+//        return handle.getType().isAssignableFrom(event.getClass());
         return true;
       })
-      .map(target -> (Handle<T>) target)
-      .forEach(target -> target.accept(event));
+      .map(handle -> (Handle<T>) handle)
+      .forEach(handle -> handle.accept(event));
   }
 
   @NotNull

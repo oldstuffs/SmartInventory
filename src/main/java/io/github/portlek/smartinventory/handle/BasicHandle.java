@@ -27,8 +27,8 @@ package io.github.portlek.smartinventory.handle;
 
 import io.github.portlek.smartinventory.Handle;
 import io.github.portlek.smartinventory.event.abs.SmartEvent;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +60,7 @@ public final class BasicHandle<T extends SmartEvent> implements Handle<T> {
    */
   public BasicHandle(@NotNull final Consumer<T> consumer, @NotNull final List<Predicate<T>> requirements) {
     this.consumer = consumer;
-    this.requirements = Objects.requireNonNull(requirements);
+    this.requirements = requirements;
   }
 
   @Override
