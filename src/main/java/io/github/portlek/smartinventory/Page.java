@@ -372,6 +372,8 @@ public interface Page {
   /**
    * runs the {@link this#provider()}'s {@link InventoryProvider#update(InventoryContents)} methods with the given
    * contents.
+   *
+   * @param contents the contents to update.
    */
   void notifyUpdate(@NotNull InventoryContents contents);
 
@@ -409,21 +411,62 @@ public interface Page {
   @NotNull
   SmartInventory inventory();
 
+  /**
+   * obtains the tick amount.
+   *
+   * @return the tick amount.
+   */
   long tick();
 
+  /**
+   * sets the tick.
+   *
+   * @param tick the tick to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   Page tick(long tick);
 
+  /**
+   * obtains the start delay for the task.
+   *
+   * @return the start delay for the task.
+   */
   long startDelay();
 
+  /**
+   * sets the start delay of the task.
+   *
+   * @param startDelay the start delay to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   Page startDelay(long startDelay);
 
+  /**
+   * obtains status of the task in terms of async.
+   *
+   * @return status of the task in terms of async.
+   */
   boolean async();
 
+  /**
+   * sets the task's async status.
+   *
+   * @param async the async to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   Page async(boolean async);
 
+  /**
+   * obtains the task enable.
+   *
+   * @return {@code true} if the task enable.
+   */
   boolean tickEnable();
 
   @NotNull
