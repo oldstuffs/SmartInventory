@@ -41,6 +41,7 @@ public interface Handle<T extends SmartEvent> extends Consumer<T> {
   /**
    * creates a simple handler.
    *
+   * @param clazz the class to determine the type of the event.
    * @param consumer the consumer to run.
    * @param requirements the requirements to check.
    * @param <T> type of the {@link SmartEvent}.
@@ -48,14 +49,15 @@ public interface Handle<T extends SmartEvent> extends Consumer<T> {
    * @return a simple handler instance.
    */
   @NotNull
-  static <T extends SmartEvent> Handle<T> from(@NotNull final Consumer<T> consumer,
+  static <T extends SmartEvent> Handle<T> from(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
                                                @NotNull final List<Predicate<T>> requirements) {
-    return new BasicHandle<>(consumer, requirements);
+    return new BasicHandle<>(clazz, consumer, requirements);
   }
 
   /**
    * creates a simple handler.
    *
+   * @param clazz the class to determine the type of the event.
    * @param consumer the consumer to run.
    * @param requirements the requirements to check.
    * @param <T> type of the {@link SmartEvent}.
@@ -64,8 +66,8 @@ public interface Handle<T extends SmartEvent> extends Consumer<T> {
    */
   @SafeVarargs
   @NotNull
-  static <T extends SmartEvent> Handle<T> from(@NotNull final Consumer<T> consumer,
+  static <T extends SmartEvent> Handle<T> from(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
                                                @NotNull final Predicate<T>... requirements) {
-    return Handle.from(consumer, Arrays.asList(requirements));
+    return Handle.from(clazz, consumer, Arrays.asList(requirements));
   }
 }

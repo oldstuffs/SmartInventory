@@ -132,7 +132,7 @@ public interface Icon {
   @NotNull
   default Icon whenInteract(@NotNull final Consumer<IconEvent> consumer,
                             @NotNull final List<Predicate<IconEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(IconEvent.class, consumer, requirements);
   }
 
   /**
@@ -158,7 +158,7 @@ public interface Icon {
   @NotNull
   default Icon whenDrag(@NotNull final Consumer<DragEvent> consumer,
                         @NotNull final List<Predicate<DragEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(DragEvent.class, consumer, requirements);
   }
 
   /**
@@ -184,12 +184,13 @@ public interface Icon {
   @NotNull
   default Icon whenClick(@NotNull final Consumer<ClickEvent> consumer,
                          @NotNull final List<Predicate<ClickEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(ClickEvent.class, consumer, requirements);
   }
 
   /**
    * add the given event and requirements to the icon's handles.
    *
+   * @param clazz the class to determine the type of the event.
    * @param consumer the consumer to add.
    * @param requirements the requirements to add.
    * @param <T> type of the event.
@@ -197,9 +198,9 @@ public interface Icon {
    * @return {@code this}, for chained calls.
    */
   @NotNull
-  default <T extends IconEvent> Icon handle(@NotNull final Consumer<T> consumer,
+  default <T extends IconEvent> Icon handle(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
                                             @NotNull final List<Predicate<T>> requirements) {
-    return this.handle(Handle.from(consumer, requirements));
+    return this.handle(Handle.from(clazz, consumer, requirements));
   }
 
   /**

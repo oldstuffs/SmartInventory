@@ -88,7 +88,7 @@ public interface Page {
   @NotNull
   default Page whenClose(@NotNull final Consumer<CloseEvent> consumer,
                          @NotNull final List<Predicate<CloseEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(CloseEvent.class, consumer, requirements);
   }
 
   /**
@@ -114,7 +114,7 @@ public interface Page {
   @NotNull
   default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer,
                         @NotNull final List<Predicate<OpenEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(OpenEvent.class, consumer, requirements);
   }
 
   /**
@@ -140,7 +140,7 @@ public interface Page {
   @NotNull
   default Page whenInit(@NotNull final Consumer<InitEvent> consumer,
                         @NotNull final List<Predicate<InitEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(InitEvent.class, consumer, requirements);
   }
 
   /**
@@ -166,7 +166,7 @@ public interface Page {
   @NotNull
   default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer,
                           @NotNull final List<Predicate<UpdateEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(UpdateEvent.class, consumer, requirements);
   }
 
   /**
@@ -192,7 +192,7 @@ public interface Page {
   @NotNull
   default Page whenTick(@NotNull final Consumer<TickEvent> consumer,
                         @NotNull final List<Predicate<TickEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(TickEvent.class, consumer, requirements);
   }
 
   /**
@@ -218,7 +218,7 @@ public interface Page {
   @NotNull
   default Page whenBottomClick(@NotNull final Consumer<BottomClickEvent> consumer,
                                @NotNull final List<Predicate<BottomClickEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(BottomClickEvent.class, consumer, requirements);
   }
 
   /**
@@ -244,7 +244,7 @@ public interface Page {
   @NotNull
   default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer,
                                 @NotNull final List<Predicate<OutsideClickEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(OutsideClickEvent.class, consumer, requirements);
   }
 
   /**
@@ -270,27 +270,30 @@ public interface Page {
   @NotNull
   default Page whenEmptyClick(@NotNull final Consumer<PageClickEvent> consumer,
                               @NotNull final List<Predicate<PageClickEvent>> requirements) {
-    return this.handle(consumer, requirements);
+    return this.handle(PageClickEvent.class, consumer, requirements);
   }
 
   /**
    * adds the given consumer.
    *
+   * @param clazz the class to determine the type of the event.
    * @param consumer the consumer to add.
    * @param requirements the requirements to add.
+   * @param <T> type of the event.
    *
    * @return {@code this}, for chained calls.
    */
   @NotNull
-  default <T extends PageEvent> Page handle(@NotNull final Consumer<T> consumer,
+  default <T extends PageEvent> Page handle(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
                                             @NotNull final List<Predicate<T>> requirements) {
-    return this.handle(Handle.from(consumer, requirements));
+    return this.handle(Handle.from(clazz, consumer, requirements));
   }
 
   /**
    * adds the given handle.
    *
    * @param handle the handle to add.
+   * @param <T> type of the event.
    *
    * @return {@code this}, for chained calls.
    */

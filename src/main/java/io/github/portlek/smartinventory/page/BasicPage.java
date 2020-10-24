@@ -34,7 +34,6 @@ import io.github.portlek.smartinventory.event.PgInitEvent;
 import io.github.portlek.smartinventory.event.PgUpdateEvent;
 import io.github.portlek.smartinventory.event.abs.CloseEvent;
 import io.github.portlek.smartinventory.event.abs.PageEvent;
-import io.github.portlek.smartinventory.event.abs.SmartEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
