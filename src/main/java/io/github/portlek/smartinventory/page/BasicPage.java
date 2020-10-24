@@ -96,7 +96,7 @@ public final class BasicPage implements Page {
 
   @NotNull
   @Override
-  public <T extends PageEvent> Page target(@NotNull final Handle<T> handle) {
+  public <T extends PageEvent> Page handle(@NotNull final Handle<T> handle) {
     this.handles.add(handle);
     return this;
   }
@@ -126,8 +126,8 @@ public final class BasicPage implements Page {
 
   @NotNull
   @Override
-  public Page provider(@NotNull final InventoryProvider provided) {
-    this.provider = provided;
+  public Page provider(@NotNull final InventoryProvider provider) {
+    this.provider = provider;
     return this;
   }
 

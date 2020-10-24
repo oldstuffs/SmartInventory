@@ -42,127 +42,301 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Page {
 
-  static Page build(@NotNull final SmartInventory inventory, @NotNull final InventoryProvider provided) {
-    return new BasicPage(inventory, provided);
+  /**
+   * creates a simple page instance from the given parameters.
+   *
+   * @param inventory the inventory to create.
+   * @param provider the provider to create.
+   *
+   * @return a simple page instance.
+   */
+  static Page build(@NotNull final SmartInventory inventory, @NotNull final InventoryProvider provider) {
+    return new BasicPage(inventory, provider);
   }
 
+  /**
+   * creates a simple page instance from the given inventory.
+   *
+   * @param inventory the inventory to create.
+   *
+   * @return a simple page instnce.
+   */
   static Page build(@NotNull final SmartInventory inventory) {
     return new BasicPage(inventory);
   }
 
+  /**
+   * adds the given consumer as a close event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenClose(@NotNull final Consumer<CloseEvent> consumer) {
     return this.whenClose(consumer, Collections.emptyList());
   }
 
+  /**
+   * adds the given consumer as a close event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenClose(@NotNull final Consumer<CloseEvent> consumer,
                          @NotNull final List<Predicate<CloseEvent>> requirements) {
-    return this.target(consumer, requirements);
+    return this.handle(consumer, requirements);
   }
 
+  /**
+   * adds the given consumer as a open event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer) {
     return this.whenOpen(consumer, Collections.emptyList());
   }
 
+  /**
+   * adds the given consumer as a open event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer,
                         @NotNull final List<Predicate<OpenEvent>> requirements) {
-    return this.target(consumer, requirements);
+    return this.handle(consumer, requirements);
   }
 
+  /**
+   * adds the given consumer as a init event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenInit(@NotNull final Consumer<InitEvent> consumer) {
     return this.whenInit(consumer, Collections.emptyList());
   }
 
+  /**
+   * adds the given consumer as a init event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenInit(@NotNull final Consumer<InitEvent> consumer,
                         @NotNull final List<Predicate<InitEvent>> requirements) {
-    return this.target(consumer, requirements);
+    return this.handle(consumer, requirements);
   }
 
+  /**
+   * adds the given consumer as a update event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer) {
     return this.whenUpdate(consumer, Collections.emptyList());
   }
 
+  /**
+   * adds the given consumer as a update event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer,
                           @NotNull final List<Predicate<UpdateEvent>> requirements) {
-    return this.target(consumer, requirements);
+    return this.handle(consumer, requirements);
   }
 
+  /**
+   * adds the given consumer as a tick event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenTick(@NotNull final Consumer<TickEvent> consumer) {
     return this.whenTick(consumer, Collections.emptyList());
   }
 
+  /**
+   * adds the given consumer as a tick event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenTick(@NotNull final Consumer<TickEvent> consumer,
                         @NotNull final List<Predicate<TickEvent>> requirements) {
-    return this.target(consumer, requirements);
+    return this.handle(consumer, requirements);
   }
 
+  /**
+   * adds the given consumer as a bottom inventory click event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenBottomClick(@NotNull final Consumer<BottomClickEvent> consumer) {
     return this.whenBottomClick(consumer, Collections.emptyList());
   }
 
+  /**
+   * adds the given consumer as a bottom inventory click event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenBottomClick(@NotNull final Consumer<BottomClickEvent> consumer,
                                @NotNull final List<Predicate<BottomClickEvent>> requirements) {
-    return this.target(consumer, requirements);
+    return this.handle(consumer, requirements);
   }
 
+  /**
+   * adds the given consumer as a outside inventory click event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer) {
     return this.whenOutsideClick(consumer, Collections.emptyList());
   }
 
+  /**
+   * adds the given consumer as a outside inventory click event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer,
                                 @NotNull final List<Predicate<OutsideClickEvent>> requirements) {
-    return this.target(consumer, requirements);
+    return this.handle(consumer, requirements);
   }
 
+  /**
+   * adds the given consumer as a empty slot click event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenEmptyClick(@NotNull final Consumer<PageClickEvent> consumer) {
     return this.whenEmptyClick(consumer, Collections.emptyList());
   }
 
+  /**
+   * adds the given consumer as a empty slot click event.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page whenEmptyClick(@NotNull final Consumer<PageClickEvent> consumer,
                               @NotNull final List<Predicate<PageClickEvent>> requirements) {
-    return this.target(consumer, requirements);
+    return this.handle(consumer, requirements);
   }
 
+  /**
+   * adds the given consumer.
+   *
+   * @param consumer the consumer to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
-  default <T extends PageEvent> Page target(@NotNull final Consumer<T> consumer,
+  default <T extends PageEvent> Page handle(@NotNull final Consumer<T> consumer,
                                             @NotNull final List<Predicate<T>> requirements) {
-    return this.target(Handle.from(consumer, requirements));
+    return this.handle(Handle.from(consumer, requirements));
   }
 
-  @NotNull <T extends PageEvent> Page target(@NotNull Handle<T> handle);
+  /**
+   * adds the given handle.
+   *
+   * @param handle the handle to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull <T extends PageEvent> Page handle(@NotNull Handle<T> handle);
 
+  /**
+   * sets the can close to the given boolean.
+   *
+   * @param canClose the can close to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   default Page canClose(final boolean canClose) {
     return this.canClose(event -> canClose);
   }
 
+  /**
+   * opens the page to the given player.
+   *
+   * @param player the player to open.
+   */
   default void open(@NotNull final Player player) {
     this.open(player, 0);
   }
 
+  /**
+   * opens the page to the given player.
+   *
+   * @param player the player to open.
+   * @param page the page to open.
+   */
   default void open(@NotNull final Player player, final int page) {
     this.open(player, page, Collections.emptyMap());
   }
 
+  /**
+   * opens the page to the given player.
+   *
+   * @param player the player to open.
+   * @param properties the properties to open.
+   */
   default void open(@NotNull final Player player, @NotNull final Map<String, Object> properties) {
     this.open(player, 0, properties);
   }
 
+  /**
+   * checks the bounds.
+   *
+   * @param row the row to check.
+   * @param column the column to check.
+   *
+   * @return {@code true} if the given row equals or bigger than zero and column too, or
+   * the page's row bigger than the given row and
+   */
   default boolean checkBounds(final int row, final int column) {
     if (row >= 0) {
       return column >= 0;
@@ -173,23 +347,49 @@ public interface Page {
     return false;
   }
 
+  /**
+   * runs the {@link InventoryProvider#update(InventoryContents)} methods for all players who opened {@code this}.
+   */
   default void notifyUpdateForAll() {
     this.inventory().notifyUpdateForAll(this.provider().getClass());
   }
 
+  /**
+   * runs the {@link InventoryProvider#update(InventoryContents)} methods for all players who opened {@code this}.
+   */
   default void notifyUpdateForAllById() {
     this.inventory().notifyUpdateForAllById(this.id());
   }
 
+  /**
+   * runs the {@link this#provider()}'s {@link InventoryProvider#update(InventoryContents)} methods with the given
+   * contents.
+   */
   void notifyUpdate(@NotNull InventoryContents contents);
 
+  /**
+   * accepts the upcoming event.
+   *
+   * @param event the event to accept.
+   * @param <T> type of the event.
+   */
   <T extends PageEvent> void accept(@NotNull T event);
 
+  /**
+   * obtains the inventory provider.
+   *
+   * @return an inventory provider instance.
+   */
   @NotNull
   InventoryProvider provider();
 
+  /**
+   * sets the provider to the given provider
+   * @param provider the provider to set.
+   * @return
+   */
   @NotNull
-  Page provider(@NotNull InventoryProvider provided);
+  Page provider(@NotNull InventoryProvider provider);
 
   @NotNull
   SmartInventory inventory();
