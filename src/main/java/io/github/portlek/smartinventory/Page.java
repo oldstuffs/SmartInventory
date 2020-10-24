@@ -81,6 +81,7 @@ public interface Page {
    * adds the given consumer as a close event.
    *
    * @param consumer the consumer to add.
+   * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
    */
@@ -106,6 +107,7 @@ public interface Page {
    * adds the given consumer as a open event.
    *
    * @param consumer the consumer to add.
+   * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
    */
@@ -131,6 +133,7 @@ public interface Page {
    * adds the given consumer as a init event.
    *
    * @param consumer the consumer to add.
+   * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
    */
@@ -156,6 +159,7 @@ public interface Page {
    * adds the given consumer as a update event.
    *
    * @param consumer the consumer to add.
+   * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
    */
@@ -181,6 +185,7 @@ public interface Page {
    * adds the given consumer as a tick event.
    *
    * @param consumer the consumer to add.
+   * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
    */
@@ -206,6 +211,7 @@ public interface Page {
    * adds the given consumer as a bottom inventory click event.
    *
    * @param consumer the consumer to add.
+   * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
    */
@@ -231,6 +237,7 @@ public interface Page {
    * adds the given consumer as a outside inventory click event.
    *
    * @param consumer the consumer to add.
+   * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
    */
@@ -256,6 +263,7 @@ public interface Page {
    * adds the given consumer as a empty slot click event.
    *
    * @param consumer the consumer to add.
+   * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
    */
@@ -269,6 +277,7 @@ public interface Page {
    * adds the given consumer.
    *
    * @param consumer the consumer to add.
+   * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
    */
@@ -387,7 +396,7 @@ public interface Page {
    *
    * @param provider the provider to set.
    *
-   * @return {@code this}, for 
+   * @return {@code this}, for chained calls.
    */
   @NotNull
   Page provider(@NotNull InventoryProvider provider);
