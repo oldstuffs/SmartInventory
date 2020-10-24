@@ -45,51 +45,110 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * an implementation for {@link Page}.
+ */
 public final class BasicPage implements Page {
 
+  /**
+   * the observer's source.
+   */
   private final Source<InventoryContents> source = new BasicSource<>();
 
+  /**
+   * the handles.
+   */
   private final Collection<Handle<? extends PageEvent>> handles = new ArrayList<>();
 
+  /**
+   * the inventory manager.
+   */
   @NotNull
   private final SmartInventory inventory;
 
+  /**
+   * the inventory type.
+   */
   // TODO Add a method to change the type of the inventory.
   @NotNull
   private final InventoryType type = InventoryType.CHEST;
 
+  /**
+   * the provider.
+   */
   @NotNull
   private InventoryProvider provider;
 
+  /**
+   * the title.
+   */
   @NotNull
   private String title = "Smart Inventory";
 
+  /**
+   * the row.
+   */
   private int row = 1;
 
+  /**
+   * the column.
+   */
   private int column = 9;
 
+  /**
+   * the tick time.
+   */
   private long tick = 1L;
 
+  /**
+   * the start delay time.
+   */
   private long startDelay = 1L;
 
+  /**
+   * the async.
+   */
   private boolean async = false;
 
+  /**
+   * the tick enable.
+   */
   private boolean tickEnable = true;
 
+  /**
+   * the id.
+   */
   @NotNull
   private String id = "none";
 
+  /**
+   * the can close.
+   */
   @NotNull
   private Predicate<CloseEvent> canClose = event -> true;
 
+  /**
+   * the parent.
+   */
   @Nullable
   private Page parent;
 
+  /**
+   * ctor.
+   *
+   * @param inventory the inventory.
+   * @param provider the provider.
+   */
   public BasicPage(@NotNull final SmartInventory inventory, @NotNull final InventoryProvider provider) {
     this.inventory = inventory;
     this.provider = provider;
   }
 
+  /**
+   * ctor.
+   *
+   * @param inventory the inventory.
+   */
   public BasicPage(@NotNull final SmartInventory inventory) {
     this(inventory, InventoryProvider.EMPTY);
   }
@@ -224,15 +283,15 @@ public final class BasicPage implements Page {
 
   @NotNull
   @Override
-  public Page parent(@NotNull final Page parent) {
-    this.parent = parent;
-    return this;
+  public Optional<Page> parent() {
+    return Optional.ofNullable(this.parent);
   }
 
   @NotNull
   @Override
-  public Optional<Page> parent() {
-    return Optional.ofNullable(this.parent);
+  public Page parent(@NotNull final Page parent) {
+    this.parent = parent;
+    return this;
   }
 
   @NotNull
@@ -248,16 +307,16 @@ public final class BasicPage implements Page {
     return this.id;
   }
 
+  @Override
+  public boolean canClose(@NotNull final CloseEvent event) {
+    return this.canClose.test(event);
+  }
+
   @NotNull
   @Override
   public Page canClose(@NotNull final Predicate<CloseEvent> predicate) {
     this.canClose = predicate;
     return this;
-  }
-
-  @Override
-  public boolean canClose(@NotNull final CloseEvent event) {
-    return this.canClose.test(event);
   }
 
   @NotNull
