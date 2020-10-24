@@ -256,8 +256,8 @@ public final class BasicPage implements Page {
   }
 
   @Override
-  public boolean canClose(@NotNull final CloseEvent predicate) {
-    return this.canClose.test(predicate);
+  public boolean canClose(@NotNull final CloseEvent event) {
+    return this.canClose.test(event);
   }
 
   @NotNull

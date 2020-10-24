@@ -370,8 +370,7 @@ public interface Page {
   }
 
   /**
-   * runs the {@link this#provider()}'s {@link InventoryProvider#update(InventoryContents)} methods with the given
-   * contents.
+   * runs the {@link #provider()}'s {@link InventoryProvider#update(InventoryContents)} method with the given contents.
    *
    * @param contents the contents to update.
    */
@@ -469,44 +468,139 @@ public interface Page {
    */
   boolean tickEnable();
 
+  /**
+   * sets the task's activity.
+   *
+   * @param tickEnable the tick enable to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   Page tickEnable(boolean tickEnable);
 
+  /**
+   * obtains row of the page.
+   *
+   * @return row of the page.
+   */
   int row();
 
+  /**
+   * set the row of the page.
+   *
+   * @param row the row to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   Page row(int row);
 
+  /**
+   * obtains column of the page.
+   *
+   * @return column of the page.
+   */
   int column();
 
+  /**
+   * set the column of the page.
+   *
+   * @param column the row to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   Page column(int column);
 
+  /**
+   * obtains title of the page.
+   *
+   * @return title of the page.
+   */
   @NotNull
   String title();
 
+  /**
+   * sets the title of the page.
+   *
+   * @param title the title to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   Page title(@NotNull String title);
 
-  @NotNull
-  Page parent(@NotNull Page parent);
-
+  /**
+   * obtains tha parent page of {@code this}.
+   *
+   * @return the parent page of {@code this}.
+   */
   @NotNull
   Optional<Page> parent();
 
+  /**
+   * sets the parent of the page.
+   *
+   * @param parent the parent to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  Page parent(@NotNull Page parent);
+
+  /**
+   * sets the id of the page.
+   *
+   * @param id the id to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   Page id(@NotNull String id);
 
+  /**
+   * obtains id of the page.
+   *
+   * @return id of the page.
+   */
   @NotNull
   String id();
 
+  /**
+   * checks the can close with the given event.
+   *
+   * @param event the event to check.
+   *
+   * @return {@code true} if the can close predicate's test returns {@code true}.
+   */
+  boolean canClose(@NotNull CloseEvent event);
+
+  /**
+   * sets the can close predicate of the page.
+   *
+   * @param predicate the predicate to set.
+   *
+   * @return {@code this}, for chained calls.
+   */
   @NotNull
   Page canClose(@NotNull Predicate<CloseEvent> predicate);
 
-  boolean canClose(@NotNull CloseEvent predicate);
-
+  /**
+   * opens the page for the player.
+   *
+   * @param player the player to open.
+   * @param page the page to open.
+   * @param properties the properties to open with.
+   *
+   * @return a new {@link Inventory} instance.
+   */
   @NotNull
   Inventory open(@NotNull Player player, int page, @NotNull Map<String, Object> properties);
 
+  /**
+   * closes the player's page.
+   *
+   * @param player the player to close.
+   */
   void close(@NotNull Player player);
 }
