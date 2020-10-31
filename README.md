@@ -2,7 +2,7 @@
 
 [![idea](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 
-[![Build Status](https://travis-ci.com/portlek/SmartInventory.svg?branch=master)](https://travis-ci.com/portlek/SmartInventory)
+![master](https://github.com/portlek/SmartInventory/workflows/build/badge.svg)
 ![Maven Central](https://img.shields.io/maven-central/v/io.github.portlek/SmartInventory?label=version)
 ## How to use
 ```xml
