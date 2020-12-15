@@ -72,3 +72,4 @@ jobs:
         with:
           tag_name: ${{ steps.bump-semver.outputs.new_version }}
           release_name: ${{ steps.bump-semver.outputs.new_version }}
+          body: '[Changelog](https://github.com/portlek/SmartInventory/compare/${{ steps.version.outputs.release }}...${{ steps.bump-semver.outputs.new_version }})'
