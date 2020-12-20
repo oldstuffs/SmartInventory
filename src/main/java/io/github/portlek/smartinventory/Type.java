@@ -32,22 +32,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> type of the class.
  */
-public abstract class Type<T> {
-
-  /**
-   * the type.
-   */
-  @NotNull
-  private final Class<T> clazz;
-
-  /**
-   * ctor.
-   *
-   * @param clazz the clazz.
-   */
-  protected Type(@NotNull final Class<T> clazz) {
-    this.clazz = clazz;
-  }
+public interface Type<T> {
 
   /**
    * obtains the type of the class.
@@ -55,7 +40,5 @@ public abstract class Type<T> {
    * @return the type of the class.
    */
   @NotNull
-  protected final Class<T> getType() {
-    return this.clazz;
-  }
+  Class<T> type();
 }
