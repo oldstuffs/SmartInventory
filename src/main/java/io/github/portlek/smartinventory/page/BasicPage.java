@@ -169,10 +169,7 @@ public final class BasicPage implements Page {
   @Override
   public <T extends PageEvent> void accept(@NotNull final T event) {
     this.handles.stream()
-      .filter(handle -> {
-//        return handle.getType().isAssignableFrom(event.getClass());
-        return true;
-      })
+      .filter(handle -> handle.type().isAssignableFrom(event.getClass()))
       .map(handle -> (Handle<T>) handle)
       .forEach(handle -> handle.accept(event));
   }
