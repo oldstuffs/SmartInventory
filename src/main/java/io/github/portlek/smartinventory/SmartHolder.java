@@ -23,47 +23,47 @@
  *
  */
 
-package io.github.portlek.smartinventory.event;
+package io.github.portlek.smartinventory;
 
-import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.event.abs.BottomClickEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public final class PgBottomClickEvent implements BottomClickEvent {
+/**
+ * an interface to determine inventory holders.
+ */
+public interface SmartHolder extends InventoryHolder {
 
+  /**
+   * obtains the contents.
+   *
+   * @return contents.
+   */
   @NotNull
-  private final InventoryContents contents;
+  InventoryContents getContents();
 
+  /**
+   * obtains the page.
+   *
+   * @return page.
+   */
   @NotNull
-  private final InventoryClickEvent event;
+  Page getPage();
 
+  /**
+   * obtains the player.
+   *
+   * @return player.
+   */
   @NotNull
-  private final Plugin plugin;
+  Player getPlayer();
 
-  public PgBottomClickEvent(@NotNull final Plugin plugin, @NotNull final InventoryClickEvent event,
-                            @NotNull final InventoryContents contents) {
-    this.plugin = plugin;
-    this.event = event;
-    this.contents = contents;
-  }
-
-  @Override
-  public void cancel() {
-    this.event.setCancelled(true);
-  }
-
-  @Override
-  public void close() {
-    Bukkit.getScheduler().runTask(this.plugin, () ->
-      this.contents.page().close(this.contents.player()));
-  }
-
+  /**
+   * obtains the plugin.
+   *
+   * @return plugin.
+   */
   @NotNull
-  @Override
-  public InventoryContents contents() {
-    return this.contents;
-  }
+  Plugin getPlugin();
 }

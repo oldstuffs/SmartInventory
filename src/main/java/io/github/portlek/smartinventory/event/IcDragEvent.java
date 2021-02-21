@@ -41,16 +41,16 @@ import org.jetbrains.annotations.NotNull;
 public final class IcDragEvent implements DragEvent {
 
   @NotNull
-  private final Plugin plugin;
+  private final InventoryContents contents;
 
   @NotNull
   private final InventoryDragEvent event;
 
   @NotNull
-  private final InventoryContents contents;
+  private final Icon icon;
 
   @NotNull
-  private final Icon icon;
+  private final Plugin plugin;
 
   public IcDragEvent(@NotNull final Plugin plugin, @NotNull final InventoryDragEvent event,
                      @NotNull final InventoryContents contents, @NotNull final Icon icon) {
@@ -62,20 +62,14 @@ public final class IcDragEvent implements DragEvent {
 
   @NotNull
   @Override
-  public DragType drag() {
-    return this.event.getType();
-  }
-
-  @NotNull
-  @Override
   public Map<Integer, ItemStack> added() {
     return this.event.getNewItems();
   }
 
   @NotNull
   @Override
-  public Set<Integer> slots() {
-    return this.event.getInventorySlots();
+  public DragType drag() {
+    return this.event.getType();
   }
 
   @NotNull
@@ -86,14 +80,8 @@ public final class IcDragEvent implements DragEvent {
 
   @NotNull
   @Override
-  public Icon icon() {
-    return this.icon;
-  }
-
-  @NotNull
-  @Override
-  public InventoryContents contents() {
-    return this.contents;
+  public Set<Integer> slots() {
+    return this.event.getInventorySlots();
   }
 
   @Override
@@ -105,5 +93,17 @@ public final class IcDragEvent implements DragEvent {
   public void close() {
     Bukkit.getScheduler().runTask(this.plugin, () ->
       this.contents.page().close(this.contents.player()));
+  }
+
+  @NotNull
+  @Override
+  public InventoryContents contents() {
+    return this.contents;
+  }
+
+  @NotNull
+  @Override
+  public Icon icon() {
+    return this.icon;
   }
 }

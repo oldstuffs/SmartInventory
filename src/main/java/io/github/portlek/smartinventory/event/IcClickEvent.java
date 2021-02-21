@@ -41,16 +41,16 @@ import org.jetbrains.annotations.NotNull;
 public final class IcClickEvent implements ClickEvent {
 
   @NotNull
-  private final Plugin plugin;
+  private final InventoryContents contents;
 
   @NotNull
   private final InventoryClickEvent event;
 
   @NotNull
-  private final InventoryContents contents;
+  private final Icon icon;
 
   @NotNull
-  private final Icon icon;
+  private final Plugin plugin;
 
   public IcClickEvent(@NotNull final Plugin plugin, @NotNull final InventoryClickEvent event,
                       @NotNull final InventoryContents contents, @NotNull final Icon icon) {
@@ -58,22 +58,6 @@ public final class IcClickEvent implements ClickEvent {
     this.event = event;
     this.contents = contents;
     this.icon = icon;
-  }
-
-  @Override
-  public int row() {
-    return this.event.getSlot() / 9;
-  }
-
-  @Override
-  public int column() {
-    return this.event.getSlot() % 9;
-  }
-
-  @NotNull
-  @Override
-  public ClickType click() {
-    return this.event.getClick();
   }
 
   @NotNull
@@ -84,14 +68,13 @@ public final class IcClickEvent implements ClickEvent {
 
   @NotNull
   @Override
-  public InventoryType.SlotType slot() {
-    return this.event.getSlotType();
+  public ClickType click() {
+    return this.event.getClick();
   }
 
-  @NotNull
   @Override
-  public Optional<ItemStack> cursor() {
-    return Optional.ofNullable(this.event.getCursor());
+  public int column() {
+    return this.event.getSlot() % 9;
   }
 
   @NotNull
@@ -102,14 +85,19 @@ public final class IcClickEvent implements ClickEvent {
 
   @NotNull
   @Override
-  public Icon icon() {
-    return this.icon;
+  public Optional<ItemStack> cursor() {
+    return Optional.ofNullable(this.event.getCursor());
+  }
+
+  @Override
+  public int row() {
+    return this.event.getSlot() / 9;
   }
 
   @NotNull
   @Override
-  public InventoryContents contents() {
-    return this.contents;
+  public InventoryType.SlotType slot() {
+    return this.event.getSlotType();
   }
 
   @Override
@@ -121,5 +109,17 @@ public final class IcClickEvent implements ClickEvent {
   public void close() {
     Bukkit.getScheduler().runTask(this.plugin, () ->
       this.contents.page().close(this.contents.player()));
+  }
+
+  @NotNull
+  @Override
+  public InventoryContents contents() {
+    return this.contents;
+  }
+
+  @NotNull
+  @Override
+  public Icon icon() {
+    return this.icon;
   }
 }

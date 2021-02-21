@@ -25,57 +25,61 @@
 
 package io.github.portlek.smartinventory.listener;
 
-import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.SmartInventory;
+import io.github.portlek.smartinventory.SmartHolder;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Consumer;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents inventory close listeners.
+ */
 public final class InventoryCloseListener implements Listener {
 
+  /**
+   * the stop tick function.
+   */
   @NotNull
-  private final SmartInventory inventory;
+  private final Consumer<UUID> stopTickFunction;
 
-  public InventoryCloseListener(@NotNull final SmartInventory inventory) {
-    this.inventory = inventory;
+  /**
+   * ctor.
+   *
+   * @param stopTickFunction the stop tick function.
+   */
+  public InventoryCloseListener(@NotNull final Consumer<UUID> stopTickFunction) {
+    this.stopTickFunction = stopTickFunction;
   }
 
+  /**
+   * listens inventory close events.
+   *
+   * @param event the event to listen.
+   */
   @EventHandler
   public void onInventoryClose(final InventoryCloseEvent event) {
-    final HumanEntity human = event.getPlayer();
-    if (!(human instanceof Player)) {
+    final Inventory inventory = event.getInventory();
+    final InventoryHolder holder = inventory.getHolder();
+    if (!(holder instanceof SmartHolder)) {
       return;
     }
-    final Player player = (Player) human;
-    final Optional<InventoryContents> optional = this.inventory.getContents(player);
-    if (!optional.isPresent()) {
-      return;
-    }
-    final InventoryContents contents = optional.get();
-    final Page page = contents.page();
-    final PgCloseEvent close = new PgCloseEvent(contents);
+    final SmartHolder smartHolder = (SmartHolder) holder;
+    final Page page = smartHolder.getPage();
+    final PgCloseEvent close = new PgCloseEvent(smartHolder.getContents());
     page.accept(close);
     if (!page.canClose(close)) {
-      Bukkit.getScheduler().runTask(this.inventory.getPlugin(), () ->
-        player.openInventory(event.getInventory()));
+      Bukkit.getScheduler().runTask(smartHolder.getPlugin(), () ->
+        event.getPlayer().openInventory(inventory));
       return;
     }
-    event.getInventory().clear();
-    this.inventory.stopTick(player);
-    this.inventory.removePage(player);
-    this.inventory.removeContent(player);
-    new HashMap<>(this.inventory.getContentsByInventory()).forEach((inventory1, contents1) -> {
-      if (contents.equals(contents1)) {
-        this.inventory.removeContentByInventory(inventory1);
-      }
-    });
+    inventory.clear();
+    this.stopTickFunction.accept(event.getPlayer().getUniqueId());
   }
 }

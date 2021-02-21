@@ -35,6 +35,13 @@ import org.jetbrains.annotations.NotNull;
 public interface Source<T> {
 
   /**
+   * notifies {@link Target#update(Object)} method all of the subscribes.
+   *
+   * @param argument the argument to notify.
+   */
+  void notifyTargets(@NotNull T argument);
+
+  /**
    * subscribes the given {@link Target} into the source.
    *
    * @param target the target to subscribe.
@@ -47,11 +54,4 @@ public interface Source<T> {
    * @param target the target to remove.
    */
   void unsubscribe(@NotNull Target<T> target);
-
-  /**
-   * notifies {@link Target#update(Object)} method all of the subscribes.
-   *
-   * @param argument the argument to notify.
-   */
-  void notifyTargets(@NotNull T argument);
 }

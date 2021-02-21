@@ -35,14 +35,14 @@ import org.jetbrains.annotations.NotNull;
 public interface DragEvent extends IconEvent {
 
   @NotNull
-  DragType drag();
-
-  @NotNull
   Map<Integer, ItemStack> added();
 
   @NotNull
-  Set<Integer> slots();
+  DragType drag();
 
   @NotNull
   Optional<ItemStack> newcursor();
+
+  @NotNull
+  Set<Integer> slots();
 }

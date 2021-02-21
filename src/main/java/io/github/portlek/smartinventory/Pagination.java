@@ -69,14 +69,14 @@ public interface Pagination {
   }
 
   /**
-   * gets the icons of the current page.
+   * Sets the current page to the first page.
    * <p>
-   * this returns an array of the size of the icons per page.
+   * this is equivalent to: {@code page(0)}.
    *
-   * @return the current page icons.
+   * @return {@code this}, for chained calls.
    */
   @NotNull
-  Icon[] getPageIcons();
+  Pagination first();
 
   /**
    * gets the current page.
@@ -86,14 +86,14 @@ public interface Pagination {
   int getPage();
 
   /**
-   * sets the current page.
+   * gets the icons of the current page.
+   * <p>
+   * this returns an array of the size of the icons per page.
    *
-   * @param page the current page.
-   *
-   * @return {@code this}, for chained calls.
+   * @return the current page icons.
    */
   @NotNull
-  Pagination page(int page);
+  Icon[] getPageIcons();
 
   /**
    * checks if the current page is the first page.
@@ -114,23 +114,14 @@ public interface Pagination {
   boolean isLast();
 
   /**
-   * Sets the current page to the first page.
+   * sets the current page to the last page.
    * <p>
-   * this is equivalent to: {@code page(0)}.
+   * this is equivalent to: {@code page(iconsCount / iconsPerPage)}.
    *
    * @return {@code this}, for chained calls.
    */
   @NotNull
-  Pagination first();
-
-  /**
-   * sets the current page to the previous page,
-   * if the current page is already the first page, this do nothing.
-   *
-   * @return {@code this}, for chained calls.
-   */
-  @NotNull
-  Pagination previous();
+  Pagination last();
 
   /**
    * sets the current page to the next page,
@@ -142,14 +133,23 @@ public interface Pagination {
   Pagination next();
 
   /**
-   * sets the current page to the last page.
-   * <p>
-   * this is equivalent to: {@code page(iconsCount / iconsPerPage)}.
+   * sets the current page.
+   *
+   * @param page the current page.
    *
    * @return {@code this}, for chained calls.
    */
   @NotNull
-  Pagination last();
+  Pagination page(int page);
+
+  /**
+   * sets the current page to the previous page,
+   * if the current page is already the first page, this do nothing.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  Pagination previous();
 
   /**
    * sets all the icons for this Pagination.

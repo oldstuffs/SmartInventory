@@ -26,7 +26,11 @@
 package io.github.portlek.smartinventory.util;
 
 import com.google.common.base.Preconditions;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,15 +42,15 @@ import org.jetbrains.annotations.Nullable;
 public final class Pattern<T> {
 
   /**
-   * the mapping.
-   */
-  private final Map<Character, T> mapping = new HashMap<>();
-
-  /**
    * the lines.
    */
   @NotNull
   private final String[] lines;
+
+  /**
+   * the mapping.
+   */
+  private final Map<Character, T> mapping = new HashMap<>();
 
   /**
    * the wrap around.
@@ -107,6 +111,68 @@ public final class Pattern<T> {
   public Pattern<T> attach(final char character, @NotNull final T object) {
     this.mapping.put(character, object);
     return this;
+  }
+
+  /**
+   * searches through this patterns lines to find all occurrences of this key.
+   * the first position is the most top-left and the last position is the most bottom-right one.
+   * <p>
+   * if the key isn't contained in this pattern, the returned list will be empty.
+   *
+   * @param character The character key to look for.
+   *
+   * @return A mutable list containing all positions where that key occurs.
+   */
+  @NotNull
+  public List<SlotPos> findAllKeys(final char character) {
+    final List<SlotPos> positions = new ArrayList<>();
+    for (int row = 0; row < this.getRowCount(); row++) {
+      for (int column = 0; column < this.getColumnCount(); column++) {
+        if (this.lines[row].charAt(column) == character) {
+          positions.add(SlotPos.of(row, column));
+        }
+      }
+    }
+    return positions;
+  }
+
+  /**
+   * searches through this patterns lines to find the first top-left occurrence of this key.
+   * if it could not be found, the returned {@link Optional} is empty.
+   *
+   * @param character The character key to look for.
+   *
+   * @return an optional containing the slot position in this pattern, or empty if it could not be found.
+   */
+  @NotNull
+  public Optional<SlotPos> findKey(final char character) {
+    for (int row = 0; row < this.getRowCount(); row++) {
+      for (int column = 0; column < this.getColumnCount(); column++) {
+        if (this.lines[row].charAt(column) == character) {
+          return Optional.of(SlotPos.of(row, column));
+        }
+      }
+    }
+    return Optional.empty();
+  }
+
+  /**
+   * this method counts the amount of rows this pattern has based on the length of the lines.
+   *
+   * @return the amount of columns.
+   */
+  public int getColumnCount() {
+    return this.lines[0].length();
+  }
+
+  /**
+   * returns the default value set via {@link #setDefault(Object)}
+   *
+   * @return The default value.
+   */
+  @NotNull
+  public Optional<T> getDefaultValue() {
+    return Optional.ofNullable(this.defaultValue);
   }
 
   /**
@@ -182,46 +248,21 @@ public final class Pattern<T> {
   }
 
   /**
-   * searches through this patterns lines to find the first top-left occurrence of this key.
-   * if it could not be found, the returned {@link Optional} is empty.
+   * this method counts the amount of rows this pattern has based on the amount of lines provided at creation.
    *
-   * @param character The character key to look for.
-   *
-   * @return an optional containing the slot position in this pattern, or empty if it could not be found.
+   * @return the amount of rows.
    */
-  @NotNull
-  public Optional<SlotPos> findKey(final char character) {
-    for (int row = 0; row < this.getRowCount(); row++) {
-      for (int column = 0; column < this.getColumnCount(); column++) {
-        if (this.lines[row].charAt(column) == character) {
-          return Optional.of(SlotPos.of(row, column));
-        }
-      }
-    }
-    return Optional.empty();
+  public int getRowCount() {
+    return this.lines.length;
   }
 
   /**
-   * searches through this patterns lines to find all occurrences of this key.
-   * the first position is the most top-left and the last position is the most bottom-right one.
-   * <p>
-   * if the key isn't contained in this pattern, the returned list will be empty.
+   * a simple getter for the value provided at the Patterns creation, if this pattern supports wrapAround.
    *
-   * @param character The character key to look for.
-   *
-   * @return A mutable list containing all positions where that key occurs.
+   * @return {@code true} if wrapAround is enabled for this instance.
    */
-  @NotNull
-  public List<SlotPos> findAllKeys(final char character) {
-    final List<SlotPos> positions = new ArrayList<>();
-    for (int row = 0; row < this.getRowCount(); row++) {
-      for (int column = 0; column < this.getColumnCount(); column++) {
-        if (this.lines[row].charAt(column) == character) {
-          positions.add(SlotPos.of(row, column));
-        }
-      }
-    }
-    return positions;
+  public boolean isWrapAround() {
+    return this.wrapAround;
   }
 
   /**
@@ -235,42 +276,5 @@ public final class Pattern<T> {
   public Pattern<T> setDefault(@NotNull final T defaultValue) {
     this.defaultValue = defaultValue;
     return this;
-  }
-
-  /**
-   * returns the default value set via {@link #setDefault(Object)}
-   *
-   * @return The default value.
-   */
-  @NotNull
-  public Optional<T> getDefaultValue() {
-    return Optional.ofNullable(this.defaultValue);
-  }
-
-  /**
-   * this method counts the amount of rows this pattern has based on the amount of lines provided at creation.
-   *
-   * @return the amount of rows.
-   */
-  public int getRowCount() {
-    return this.lines.length;
-  }
-
-  /**
-   * this method counts the amount of rows this pattern has based on the length of the lines.
-   *
-   * @return the amount of columns.
-   */
-  public int getColumnCount() {
-    return this.lines[0].length();
-  }
-
-  /**
-   * a simple getter for the value provided at the Patterns creation, if this pattern supports wrapAround.
-   *
-   * @return {@code true} if wrapAround is enabled for this instance.
-   */
-  public boolean isWrapAround() {
-    return this.wrapAround;
   }
 }

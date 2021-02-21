@@ -35,25 +35,19 @@ import org.jetbrains.annotations.NotNull;
 public final class PgOpenEvent implements OpenEvent {
 
   @NotNull
-  private final Plugin plugin;
+  private final InventoryContents contents;
 
   @NotNull
   private final InventoryOpenEvent event;
 
   @NotNull
-  private final InventoryContents contents;
+  private final Plugin plugin;
 
   public PgOpenEvent(@NotNull final Plugin plugin, @NotNull final InventoryOpenEvent event,
                      @NotNull final InventoryContents contents) {
     this.plugin = plugin;
     this.event = event;
     this.contents = contents;
-  }
-
-  @NotNull
-  @Override
-  public InventoryContents contents() {
-    return this.contents;
   }
 
   @Override
@@ -65,5 +59,11 @@ public final class PgOpenEvent implements OpenEvent {
   public void close() {
     Bukkit.getScheduler().runTask(this.plugin, () ->
       this.contents.page().close(this.contents.player()));
+  }
+
+  @NotNull
+  @Override
+  public InventoryContents contents() {
+    return this.contents;
   }
 }

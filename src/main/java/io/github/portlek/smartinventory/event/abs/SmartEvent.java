@@ -30,12 +30,12 @@ import org.jetbrains.annotations.NotNull;
 
 public interface SmartEvent {
 
-  @NotNull
-  InventoryContents contents();
-
   default void cancel() {
   }
 
   default void close() {
   }
+
+  @NotNull
+  InventoryContents contents();
 }

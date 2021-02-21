@@ -35,25 +35,19 @@ import org.jetbrains.annotations.NotNull;
 public final class PgClickEvent implements PageClickEvent {
 
   @NotNull
-  private final Plugin plugin;
+  private final InventoryContents contents;
 
   @NotNull
   private final InventoryClickEvent event;
 
   @NotNull
-  private final InventoryContents contents;
+  private final Plugin plugin;
 
   public PgClickEvent(@NotNull final Plugin plugin, @NotNull final InventoryClickEvent event,
                       @NotNull final InventoryContents contents) {
     this.plugin = plugin;
     this.event = event;
     this.contents = contents;
-  }
-
-  @NotNull
-  @Override
-  public InventoryContents contents() {
-    return this.contents;
   }
 
   @Override
@@ -65,5 +59,11 @@ public final class PgClickEvent implements PageClickEvent {
   public void close() {
     Bukkit.getScheduler().runTask(this.plugin, () ->
       this.contents.page().close(this.contents.player()));
+  }
+
+  @NotNull
+  @Override
+  public InventoryContents contents() {
+    return this.contents;
   }
 }

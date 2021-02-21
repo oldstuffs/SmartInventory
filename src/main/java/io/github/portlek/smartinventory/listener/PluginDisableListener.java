@@ -25,37 +25,36 @@
 
 package io.github.portlek.smartinventory.listener;
 
-import io.github.portlek.smartinventory.SmartInventory;
+import io.github.portlek.smartinventory.Page;
+import io.github.portlek.smartinventory.SmartHolder;
 import io.github.portlek.smartinventory.event.PlgnDisableEvent;
-import java.util.HashMap;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.inventory.InventoryHolder;
 
+/**
+ * a class that represents plugin disable events.
+ */
 public final class PluginDisableListener implements Listener {
 
-  static {
-    //noinspection ResultOfMethodCallIgnored
-    PlgnDisableEvent.class.getSimpleName();
-  }
-
-  @NotNull
-  private final SmartInventory inventory;
-
-  public PluginDisableListener(@NotNull final SmartInventory inventory) {
-    this.inventory = inventory;
-  }
-
+  /**
+   * listens the plugin disable events.
+   *
+   * @param event the event to listen.
+   */
   @EventHandler
   public void onPluginDisable(final PluginDisableEvent event) {
-    new HashMap<>(this.inventory.getPages()).forEach((player, page) -> {
-      this.inventory.getContents(player).ifPresent(contents ->
-        page.accept(new PlgnDisableEvent(contents)));
+    Bukkit.getOnlinePlayers().forEach(player -> {
+      final InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
+      if (!(holder instanceof SmartHolder)) {
+        return;
+      }
+      final SmartHolder smartHolder = (SmartHolder) holder;
+      final Page page = smartHolder.getPage();
+      page.accept(new PlgnDisableEvent(smartHolder.getContents()));
       page.close(player);
     });
-    this.inventory.clearPages();
-    this.inventory.clearContents();
-    this.inventory.clearContentsByInventory();
   }
 }

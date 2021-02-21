@@ -47,12 +47,6 @@ public final class BasicIcon implements Icon {
   private final Collection<Handle<? extends IconEvent>> handles = new ArrayList<>();
 
   /**
-   * the item.
-   */
-  @NotNull
-  private ItemStack item;
-
-  /**
    * the can see.
    */
   @NotNull
@@ -71,30 +65,18 @@ public final class BasicIcon implements Icon {
   private ItemStack fallback = new ItemStack(Material.AIR);
 
   /**
+   * the item.
+   */
+  @NotNull
+  private ItemStack item;
+
+  /**
    * ctor.
    *
    * @param item the item.
    */
   public BasicIcon(@NotNull final ItemStack item) {
     this.item = item;
-  }
-
-  @NotNull
-  @Override
-  public ItemStack getItem() {
-    return this.item;
-  }
-
-  @NotNull
-  @Override
-  public ItemStack calculateItem(@NotNull final InventoryContents contents) {
-    final ItemStack calculated;
-    if (this.canSee.test(contents)) {
-      calculated = this.getItem();
-    } else {
-      calculated = this.fallback;
-    }
-    return calculated;
   }
 
   @Override
@@ -113,16 +95,14 @@ public final class BasicIcon implements Icon {
 
   @NotNull
   @Override
-  public <T extends IconEvent> Icon handle(@NotNull final Handle<T> handle) {
-    this.handles.add(handle);
-    return this;
-  }
-
-  @NotNull
-  @Override
-  public Icon handles(@NotNull final Collection<Handle<? extends IconEvent>> handles) {
-    this.handles.addAll(handles);
-    return this;
+  public ItemStack calculateItem(@NotNull final InventoryContents contents) {
+    final ItemStack calculated;
+    if (this.canSee.test(contents)) {
+      calculated = this.getItem();
+    } else {
+      calculated = this.fallback;
+    }
+    return calculated;
   }
 
   @NotNull
@@ -143,6 +123,26 @@ public final class BasicIcon implements Icon {
   @Override
   public Icon fallback(@NotNull final ItemStack fallback) {
     this.fallback = fallback;
+    return this;
+  }
+
+  @NotNull
+  @Override
+  public ItemStack getItem() {
+    return this.item;
+  }
+
+  @NotNull
+  @Override
+  public <T extends IconEvent> Icon handle(@NotNull final Handle<T> handle) {
+    this.handles.add(handle);
+    return this;
+  }
+
+  @NotNull
+  @Override
+  public Icon handles(@NotNull final Collection<Handle<? extends IconEvent>> handles) {
+    this.handles.addAll(handles);
     return this;
   }
 

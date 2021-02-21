@@ -34,14 +34,14 @@ import org.jetbrains.annotations.NotNull;
 public final class SlotPos {
 
   /**
-   * the row.
-   */
-  private final int row;
-
-  /**
    * the column.
    */
   private final int column;
+
+  /**
+   * the row.
+   */
+  private final int row;
 
   /**
    * ctor.
@@ -68,21 +68,21 @@ public final class SlotPos {
   }
 
   /**
-   * obtains the row row of {@code this}
-   *
-   * @return the row.
-   */
-  public int getRow() {
-    return this.row;
-  }
-
-  /**
    * obtains the column row of {@code this}
    *
    * @return the column.
    */
   public int getColumn() {
     return this.column;
+  }
+
+  /**
+   * obtains the row row of {@code this}
+   *
+   * @return the row.
+   */
+  public int getRow() {
+    return this.row;
   }
 
   @Override

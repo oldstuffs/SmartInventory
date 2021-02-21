@@ -23,47 +23,63 @@
  *
  */
 
-package io.github.portlek.smartinventory.event;
+package io.github.portlek.smartinventory.holder;
 
 import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.event.abs.BottomClickEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import io.github.portlek.smartinventory.Page;
+import io.github.portlek.smartinventory.SmartHolder;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public final class PgBottomClickEvent implements BottomClickEvent {
+/**
+ * a class that implements {@link SmartHolder}.
+ */
+public final class SmartInventoryHolder implements SmartHolder {
 
+  /**
+   * the contents.
+   */
   @NotNull
   private final InventoryContents contents;
 
-  @NotNull
-  private final InventoryClickEvent event;
-
-  @NotNull
-  private final Plugin plugin;
-
-  public PgBottomClickEvent(@NotNull final Plugin plugin, @NotNull final InventoryClickEvent event,
-                            @NotNull final InventoryContents contents) {
-    this.plugin = plugin;
-    this.event = event;
+  /**
+   * ctor.
+   *
+   * @param contents the contents.
+   */
+  public SmartInventoryHolder(@NotNull final InventoryContents contents) {
     this.contents = contents;
   }
 
+  @NotNull
   @Override
-  public void cancel() {
-    this.event.setCancelled(true);
-  }
-
-  @Override
-  public void close() {
-    Bukkit.getScheduler().runTask(this.plugin, () ->
-      this.contents.page().close(this.contents.player()));
+  public InventoryContents getContents() {
+    return this.contents;
   }
 
   @NotNull
   @Override
-  public InventoryContents contents() {
-    return this.contents;
+  public Page getPage() {
+    return this.contents.page();
+  }
+
+  @NotNull
+  @Override
+  public Player getPlayer() {
+    return this.contents.player();
+  }
+
+  @NotNull
+  @Override
+  public Plugin getPlugin() {
+    return this.getPage().inventory().getPlugin();
+  }
+
+  @NotNull
+  @Override
+  public Inventory getInventory() {
+    return this.contents.getTopInventory();
   }
 }
