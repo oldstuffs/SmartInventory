@@ -52,6 +52,7 @@ public final class ChestInventoryOpener implements InventoryOpener {
         String.format("The row count for the chest inventory must be between 1 and 6, found: %s", page.row()));
     }
     final SmartInventoryHolder holder = new SmartInventoryHolder(contents);
+    holder.setActive(true);
     final Inventory handle = Bukkit.createInventory(holder, page.row() * page.column(), page.title());
     this.fill(handle, contents);
     contents.player().openInventory(handle);

@@ -36,18 +36,6 @@ import org.jetbrains.annotations.NotNull;
 public interface SmartHolder extends InventoryHolder {
 
   /**
-   * checks if the holder is active.
-   * @return {@code true} if the holder is active.
-   */
-  boolean isActive();
-
-  /**
-   * sets the active.
-   * @param active the active to set.
-   */
-  void setActive(boolean active);
-
-  /**
    * obtains the contents.
    *
    * @return contents.
@@ -78,4 +66,18 @@ public interface SmartHolder extends InventoryHolder {
    */
   @NotNull
   Plugin getPlugin();
+
+  /**
+   * checks if the holder is active.
+   *
+   * @return {@code true} if the holder is active.
+   */
+  boolean isActive();
+
+  /**
+   * sets the active.
+   *
+   * @param active the active to set.
+   */
+  void setActive(boolean active);
 }
