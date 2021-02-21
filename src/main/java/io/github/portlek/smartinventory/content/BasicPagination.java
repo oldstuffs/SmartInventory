@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -53,10 +53,9 @@ public final class BasicPagination implements Pagination {
 
   @NotNull
   @Override
-  public Icon[] getPageIcons() {
-    return Arrays.copyOfRange(this.icons,
-      this.currentPage * this.iconsPerPage,
-      (this.currentPage + 1) * this.iconsPerPage);
+  public Pagination first() {
+    this.currentPage = 0;
+    return this;
   }
 
   @Override
@@ -66,9 +65,10 @@ public final class BasicPagination implements Pagination {
 
   @NotNull
   @Override
-  public Pagination page(final int page) {
-    this.currentPage = page;
-    return this;
+  public Icon[] getPageIcons() {
+    return Arrays.copyOfRange(this.icons,
+      this.currentPage * this.iconsPerPage,
+      (this.currentPage + 1) * this.iconsPerPage);
   }
 
   @Override
@@ -83,18 +83,8 @@ public final class BasicPagination implements Pagination {
 
   @NotNull
   @Override
-  public Pagination first() {
-    this.currentPage = 0;
-    return this;
-  }
-
-  @NotNull
-  @Override
-  public Pagination previous() {
-    if (!this.isFirst()) {
-      this.currentPage--;
-    }
-    return this;
+  public Pagination last() {
+    return this.page(this.getPageIcons().length / this.iconsPerPage);
   }
 
   @NotNull
@@ -108,8 +98,18 @@ public final class BasicPagination implements Pagination {
 
   @NotNull
   @Override
-  public Pagination last() {
-    return this.page(this.getPageIcons().length / this.iconsPerPage);
+  public Pagination page(final int page) {
+    this.currentPage = page;
+    return this;
+  }
+
+  @NotNull
+  @Override
+  public Pagination previous() {
+    if (!this.isFirst()) {
+      this.currentPage--;
+    }
+    return this;
   }
 
   @NotNull

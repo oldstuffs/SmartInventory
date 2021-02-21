@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,10 +44,9 @@ import org.jetbrains.annotations.Nullable;
 public final class BasicSlotIterator implements SlotIterator {
 
   /**
-   * the type.
+   * the blacklisted.
    */
-  @NotNull
-  private final SlotIterator.Type type;
+  private final Set<SlotPos> blacklisted = new HashSet<>();
 
   /**
    * the contents.
@@ -56,24 +55,20 @@ public final class BasicSlotIterator implements SlotIterator {
   private final InventoryContents contents;
 
   /**
-   * the start row.
-   */
-  private final int startRow;
-
-  /**
    * the start column.
    */
   private final int startColumn;
 
   /**
-   * the blacklisted.
+   * the start row.
    */
-  private final Set<SlotPos> blacklisted = new HashSet<>();
+  private final int startRow;
 
   /**
-   * the started.
+   * the type.
    */
-  private boolean started;
+  @NotNull
+  private final SlotIterator.Type type;
 
   /**
    * the allow override.
@@ -81,19 +76,20 @@ public final class BasicSlotIterator implements SlotIterator {
   private boolean allowOverride = true;
 
   /**
-   * the end row.
+   * the blacklist pattern.
    */
-  private int endRow;
+  @Nullable
+  private Pattern<Boolean> blacklistPattern;
 
   /**
-   * the end column.
+   * the blacklist pattern column offset.
    */
-  private int endColumn;
+  private int blacklistPatternColumnOffset;
 
   /**
-   * the row.
+   * the blacklist pattern row offset.
    */
-  private int row;
+  private int blacklistPatternRowOffset;
 
   /**
    * the column.
@@ -101,14 +97,14 @@ public final class BasicSlotIterator implements SlotIterator {
   private int column;
 
   /**
-   * the pattern row offset.
+   * the end column.
    */
-  private int patternRowOffset;
+  private int endColumn;
 
   /**
-   * the pattern column offset.
+   * the end row.
    */
-  private int patternColumnOffset;
+  private int endRow;
 
   /**
    * the pattern.
@@ -117,20 +113,24 @@ public final class BasicSlotIterator implements SlotIterator {
   private Pattern<Boolean> pattern;
 
   /**
-   * the blacklist pattern row offset.
+   * the pattern column offset.
    */
-  private int blacklistPatternRowOffset;
+  private int patternColumnOffset;
 
   /**
-   * the blacklist pattern column offset.
+   * the pattern row offset.
    */
-  private int blacklistPatternColumnOffset;
+  private int patternRowOffset;
 
   /**
-   * the blacklist pattern.
+   * the row.
    */
-  @Nullable
-  private Pattern<Boolean> blacklistPattern;
+  private int row;
+
+  /**
+   * the started.
+   */
+  private boolean started;
 
   /**
    * ctor.
@@ -164,16 +164,111 @@ public final class BasicSlotIterator implements SlotIterator {
 
   @NotNull
   @Override
+  public SlotIterator allowOverride(final boolean override) {
+    this.allowOverride = override;
+    return this;
+  }
+
+  @NotNull
+  @Override
+  public SlotIterator blacklist(final int index) {
+    final int count = this.contents.page().column();
+    this.blacklisted.add(SlotPos.of(index / count, index % count));
+    return this;
+  }
+
+  @NotNull
+  @Override
+  public SlotIterator blacklist(final int row, final int column) {
+    this.blacklisted.add(SlotPos.of(row, column));
+    return this;
+  }
+
+  @NotNull
+  @Override
+  public SlotIterator blacklistPattern(@NotNull final Pattern<Boolean> pattern, final int rowOffset,
+                                       final int columnOffset) {
+    this.blacklistPatternRowOffset = rowOffset;
+    this.blacklistPatternColumnOffset = columnOffset;
+    if (!pattern.getDefaultValue().isPresent()) {
+      pattern.setDefault(false);
+    }
+    this.blacklistPattern = pattern;
+    return this;
+  }
+
+  @Override
+  public int column() {
+    return this.column;
+  }
+
+  @NotNull
+  @Override
+  public SlotIterator column(final int column) {
+    this.column = column;
+    return this;
+  }
+
+  @Override
+  public boolean doesAllowOverride() {
+    return this.allowOverride;
+  }
+
+  @NotNull
+  @Override
+  public SlotIterator endPosition(int row, int column) {
+    if (row < 0) {
+      row = this.contents.page().row() - 1;
+    }
+    if (column < 0) {
+      column = this.contents.page().column() - 1;
+    }
+    Preconditions.checkArgument(row * column >= this.startRow * this.startColumn,
+      "The end position needs to be after the start of the slot iterator");
+    this.endRow = row;
+    this.endColumn = column;
+    return this;
+  }
+
+  @Override
+  public boolean ended() {
+    return this.row == this.endRow
+      && this.column == this.endColumn;
+  }
+
+  @NotNull
+  @Override
   public Optional<Icon> get() {
     return this.contents.get(this.row, this.column);
   }
 
   @NotNull
   @Override
-  public SlotIterator set(@NotNull final Icon icon) {
-    if (this.canPlace()) {
-      this.contents.set(this.row, this.column, icon);
+  public SlotIterator next() {
+    if (this.ended()) {
+      this.started = true;
+      return this;
     }
+    do {
+      if (this.started) {
+        if (this.type == Type.HORIZONTAL) {
+          ++this.column;
+          this.column %= this.contents.page().column();
+          if (this.column == 0) {
+            this.row++;
+          }
+        } else if (this.type == Type.VERTICAL) {
+          ++this.row;
+          this.row %= this.contents.page().row();
+          if (this.row == 0) {
+            this.column++;
+          }
+        }
+      } else {
+        this.started = true;
+      }
+    }
+    while (!this.canPlace() && !this.ended());
     return this;
   }
 
@@ -209,47 +304,10 @@ public final class BasicSlotIterator implements SlotIterator {
 
   @NotNull
   @Override
-  public SlotIterator next() {
-    if (this.ended()) {
-      this.started = true;
-      return this;
-    }
-    do {
-      if (this.started) {
-        if (this.type == Type.HORIZONTAL) {
-          ++this.column;
-          this.column %= this.contents.page().column();
-          if (this.column == 0) {
-            this.row++;
-          }
-        } else if (this.type == Type.VERTICAL) {
-          ++this.row;
-          this.row %= this.contents.page().row();
-          if (this.row == 0) {
-            this.column++;
-          }
-        }
-      } else {
-        this.started = true;
-      }
-    }
-    while (!this.canPlace() && !this.ended());
-    return this;
-  }
-
-  @NotNull
-  @Override
-  public SlotIterator blacklist(final int index) {
-    final int count = this.contents.page().column();
-    this.blacklisted.add(SlotPos.of(index / count, index % count));
-    return this;
-  }
-
-  @NotNull
-  @Override
-  public SlotIterator blacklist(final int row, final int column) {
-    this.blacklisted.add(SlotPos.of(row, column));
-    return this;
+  public SlotIterator reset() {
+    this.started = false;
+    return this.row(this.startRow)
+      .column(this.startColumn);
   }
 
   @Override
@@ -264,63 +322,18 @@ public final class BasicSlotIterator implements SlotIterator {
     return this;
   }
 
-  @Override
-  public int column() {
-    return this.column;
-  }
-
   @NotNull
   @Override
-  public SlotIterator column(final int column) {
-    this.column = column;
+  public SlotIterator set(@NotNull final Icon icon) {
+    if (this.canPlace()) {
+      this.contents.set(this.row, this.column, icon);
+    }
     return this;
-  }
-
-  @NotNull
-  @Override
-  public SlotIterator reset() {
-    this.started = false;
-    return this.row(this.startRow)
-      .column(this.startColumn);
   }
 
   @Override
   public boolean started() {
     return this.started;
-  }
-
-  @Override
-  public boolean ended() {
-    return this.row == this.endRow
-      && this.column == this.endColumn;
-  }
-
-  @NotNull
-  @Override
-  public SlotIterator endPosition(int row, int column) {
-    if (row < 0) {
-      row = this.contents.page().row() - 1;
-    }
-    if (column < 0) {
-      column = this.contents.page().column() - 1;
-    }
-    Preconditions.checkArgument(row * column >= this.startRow * this.startColumn,
-      "The end position needs to be after the start of the slot iterator");
-    this.endRow = row;
-    this.endColumn = column;
-    return this;
-  }
-
-  @Override
-  public boolean doesAllowOverride() {
-    return this.allowOverride;
-  }
-
-  @NotNull
-  @Override
-  public SlotIterator allowOverride(final boolean override) {
-    this.allowOverride = override;
-    return this;
   }
 
   @NotNull
@@ -333,19 +346,6 @@ public final class BasicSlotIterator implements SlotIterator {
       pattern.setDefault(false);
     }
     this.pattern = pattern;
-    return this;
-  }
-
-  @NotNull
-  @Override
-  public SlotIterator blacklistPattern(@NotNull final Pattern<Boolean> pattern, final int rowOffset,
-                                       final int columnOffset) {
-    this.blacklistPatternRowOffset = rowOffset;
-    this.blacklistPatternColumnOffset = columnOffset;
-    if (!pattern.getDefaultValue().isPresent()) {
-      pattern.setDefault(false);
-    }
-    this.blacklistPattern = pattern;
     return this;
   }
 

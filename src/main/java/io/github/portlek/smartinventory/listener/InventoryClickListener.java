@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +33,8 @@ import io.github.portlek.smartinventory.event.PgBottomClickEvent;
 import io.github.portlek.smartinventory.event.PgClickEvent;
 import io.github.portlek.smartinventory.event.PgOutsideClickEvent;
 import io.github.portlek.smartinventory.util.SlotPos;
-import java.util.Optional;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,61 +42,58 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.plugin.Plugin;
 
+/**
+ * a class that represents inventory click listeners.
+ */
 public final class InventoryClickListener implements Listener {
 
-  @NotNull
-  private final SmartInventory inventory;
-
-  public InventoryClickListener(@NotNull final SmartInventory inventory) {
-    this.inventory = inventory;
-  }
-
+  /**
+   * listens inventory click events.
+   *
+   * @param event the event to listen.
+   */
   @EventHandler
   public void onInventoryClick(final InventoryClickEvent event) {
-    final Player player = (Player) event.getWhoClicked();
-    final Optional<Page> optional = this.inventory.getPage(player);
-    if (!optional.isPresent()) {
-      return;
-    }
-    final Page page = optional.get();
-    final Optional<InventoryContents> contentsoptional = this.inventory.getContents(player);
-    if (!contentsoptional.isPresent()) {
-      return;
-    }
-    final InventoryContents contents = contentsoptional.get();
-    if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
-      event.setCancelled(true);
-      return;
-    }
-    final Inventory clicked = event.getClickedInventory();
-    if (clicked == null) {
-      page.accept(new PgOutsideClickEvent(this.inventory.getPlugin(), event, contents));
-      return;
-    }
-    if (clicked.equals(player.getOpenInventory().getBottomInventory())) {
-      page.accept(new PgBottomClickEvent(this.inventory.getPlugin(), event, contents));
-      return;
-    }
-    final ItemStack current = event.getCurrentItem();
-    if (current == null || current.getType() == Material.AIR) {
-      page.accept(new PgClickEvent(this.inventory.getPlugin(), event, contents));
-      return;
-    }
-    final int row = event.getSlot() / 9;
-    final int column = event.getSlot() % 9;
-    if (!page.checkBounds(row, column)) {
-      return;
-    }
-    final SlotPos slot = SlotPos.of(row, column);
-    if (!contents.isEditable(slot)) {
-      event.setCancelled(true);
-    }
-    contents.get(slot).ifPresent(item ->
-      item.accept(new IcClickEvent(this.inventory.getPlugin(), event, contents, item)));
-    if (!contents.isEditable(slot)) {
-      player.updateInventory();
-    }
+    SmartInventory.getHolder(event.getWhoClicked().getUniqueId()).ifPresent(holder -> {
+      if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
+        event.setCancelled(true);
+        return;
+      }
+      final Page page = holder.getPage();
+      final InventoryContents contents = holder.getContents();
+      final Plugin plugin = holder.getPlugin();
+      final Inventory clicked = event.getClickedInventory();
+      if (clicked == null) {
+        page.accept(new PgOutsideClickEvent(plugin, event, contents));
+        return;
+      }
+      final HumanEntity player = event.getWhoClicked();
+      if (clicked.equals(player.getOpenInventory().getBottomInventory())) {
+        page.accept(new PgBottomClickEvent(plugin, event, contents));
+        return;
+      }
+      final ItemStack current = event.getCurrentItem();
+      if (current == null || current.getType() == Material.AIR) {
+        page.accept(new PgClickEvent(plugin, event, contents));
+        return;
+      }
+      final int slot = event.getSlot();
+      final int row = slot / 9;
+      final int column = slot % 9;
+      if (!page.checkBounds(row, column)) {
+        return;
+      }
+      final SlotPos slotPos = SlotPos.of(row, column);
+      if (!contents.isEditable(slotPos)) {
+        event.setCancelled(true);
+      }
+      contents.get(slotPos).ifPresent(item ->
+        item.accept(new IcClickEvent(plugin, event, contents, item)));
+      if (!contents.isEditable(slotPos) && player instanceof Player) {
+        ((Player) player).updateInventory();
+      }
+    });
   }
 }

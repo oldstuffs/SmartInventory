@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,35 +25,36 @@
 
 package io.github.portlek.smartinventory.listener;
 
+import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.IcDragEvent;
 import io.github.portlek.smartinventory.util.SlotPos;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.inventory.Inventory;
 
+/**
+ * a class that represents inventory drag listeners.
+ */
 public final class InventoryDragListener implements Listener {
 
-  @NotNull
-  private final SmartInventory inventory;
-
-  public InventoryDragListener(@NotNull final SmartInventory inventory) {
-    this.inventory = inventory;
-  }
-
+  /**
+   * listens inventory drag events.
+   *
+   * @param event the event to listen.
+   */
   @EventHandler(priority = EventPriority.LOW)
   public void onInventoryDrag(final InventoryDragEvent event) {
-    final Player player = (Player) event.getWhoClicked();
-    this.inventory.getContents(player).ifPresent(contents -> {
+    SmartInventory.getHolder(event.getWhoClicked().getUniqueId()).ifPresent(holder -> {
+      final Inventory inventory = event.getInventory();
+      final InventoryContents contents = holder.getContents();
       for (final int slot : event.getRawSlots()) {
         final SlotPos pos = SlotPos.of(slot / 9, slot % 9);
         contents.get(pos).ifPresent(icon ->
-          icon.accept(new IcDragEvent(this.inventory.getPlugin(), event, contents, icon)));
-        if (slot >= player.getOpenInventory().getTopInventory().getSize() ||
-          contents.isEditable(pos)) {
+          icon.accept(new IcDragEvent(holder.getPlugin(), event, contents, icon)));
+        if (slot >= inventory.getSize() || contents.isEditable(pos)) {
           continue;
         }
         event.setCancelled(true);

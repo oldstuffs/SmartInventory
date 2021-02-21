@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,18 @@
 
 package io.github.portlek.smartinventory.content;
 
-import io.github.portlek.smartinventory.*;
+import io.github.portlek.smartinventory.Icon;
+import io.github.portlek.smartinventory.InventoryContents;
+import io.github.portlek.smartinventory.Page;
+import io.github.portlek.smartinventory.Pagination;
+import io.github.portlek.smartinventory.SlotIterator;
+import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.util.SlotPos;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -39,24 +48,20 @@ import org.jetbrains.annotations.Nullable;
 public final class BasicInventoryContents implements InventoryContents {
 
   /**
-   * the pagination.
+   * the contents.
    */
-  private final Pagination pagination = new BasicPagination();
-
-  /**
-   * the iterators.
-   */
-  private final Map<String, SlotIterator> iterators = new HashMap<>();
-
-  /**
-   * the properties.
-   */
-  private final Map<String, Object> properties = new HashMap<>();
+  @Nullable
+  private final Icon[][] contents;
 
   /**
    * the editable slots.
    */
   private final Set<SlotPos> editableSlots = new HashSet<>();
+
+  /**
+   * the iterators.
+   */
+  private final Map<String, SlotIterator> iterators = new HashMap<>();
 
   /**
    * the page.
@@ -65,16 +70,20 @@ public final class BasicInventoryContents implements InventoryContents {
   private final Page page;
 
   /**
+   * the pagination.
+   */
+  private final Pagination pagination = new BasicPagination();
+
+  /**
    * the player.
    */
   @NotNull
   private final Player player;
 
   /**
-   * the contents.
+   * the properties.
    */
-  @Nullable
-  private final Icon[][] contents;
+  private final Map<String, Object> properties = new HashMap<>();
 
   /**
    * ctpr.
@@ -102,6 +111,49 @@ public final class BasicInventoryContents implements InventoryContents {
 
   @NotNull
   @Override
+  public Icon[][] all() {
+    return this.contents.clone();
+  }
+
+  @Nullable
+  @Override
+  public <T> T getProperty(@NotNull final String name) {
+    if (!this.properties.containsKey(name)) {
+      return null;
+    }
+    //noinspection unchecked
+    return (T) this.properties.get(name);
+  }
+
+  @NotNull
+  @Override
+  public <T> T getPropertyOrDefault(@NotNull final String name, @NotNull final T def) {
+    //noinspection unchecked
+    return (T) this.properties.getOrDefault(name, def);
+  }
+
+  @Override
+  public boolean isEditable(@NotNull final SlotPos slot) {
+    return this.editableSlots.contains(slot);
+  }
+
+  @NotNull
+  @Override
+  public Optional<SlotIterator> iterator(@NotNull final String id) {
+    return Optional.ofNullable(this.iterators.get(id));
+  }
+
+  @NotNull
+  @Override
+  public SlotIterator newIterator(@NotNull final String id, @NotNull final SlotIterator.Type type,
+                                  final int startRow, final int startColumn) {
+    final SlotIterator iterator = this.newIterator(type, startRow, startColumn);
+    this.iterators.put(id, iterator);
+    return iterator;
+  }
+
+  @NotNull
+  @Override
   public Page page() {
     return this.page;
   }
@@ -114,43 +166,8 @@ public final class BasicInventoryContents implements InventoryContents {
 
   @NotNull
   @Override
-  public Icon[][] all() {
-    return this.contents.clone();
-  }
-
-  @NotNull
-  @Override
   public Player player() {
     return this.player;
-  }
-
-  @NotNull
-  @Override
-  public Optional<SlotIterator> iterator(@NotNull final String id) {
-    return Optional.ofNullable(this.iterators.get(id));
-  }
-
-  @Nullable
-  @Override
-  public <T> T getProperty(@NotNull final String name) {
-    //noinspection unchecked
-    return (T) this.properties.get(name);
-  }
-
-  @NotNull
-  @Override
-  public <T> T getPropertyOrDefault(@NotNull final String name, @NotNull final T def) {
-    //noinspection unchecked
-    return (T) this.properties.getOrDefault(name, def);
-  }
-
-  @NotNull
-  @Override
-  public SlotIterator newIterator(@NotNull final String id, @NotNull final SlotIterator.Type type,
-                                  final int startRow, final int startColumn) {
-    final SlotIterator iterator = this.newIterator(type, startRow, startColumn);
-    this.iterators.put(id, iterator);
-    return iterator;
   }
 
   @NotNull
@@ -173,13 +190,6 @@ public final class BasicInventoryContents implements InventoryContents {
 
   @NotNull
   @Override
-  public InventoryContents setProperty(@NotNull final String name, @NotNull final Object value) {
-    this.properties.put(name, value);
-    return this;
-  }
-
-  @NotNull
-  @Override
   public InventoryContents setEditable(@NotNull final SlotPos slot, final boolean editable) {
     if (editable) {
       this.editableSlots.add(slot);
@@ -189,9 +199,11 @@ public final class BasicInventoryContents implements InventoryContents {
     return this;
   }
 
+  @NotNull
   @Override
-  public boolean isEditable(@NotNull final SlotPos slot) {
-    return this.editableSlots.contains(slot);
+  public InventoryContents setProperty(@NotNull final String name, @NotNull final Object value) {
+    this.properties.put(name, value);
+    return this;
   }
 
   /**
@@ -202,8 +214,9 @@ public final class BasicInventoryContents implements InventoryContents {
    * @param item the item to update.
    */
   private void update(final int row, final int column, @Nullable final ItemStack item) {
-    if (this.page().inventory().getOpenedPlayers(this.page()).contains(this.player())) {
-      this.getTopInventory().setItem(this.page().column() * row + column, item);
+    final Page page = this.page();
+    if (SmartInventory.getOpenedPlayers(page).contains(this.player())) {
+      this.getTopInventory().setItem(page.column() * row + column, item);
     }
   }
 }

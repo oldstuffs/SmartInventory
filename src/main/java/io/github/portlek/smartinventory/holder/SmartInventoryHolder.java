@@ -23,44 +23,78 @@
  *
  */
 
-package io.github.portlek.smartinventory.opener;
+package io.github.portlek.smartinventory.holder;
 
 import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.InventoryOpener;
 import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.holder.SmartInventoryHolder;
-import org.bukkit.Bukkit;
-import org.bukkit.event.inventory.InventoryType;
+import io.github.portlek.smartinventory.SmartHolder;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * an {@link InventoryType#CHEST} implementation for {@link InventoryOpener}.
+ * a class that implements {@link SmartHolder}.
  */
-public final class ChestInventoryOpener implements InventoryOpener {
+public final class SmartInventoryHolder implements SmartHolder {
+
+  /**
+   * the contents.
+   */
+  @NotNull
+  private final InventoryContents contents;
+
+  /**
+   * the active.
+   */
+  private boolean active = true;
+
+  /**
+   * ctor.
+   *
+   * @param contents the contents.
+   */
+  public SmartInventoryHolder(@NotNull final InventoryContents contents) {
+    this.contents = contents;
+  }
 
   @NotNull
   @Override
-  public Inventory open(@NotNull final InventoryContents contents) {
-    final Page page = contents.page();
-    if (page.column() != 9) {
-      throw new IllegalArgumentException(
-        String.format("The column count for the chest inventory must be 9, found: %s.", page.column()));
-    }
-    if (page.row() < 1 && page.row() > 6) {
-      throw new IllegalArgumentException(
-        String.format("The row count for the chest inventory must be between 1 and 6, found: %s", page.row()));
-    }
-    final SmartInventoryHolder holder = new SmartInventoryHolder(contents);
-    holder.setActive(true);
-    final Inventory handle = Bukkit.createInventory(holder, page.row() * page.column(), page.title());
-    this.fill(handle, contents);
-    contents.player().openInventory(handle);
-    return handle;
+  public InventoryContents getContents() {
+    return this.contents;
+  }
+
+  @NotNull
+  @Override
+  public Page getPage() {
+    return this.contents.page();
+  }
+
+  @NotNull
+  @Override
+  public Player getPlayer() {
+    return this.contents.player();
+  }
+
+  @NotNull
+  @Override
+  public Plugin getPlugin() {
+    return this.getPage().inventory().getPlugin();
   }
 
   @Override
-  public boolean supports(@NotNull final InventoryType type) {
-    return type == InventoryType.CHEST || type == InventoryType.ENDER_CHEST;
+  public boolean isActive() {
+    return this.active;
+  }
+
+  @Override
+  public void setActive(final boolean active) {
+    this.active = active;
+  }
+
+  @NotNull
+  @Override
+  public Inventory getInventory() {
+    return this.contents.getTopInventory();
   }
 }

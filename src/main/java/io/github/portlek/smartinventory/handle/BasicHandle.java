@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -72,16 +72,16 @@ public final class BasicHandle<T extends SmartEvent> implements Handle<T> {
     this.requirements = Collections.unmodifiableList(requirements);
   }
 
-  @NotNull
-  @Override
-  public Class<T> type() {
-    return this.clazz;
-  }
-
   @Override
   public void accept(@NotNull final T t) {
     if (this.requirements.stream().allMatch(req -> req.test(t))) {
       this.consumer.accept(t);
     }
+  }
+
+  @NotNull
+  @Override
+  public Class<T> type() {
+    return this.clazz;
   }
 }

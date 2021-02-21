@@ -23,6 +23,6 @@
  *
  */
 /**
- * the package that contains interfaces of all the events.
+ * the package that contains implementation of {@link io.github.portlek.smartinventory.SmartHolder}.
  */
-package io.github.portlek.smartinventory.event.abs;
+package io.github.portlek.smartinventory.holder;

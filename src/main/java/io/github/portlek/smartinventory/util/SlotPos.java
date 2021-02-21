@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,14 +34,14 @@ import org.jetbrains.annotations.NotNull;
 public final class SlotPos {
 
   /**
-   * the row.
-   */
-  private final int row;
-
-  /**
    * the column.
    */
   private final int column;
+
+  /**
+   * the row.
+   */
+  private final int row;
 
   /**
    * ctor.
@@ -68,15 +68,6 @@ public final class SlotPos {
   }
 
   /**
-   * obtains the row row of {@code this}
-   *
-   * @return the row.
-   */
-  public int getRow() {
-    return this.row;
-  }
-
-  /**
    * obtains the column row of {@code this}
    *
    * @return the column.
@@ -85,21 +76,31 @@ public final class SlotPos {
     return this.column;
   }
 
+  /**
+   * obtains the row row of {@code this}
+   *
+   * @return the row.
+   */
+  public int getRow() {
+    return this.row;
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(this.row, this.column);
   }
 
   @Override
-  public boolean equals(final Object o) {
-    if (this == o) {
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
     }
-    if (o == null || this.getClass() != o.getClass()) {
+    if (obj == null || this.getClass() != obj.getClass()) {
       return false;
     }
-    final SlotPos slotPos = (SlotPos) o;
-    return this.row == slotPos.row && this.column == slotPos.column;
+    final SlotPos slotPos = (SlotPos) obj;
+    return this.row == slotPos.row &&
+      this.column == slotPos.column;
   }
 
   @Override

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,32 +27,23 @@ package io.github.portlek.smartinventory.listener;
 
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PgOpenEvent;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents inventory open listeners.
+ */
 public final class InventoryOpenListener implements Listener {
 
-  @NotNull
-  private final SmartInventory inventory;
-
-  public InventoryOpenListener(@NotNull final SmartInventory inventory) {
-    this.inventory = inventory;
-  }
-
+  /**
+   * listens the inventory open events.
+   *
+   * @param event the event to listen.
+   */
   @EventHandler
   public void onInventoryOpen(final InventoryOpenEvent event) {
-    final HumanEntity human = event.getPlayer();
-    if (!(human instanceof Player)) {
-      return;
-    }
-    final Player player = (Player) human;
-    this.inventory.getPage(player).ifPresent(page ->
-      this.inventory.getContents(player)
-        .map(contents -> new PgOpenEvent(this.inventory.getPlugin(), event, contents))
-        .ifPresent(page::accept));
+    SmartInventory.getHolder(event.getPlayer().getUniqueId()).ifPresent(holder ->
+      holder.getPage().accept(new PgOpenEvent(holder.getPlugin(), event, holder.getContents())));
   }
 }

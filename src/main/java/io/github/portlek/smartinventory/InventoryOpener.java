@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,6 @@
 
 package io.github.portlek.smartinventory;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -34,26 +33,6 @@ import org.jetbrains.annotations.NotNull;
  * a class that opens {@link Inventory}s from the given {@link InventoryType}s.
  */
 public interface InventoryOpener {
-
-  /**
-   * opens the page for the given player.
-   *
-   * @param page the page to open.
-   * @param player the player to open.
-   *
-   * @return opened inventory itself.
-   */
-  @NotNull
-  Inventory open(@NotNull Page page, @NotNull Player player);
-
-  /**
-   * checks if the inventory type is supporting for {@code this}.
-   *
-   * @param type the type to check.
-   *
-   * @return {@code true} if the type supports the type..
-   */
-  boolean supports(@NotNull InventoryType type);
 
   /**
    * fills the given contents to the given inventory.
@@ -71,4 +50,23 @@ public interface InventoryOpener {
       }
     }
   }
+
+  /**
+   * opens the page for the given player.
+   *
+   * @param contents the contents to open.
+   *
+   * @return opened inventory itself.
+   */
+  @NotNull
+  Inventory open(@NotNull InventoryContents contents);
+
+  /**
+   * checks if the inventory type is supporting for {@code this}.
+   *
+   * @param type the type to check.
+   *
+   * @return {@code true} if the type supports the type..
+   */
+  boolean supports(@NotNull InventoryType type);
 }

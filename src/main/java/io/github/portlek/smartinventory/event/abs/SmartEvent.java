@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,12 +30,12 @@ import org.jetbrains.annotations.NotNull;
 
 public interface SmartEvent {
 
-  @NotNull
-  InventoryContents contents();
-
   default void cancel() {
   }
 
   default void close() {
   }
+
+  @NotNull
+  InventoryContents contents();
 }

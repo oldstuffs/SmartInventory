@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,22 +34,22 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ClickEvent extends IconEvent {
 
-  int row();
-
-  int column();
-
-  @NotNull
-  ClickType click();
-
   @NotNull
   InventoryAction action();
 
   @NotNull
-  InventoryType.SlotType slot();
+  ClickType click();
+
+  int column();
+
+  @NotNull
+  Optional<ItemStack> current();
 
   @NotNull
   Optional<ItemStack> cursor();
 
+  int row();
+
   @NotNull
-  Optional<ItemStack> current();
+  InventoryType.SlotType slot();
 }

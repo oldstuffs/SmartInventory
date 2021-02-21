@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,57 +25,57 @@
 
 package io.github.portlek.smartinventory.listener;
 
-import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Consumer;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents inventory close listeners.
+ */
 public final class InventoryCloseListener implements Listener {
 
+  /**
+   * the stop tick function.
+   */
   @NotNull
-  private final SmartInventory inventory;
+  private final Consumer<UUID> stopTickFunction;
 
-  public InventoryCloseListener(@NotNull final SmartInventory inventory) {
-    this.inventory = inventory;
+  /**
+   * ctor.
+   *
+   * @param stopTickFunction the stop tick function.
+   */
+  public InventoryCloseListener(@NotNull final Consumer<UUID> stopTickFunction) {
+    this.stopTickFunction = stopTickFunction;
   }
 
+  /**
+   * listens inventory close events.
+   *
+   * @param event the event to listen.
+   */
   @EventHandler
   public void onInventoryClose(final InventoryCloseEvent event) {
-    final HumanEntity human = event.getPlayer();
-    if (!(human instanceof Player)) {
-      return;
-    }
-    final Player player = (Player) human;
-    final Optional<InventoryContents> optional = this.inventory.getContents(player);
-    if (!optional.isPresent()) {
-      return;
-    }
-    final InventoryContents contents = optional.get();
-    final Page page = contents.page();
-    final PgCloseEvent close = new PgCloseEvent(contents);
-    page.accept(close);
-    if (!page.canClose(close)) {
-      Bukkit.getScheduler().runTask(this.inventory.getPlugin(), () ->
-        player.openInventory(event.getInventory()));
-      return;
-    }
-    event.getInventory().clear();
-    this.inventory.stopTick(player);
-    this.inventory.removePage(player);
-    this.inventory.removeContent(player);
-    new HashMap<>(this.inventory.getContentsByInventory()).forEach((inventory1, contents1) -> {
-      if (contents.equals(contents1)) {
-        this.inventory.removeContentByInventory(inventory1);
+    SmartInventory.getHolder(event.getPlayer().getUniqueId()).ifPresent(holder -> {
+      final Inventory inventory = event.getInventory();
+      final Page page = holder.getPage();
+      final PgCloseEvent close = new PgCloseEvent(holder.getContents());
+      page.accept(close);
+      if (!page.canClose(close)) {
+        Bukkit.getScheduler().runTask(holder.getPlugin(), () ->
+          event.getPlayer().openInventory(inventory));
+        return;
       }
+      inventory.clear();
+      this.stopTickFunction.accept(event.getPlayer().getUniqueId());
     });
   }
 }

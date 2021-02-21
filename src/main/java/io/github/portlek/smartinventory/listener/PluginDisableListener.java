@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,37 +25,29 @@
 
 package io.github.portlek.smartinventory.listener;
 
+import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PlgnDisableEvent;
-import java.util.HashMap;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents plugin disable events.
+ */
 public final class PluginDisableListener implements Listener {
 
-  static {
-    //noinspection ResultOfMethodCallIgnored
-    PlgnDisableEvent.class.getSimpleName();
-  }
-
-  @NotNull
-  private final SmartInventory inventory;
-
-  public PluginDisableListener(@NotNull final SmartInventory inventory) {
-    this.inventory = inventory;
-  }
-
+  /**
+   * listens the plugin disable events.
+   *
+   * @param event the event to listen.
+   */
   @EventHandler
   public void onPluginDisable(final PluginDisableEvent event) {
-    new HashMap<>(this.inventory.getPages()).forEach((player, page) -> {
-      this.inventory.getContents(player).ifPresent(contents ->
-        page.accept(new PlgnDisableEvent(contents)));
-      page.close(player);
+    SmartInventory.getHolders().forEach(holder -> {
+      final Page page = holder.getPage();
+      page.accept(new PlgnDisableEvent(holder.getContents()));
+      page.close(holder.getPlayer());
     });
-    this.inventory.clearPages();
-    this.inventory.clearContents();
-    this.inventory.clearContentsByInventory();
   }
 }

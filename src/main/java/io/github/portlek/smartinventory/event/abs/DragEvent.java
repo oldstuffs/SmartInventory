@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,14 +35,14 @@ import org.jetbrains.annotations.NotNull;
 public interface DragEvent extends IconEvent {
 
   @NotNull
-  DragType drag();
-
-  @NotNull
   Map<Integer, ItemStack> added();
 
   @NotNull
-  Set<Integer> slots();
+  DragType drag();
 
   @NotNull
   Optional<ItemStack> newcursor();
+
+  @NotNull
+  Set<Integer> slots();
 }

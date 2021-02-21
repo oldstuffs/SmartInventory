@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Hasan Demirtaş
+ * Copyright (c) 2021 Hasan Demirtaş
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,30 +27,43 @@ package io.github.portlek.smartinventory.listener;
 
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PlyrQuitEvent;
-import org.bukkit.entity.Player;
+import java.util.UUID;
+import java.util.function.Consumer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents player quit listeners.
+ */
 public final class PlayerQuitListener implements Listener {
 
+  /**
+   * the stop tick function.
+   */
   @NotNull
-  private final SmartInventory inventory;
+  private final Consumer<UUID> stopTickFunction;
 
-  public PlayerQuitListener(@NotNull final SmartInventory inventory) {
-    this.inventory = inventory;
+  /**
+   * ctor.
+   *
+   * @param stopTickFunction the stop tick function.
+   */
+  public PlayerQuitListener(@NotNull final Consumer<UUID> stopTickFunction) {
+    this.stopTickFunction = stopTickFunction;
   }
 
+  /**
+   * listens the player quit event.
+   *
+   * @param event the event to listen.
+   */
   @EventHandler
   public void onPlayerQuit(final PlayerQuitEvent event) {
-    final Player player = event.getPlayer();
-    this.inventory.getPage(player).ifPresent(page ->
-      this.inventory.getContents(player).ifPresent(contents ->
-        page.accept(new PlyrQuitEvent(contents))));
-    this.inventory.stopTick(player);
-    this.inventory.removePage(player);
-    this.inventory.removeContent(player);
-    this.inventory.removeContentByInventory(player.getOpenInventory().getTopInventory());
+    SmartInventory.getHolder(event.getPlayer()).ifPresent(holder -> {
+      holder.getPage().accept(new PlyrQuitEvent(holder.getContents()));
+      this.stopTickFunction.accept(event.getPlayer().getUniqueId());
+    });
   }
 }
