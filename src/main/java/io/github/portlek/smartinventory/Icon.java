@@ -226,7 +226,7 @@ public interface Icon {
   }
 
   /**
-   * adds the given {@link ClickEvent} with the requirements to the icon's handles.
+   * adds the given {@link ClickEvent} with the requirement to the icon's handles.
    *
    * @param consumer the consumer to add.
    * @param requirement the requirement to add.
@@ -266,6 +266,20 @@ public interface Icon {
   }
 
   /**
+   * adds the given {@link DragEvent} with the requirement to the icon's handles.
+   *
+   * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Icon whenDrag(@NotNull final Consumer<DragEvent> consumer,
+                        @NotNull final Predicate<DragEvent> requirement) {
+    return this.whenDrag(consumer, Collections.singletonList(requirement));
+  }
+
+  /**
    * adds the given {@link DragEvent} with the requirements to the icon's handles.
    *
    * @param consumer the consumer to add.
@@ -289,6 +303,20 @@ public interface Icon {
   @NotNull
   default Icon whenInteract(@NotNull final Consumer<IconEvent> consumer) {
     return this.whenInteract(consumer, Collections.emptyList());
+  }
+
+  /**
+   * adds the given {@link IconEvent} with the requirement to the icon's handles.
+   *
+   * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Icon whenInteract(@NotNull final Consumer<IconEvent> consumer,
+                            @NotNull final Predicate<IconEvent> requirement) {
+    return this.whenInteract(consumer, Collections.singletonList(requirement));
   }
 
   /**
