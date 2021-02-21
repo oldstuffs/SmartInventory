@@ -33,7 +33,6 @@ import io.github.portlek.smartinventory.listener.InventoryOpenListener;
 import io.github.portlek.smartinventory.listener.PlayerQuitListener;
 import io.github.portlek.smartinventory.listener.PluginDisableListener;
 import io.github.portlek.smartinventory.opener.ChestInventoryOpener;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -128,18 +127,10 @@ public interface SmartInventory {
    */
   @NotNull
   static List<Player> getOpenedPlayers(@NotNull final Page page) {
-    final List<Player> list = new ArrayList<>();
-    Bukkit.getOnlinePlayers().forEach(player -> {
-      final InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
-      if (!(holder instanceof SmartHolder)) {
-        return;
-      }
-      final SmartHolder smartHolder = (SmartHolder) holder;
-      if (page.equals(smartHolder.getPage())) {
-        list.add(player);
-      }
-    });
-    return list;
+    return SmartInventory.getHolders().stream()
+      .filter(holder -> page.equals(holder.getPage()))
+      .map(SmartHolder::getPlayer)
+      .collect(Collectors.toList());
   }
 
   /**
