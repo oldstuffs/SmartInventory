@@ -198,6 +198,7 @@ public final class BasicPage implements Page {
       this.accept(new PgCloseEvent(holder.getContents()));
       this.inventory().stopTick(player.getUniqueId());
       this.source.unsubscribe(this.provider());
+      holder.setActive(false);
       player.closeInventory();
     });
   }

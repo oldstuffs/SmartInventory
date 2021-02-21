@@ -45,12 +45,33 @@ public final class SmartInventoryHolder implements SmartHolder {
   private final InventoryContents contents;
 
   /**
+   * the active.
+   */
+  private boolean active = true;
+
+  /**
    * ctor.
    *
    * @param contents the contents.
    */
   public SmartInventoryHolder(@NotNull final InventoryContents contents) {
     this.contents = contents;
+  }
+
+  @NotNull
+  @Override
+  public Inventory getInventory() {
+    return this.contents.getTopInventory();
+  }
+
+  @Override
+  public boolean isActive() {
+    return this.active;
+  }
+
+  @Override
+  public void setActive(final boolean active) {
+    this.active = active;
   }
 
   @NotNull
@@ -75,11 +96,5 @@ public final class SmartInventoryHolder implements SmartHolder {
   @Override
   public Plugin getPlugin() {
     return this.getPage().inventory().getPlugin();
-  }
-
-  @NotNull
-  @Override
-  public Inventory getInventory() {
-    return this.contents.getTopInventory();
   }
 }

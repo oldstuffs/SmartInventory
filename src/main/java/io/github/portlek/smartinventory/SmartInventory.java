@@ -101,7 +101,8 @@ public interface SmartInventory {
     if (!(holder instanceof SmartHolder)) {
       return Optional.empty();
     }
-    return Optional.of((SmartHolder) holder);
+    return Optional.of((SmartHolder) holder)
+      .filter(SmartHolder::isActive);
   }
 
   /**
