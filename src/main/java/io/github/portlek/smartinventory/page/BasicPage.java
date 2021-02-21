@@ -32,7 +32,6 @@ import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.InventoryOpener;
 import io.github.portlek.smartinventory.InventoryProvider;
 import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.SmartHolder;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.content.BasicInventoryContents;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
@@ -49,7 +48,6 @@ import java.util.function.Predicate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -196,15 +194,12 @@ public final class BasicPage implements Page {
 
   @Override
   public void close(@NotNull final Player player) {
-    final InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
-    if (!(holder instanceof SmartHolder)) {
-      return;
-    }
-    final SmartHolder smartHolder = (SmartHolder) holder;
-    this.accept(new PgCloseEvent(smartHolder.getContents()));
-    this.inventory().stopTick(player.getUniqueId());
-    this.source.unsubscribe(this.provider());
-    player.closeInventory();
+    SmartInventory.getHolder(player).ifPresent(holder -> {
+      this.accept(new PgCloseEvent(holder.getContents()));
+      this.inventory().stopTick(player.getUniqueId());
+      this.source.unsubscribe(this.provider());
+      player.closeInventory();
+    });
   }
 
   @Override
