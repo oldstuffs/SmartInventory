@@ -26,7 +26,7 @@
 package io.github.portlek.smartinventory.listener;
 
 import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.SmartHolder;
+import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PgCloseEvent;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -35,7 +35,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -65,21 +64,18 @@ public final class InventoryCloseListener implements Listener {
    */
   @EventHandler
   public void onInventoryClose(final InventoryCloseEvent event) {
-    final Inventory inventory = event.getInventory();
-    final InventoryHolder holder = inventory.getHolder();
-    if (!(holder instanceof SmartHolder)) {
-      return;
-    }
-    final SmartHolder smartHolder = (SmartHolder) holder;
-    final Page page = smartHolder.getPage();
-    final PgCloseEvent close = new PgCloseEvent(smartHolder.getContents());
-    page.accept(close);
-    if (!page.canClose(close)) {
-      Bukkit.getScheduler().runTask(smartHolder.getPlugin(), () ->
-        event.getPlayer().openInventory(inventory));
-      return;
-    }
-    inventory.clear();
-    this.stopTickFunction.accept(event.getPlayer().getUniqueId());
+    SmartInventory.getHolder(event.getPlayer().getUniqueId()).ifPresent(holder -> {
+      final Inventory inventory = event.getInventory();
+      final Page page = holder.getPage();
+      final PgCloseEvent close = new PgCloseEvent(holder.getContents());
+      page.accept(close);
+      if (!page.canClose(close)) {
+        Bukkit.getScheduler().runTask(holder.getPlugin(), () ->
+          event.getPlayer().openInventory(inventory));
+        return;
+      }
+      inventory.clear();
+      this.stopTickFunction.accept(event.getPlayer().getUniqueId());
+    });
   }
 }

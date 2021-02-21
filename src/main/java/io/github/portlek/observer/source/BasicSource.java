@@ -44,6 +44,11 @@ public final class BasicSource<T> implements Source<T> {
   private final Collection<Target<T>> subscriptions = new ArrayList<>();
 
   @Override
+  public void notifyTargets(@NotNull final T argument) {
+    this.subscriptions.forEach(target -> target.update(argument));
+  }
+
+  @Override
   public void subscribe(@NotNull final Target<T> target) {
     if (!this.subscriptions.contains(target)) {
       this.subscriptions.add(target);
@@ -53,10 +58,5 @@ public final class BasicSource<T> implements Source<T> {
   @Override
   public void unsubscribe(@NotNull final Target<T> target) {
     this.subscriptions.remove(target);
-  }
-
-  @Override
-  public void notifyTargets(@NotNull final T argument) {
-    this.subscriptions.forEach(target -> target.update(argument));
   }
 }

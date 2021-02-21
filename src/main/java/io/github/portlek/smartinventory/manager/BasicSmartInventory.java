@@ -32,7 +32,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.plugin.Plugin;
@@ -82,11 +81,6 @@ public final class BasicSmartInventory implements SmartInventory {
   public Collection<InventoryOpener> getOpeners() {
     return Collections.unmodifiableCollection(this.openers);
   }
-  @NotNull
-  @Override
-  public Map<UUID, BukkitRunnable> getTasks() {
-    return Collections.unmodifiableMap(this.tasks);
-  }
 
   @NotNull
   @Override
@@ -94,14 +88,15 @@ public final class BasicSmartInventory implements SmartInventory {
     return this.plugin;
   }
 
+  @NotNull
   @Override
-  public void registerOpeners(@NotNull final InventoryOpener... openers) {
-    this.openers.addAll(Arrays.asList(openers));
+  public Map<UUID, BukkitRunnable> getTasks() {
+    return Collections.unmodifiableMap(this.tasks);
   }
 
   @Override
-  public void unregisterOpeners(@NotNull final InventoryOpener... openers) {
-    this.openers.removeAll(Arrays.asList(openers));
+  public void registerOpeners(@NotNull final InventoryOpener... openers) {
+    this.openers.addAll(Arrays.asList(openers));
   }
 
   @Override
@@ -112,5 +107,10 @@ public final class BasicSmartInventory implements SmartInventory {
   @Override
   public void setTask(@NotNull final UUID uniqueId, @NotNull final BukkitRunnable task) {
     this.tasks.put(uniqueId, task);
+  }
+
+  @Override
+  public void unregisterOpeners(@NotNull final InventoryOpener... openers) {
+    this.openers.removeAll(Arrays.asList(openers));
   }
 }

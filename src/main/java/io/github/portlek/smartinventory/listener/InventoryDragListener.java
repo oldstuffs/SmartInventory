@@ -26,7 +26,7 @@
 package io.github.portlek.smartinventory.listener;
 
 import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.SmartHolder;
+import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.IcDragEvent;
 import io.github.portlek.smartinventory.util.SlotPos;
 import org.bukkit.event.EventHandler;
@@ -34,7 +34,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 
 /**
  * a class that represents inventory drag listeners.
@@ -48,22 +47,19 @@ public final class InventoryDragListener implements Listener {
    */
   @EventHandler(priority = EventPriority.LOW)
   public void onInventoryDrag(final InventoryDragEvent event) {
-    final Inventory inventory = event.getInventory();
-    final InventoryHolder holder = inventory.getHolder();
-    if (!(holder instanceof SmartHolder)) {
-      return;
-    }
-    final SmartHolder smartHolder = (SmartHolder) holder;
-    final InventoryContents contents = smartHolder.getContents();
-    for (final int slot : event.getRawSlots()) {
-      final SlotPos pos = SlotPos.of(slot / 9, slot % 9);
-      contents.get(pos).ifPresent(icon ->
-        icon.accept(new IcDragEvent(smartHolder.getPlugin(), event, contents, icon)));
-      if (slot >= inventory.getSize() || contents.isEditable(pos)) {
-        continue;
+    SmartInventory.getHolder(event.getWhoClicked().getUniqueId()).ifPresent(holder -> {
+      final Inventory inventory = event.getInventory();
+      final InventoryContents contents = holder.getContents();
+      for (final int slot : event.getRawSlots()) {
+        final SlotPos pos = SlotPos.of(slot / 9, slot % 9);
+        contents.get(pos).ifPresent(icon ->
+          icon.accept(new IcDragEvent(holder.getPlugin(), event, contents, icon)));
+        if (slot >= inventory.getSize() || contents.isEditable(pos)) {
+          continue;
+        }
+        event.setCancelled(true);
+        break;
       }
-      event.setCancelled(true);
-      break;
-    }
+    });
   }
 }

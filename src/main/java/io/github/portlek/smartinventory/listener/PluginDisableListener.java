@@ -26,13 +26,11 @@
 package io.github.portlek.smartinventory.listener;
 
 import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.SmartHolder;
+import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PlgnDisableEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.inventory.InventoryHolder;
 
 /**
  * a class that represents plugin disable events.
@@ -46,15 +44,10 @@ public final class PluginDisableListener implements Listener {
    */
   @EventHandler
   public void onPluginDisable(final PluginDisableEvent event) {
-    Bukkit.getOnlinePlayers().forEach(player -> {
-      final InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
-      if (!(holder instanceof SmartHolder)) {
-        return;
-      }
-      final SmartHolder smartHolder = (SmartHolder) holder;
-      final Page page = smartHolder.getPage();
-      page.accept(new PlgnDisableEvent(smartHolder.getContents()));
-      page.close(player);
+    SmartInventory.getHolders().forEach(holder -> {
+      final Page page = holder.getPage();
+      page.accept(new PlgnDisableEvent(holder.getContents()));
+      page.close(holder.getPlayer());
     });
   }
 }

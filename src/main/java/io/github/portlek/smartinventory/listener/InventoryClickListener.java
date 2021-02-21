@@ -27,7 +27,7 @@ package io.github.portlek.smartinventory.listener;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.Page;
-import io.github.portlek.smartinventory.SmartHolder;
+import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.IcClickEvent;
 import io.github.portlek.smartinventory.event.PgBottomClickEvent;
 import io.github.portlek.smartinventory.event.PgClickEvent;
@@ -41,7 +41,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -57,47 +56,44 @@ public final class InventoryClickListener implements Listener {
    */
   @EventHandler
   public void onInventoryClick(final InventoryClickEvent event) {
-    final InventoryHolder holder = event.getInventory().getHolder();
-    if (!(holder instanceof SmartHolder)) {
-      return;
-    }
-    if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
-      event.setCancelled(true);
-      return;
-    }
-    final SmartHolder smartHolder = (SmartHolder) holder;
-    final Page page = smartHolder.getPage();
-    final InventoryContents contents = smartHolder.getContents();
-    final Plugin plugin = smartHolder.getPlugin();
-    final Inventory clicked = event.getClickedInventory();
-    if (clicked == null) {
-      page.accept(new PgOutsideClickEvent(plugin, event, contents));
-      return;
-    }
-    final HumanEntity player = event.getWhoClicked();
-    if (clicked.equals(player.getOpenInventory().getBottomInventory())) {
-      page.accept(new PgBottomClickEvent(plugin, event, contents));
-      return;
-    }
-    final ItemStack current = event.getCurrentItem();
-    if (current == null || current.getType() == Material.AIR) {
-      page.accept(new PgClickEvent(plugin, event, contents));
-      return;
-    }
-    final int slot = event.getSlot();
-    final int row = slot / 9;
-    final int column = slot % 9;
-    if (!page.checkBounds(row, column)) {
-      return;
-    }
-    final SlotPos slotPos = SlotPos.of(row, column);
-    if (!contents.isEditable(slotPos)) {
-      event.setCancelled(true);
-    }
-    contents.get(slotPos).ifPresent(item ->
-      item.accept(new IcClickEvent(plugin, event, contents, item)));
-    if (!contents.isEditable(slotPos) && player instanceof Player) {
-      ((Player) player).updateInventory();
-    }
+    SmartInventory.getHolder(event.getWhoClicked().getUniqueId()).ifPresent(holder -> {
+      if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
+        event.setCancelled(true);
+        return;
+      }
+      final Page page = holder.getPage();
+      final InventoryContents contents = holder.getContents();
+      final Plugin plugin = holder.getPlugin();
+      final Inventory clicked = event.getClickedInventory();
+      if (clicked == null) {
+        page.accept(new PgOutsideClickEvent(plugin, event, contents));
+        return;
+      }
+      final HumanEntity player = event.getWhoClicked();
+      if (clicked.equals(player.getOpenInventory().getBottomInventory())) {
+        page.accept(new PgBottomClickEvent(plugin, event, contents));
+        return;
+      }
+      final ItemStack current = event.getCurrentItem();
+      if (current == null || current.getType() == Material.AIR) {
+        page.accept(new PgClickEvent(plugin, event, contents));
+        return;
+      }
+      final int slot = event.getSlot();
+      final int row = slot / 9;
+      final int column = slot % 9;
+      if (!page.checkBounds(row, column)) {
+        return;
+      }
+      final SlotPos slotPos = SlotPos.of(row, column);
+      if (!contents.isEditable(slotPos)) {
+        event.setCancelled(true);
+      }
+      contents.get(slotPos).ifPresent(item ->
+        item.accept(new IcClickEvent(plugin, event, contents, item)));
+      if (!contents.isEditable(slotPos) && player instanceof Player) {
+        ((Player) player).updateInventory();
+      }
+    });
   }
 }

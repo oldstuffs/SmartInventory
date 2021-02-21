@@ -25,15 +25,13 @@
 
 package io.github.portlek.smartinventory.listener;
 
-import io.github.portlek.smartinventory.SmartHolder;
+import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PlyrQuitEvent;
 import java.util.UUID;
 import java.util.function.Consumer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -63,13 +61,9 @@ public final class PlayerQuitListener implements Listener {
    */
   @EventHandler
   public void onPlayerQuit(final PlayerQuitEvent event) {
-    final Player player = event.getPlayer();
-    final InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
-    if (!(holder instanceof SmartHolder)) {
-      return;
-    }
-    final SmartHolder smartHolder = (SmartHolder) holder;
-    smartHolder.getPage().accept(new PlyrQuitEvent(smartHolder.getContents()));
-    this.stopTickFunction.accept(player.getUniqueId());
+    SmartInventory.getHolder(event.getPlayer()).ifPresent(holder -> {
+      holder.getPage().accept(new PlyrQuitEvent(holder.getContents()));
+      this.stopTickFunction.accept(event.getPlayer().getUniqueId());
+    });
   }
 }

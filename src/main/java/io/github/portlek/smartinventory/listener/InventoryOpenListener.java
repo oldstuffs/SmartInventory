@@ -25,12 +25,11 @@
 
 package io.github.portlek.smartinventory.listener;
 
-import io.github.portlek.smartinventory.SmartHolder;
+import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PgOpenEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.inventory.InventoryHolder;
 
 /**
  * a class that represents inventory open listeners.
@@ -44,11 +43,7 @@ public final class InventoryOpenListener implements Listener {
    */
   @EventHandler
   public void onInventoryOpen(final InventoryOpenEvent event) {
-    final InventoryHolder holder = event.getInventory().getHolder();
-    if (!(holder instanceof SmartHolder)) {
-      return;
-    }
-    final SmartHolder smartHolder = (SmartHolder) holder;
-    smartHolder.getPage().accept(new PgOpenEvent(smartHolder.getPlugin(), event, smartHolder.getContents()));
+    SmartInventory.getHolder(event.getPlayer().getUniqueId()).ifPresent(holder ->
+      holder.getPage().accept(new PgOpenEvent(holder.getPlugin(), event, holder.getContents())));
   }
 }
