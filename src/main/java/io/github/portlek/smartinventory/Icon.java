@@ -229,6 +229,20 @@ public interface Icon {
    * adds the given {@link ClickEvent} with the requirements to the icon's handles.
    *
    * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Icon whenClick(@NotNull final Consumer<ClickEvent> consumer,
+                         @NotNull final Predicate<ClickEvent> requirement) {
+    return this.handle(ClickEvent.class, consumer, Collections.singletonList(requirement));
+  }
+
+  /**
+   * adds the given {@link ClickEvent} with the requirements to the icon's handles.
+   *
+   * @param consumer the consumer to add.
    * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.

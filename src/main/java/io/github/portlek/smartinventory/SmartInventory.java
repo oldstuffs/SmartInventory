@@ -129,7 +129,7 @@ public interface SmartInventory {
   @NotNull
   static List<Player> getOpenedPlayers(@NotNull final Page page) {
     return SmartInventory.getHolders().stream()
-      .filter(holder -> page.equals(holder.getPage()))
+      .filter(holder -> page.id().equals(holder.getPage().id()))
       .map(SmartHolder::getPlayer)
       .collect(Collectors.toList());
   }

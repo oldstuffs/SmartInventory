@@ -84,10 +84,7 @@ public final class BasicIcon implements Icon {
     final InventoryContents contents = event.contents();
     if (this.canSee.test(contents) && this.canUse.test(contents)) {
       this.handles.stream()
-        .filter(target -> {
-//        return target.getType().isAssignableFrom(event.getClass())
-          return true;
-        })
+        .filter(target -> target.type().isAssignableFrom(event.getClass()))
         .map(target -> (Handle<T>) target)
         .forEach(target -> target.accept(event));
     }

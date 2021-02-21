@@ -42,7 +42,6 @@ import io.github.portlek.smartinventory.event.abs.PageEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
@@ -354,37 +353,5 @@ public final class BasicPage implements Page {
   public Page title(@NotNull final String title) {
     this.title = title;
     return this;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(this.handles, this.inventory, this.source, this.type, this.async, this.canClose, this.column,
-      this.id, this.parent, this.provider, this.row, this.startDelay, this.tick, this.tickEnable, this.title);
-  }
-
-  @Override
-  public boolean equals(final Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || this.getClass() != obj.getClass()) {
-      return false;
-    }
-    final BasicPage page = (BasicPage) obj;
-    return this.async == page.async &&
-      this.column == page.column &&
-      this.row == page.row &&
-      this.startDelay == page.startDelay &&
-      this.tick == page.tick &&
-      this.tickEnable == page.tickEnable &&
-      Objects.equals(this.handles, page.handles) &&
-      this.inventory.equals(page.inventory) &&
-      Objects.equals(this.source, page.source) &&
-      this.type == page.type &&
-      this.canClose.equals(page.canClose) &&
-      this.id.equals(page.id) &&
-      Objects.equals(this.parent, page.parent) &&
-      this.provider.equals(page.provider) &&
-      this.title.equals(page.title);
   }
 }

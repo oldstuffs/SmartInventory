@@ -438,6 +438,20 @@ public interface Page {
    * adds the given consumer as a bottom inventory click event.
    *
    * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Page whenBottomClick(@NotNull final Consumer<BottomClickEvent> consumer,
+                               @NotNull final Predicate<BottomClickEvent> requirement) {
+    return this.whenBottomClick(consumer, Collections.singletonList(requirement));
+  }
+
+  /**
+   * adds the given consumer as a bottom inventory click event.
+   *
+   * @param consumer the consumer to add.
    * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
@@ -458,6 +472,20 @@ public interface Page {
   @NotNull
   default Page whenClose(@NotNull final Consumer<CloseEvent> consumer) {
     return this.whenClose(consumer, Collections.emptyList());
+  }
+
+  /**
+   * adds the given consumer as a close event.
+   *
+   * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Page whenClose(@NotNull final Consumer<CloseEvent> consumer,
+                         @NotNull final Predicate<CloseEvent> requirement) {
+    return this.whenClose(consumer, Collections.singletonList(requirement));
   }
 
   /**
@@ -490,6 +518,20 @@ public interface Page {
    * adds the given consumer as a empty slot click event.
    *
    * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Page whenEmptyClick(@NotNull final Consumer<PageClickEvent> consumer,
+                              @NotNull final Predicate<PageClickEvent> requirement) {
+    return this.whenEmptyClick(consumer, Collections.singletonList(requirement));
+  }
+
+  /**
+   * adds the given consumer as a empty slot click event.
+   *
+   * @param consumer the consumer to add.
    * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
@@ -510,6 +552,19 @@ public interface Page {
   @NotNull
   default Page whenInit(@NotNull final Consumer<InitEvent> consumer) {
     return this.whenInit(consumer, Collections.emptyList());
+  }
+
+  /**
+   * adds the given consumer as a init event.
+   *
+   * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Page whenInit(@NotNull final Consumer<InitEvent> consumer, @NotNull final Predicate<InitEvent> requirement) {
+    return this.whenInit(consumer, Collections.singletonList(requirement));
   }
 
   /**
@@ -542,6 +597,20 @@ public interface Page {
    * adds the given consumer as a open event.
    *
    * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Page whenOpen(@NotNull final Consumer<OpenEvent> consumer,
+                        @NotNull final Predicate<OpenEvent> requirement) {
+    return this.whenOpen(consumer, Collections.singletonList(requirement));
+  }
+
+  /**
+   * adds the given consumer as a open event.
+   *
+   * @param consumer the consumer to add.
    * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
@@ -562,6 +631,20 @@ public interface Page {
   @NotNull
   default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer) {
     return this.whenOutsideClick(consumer, Collections.emptyList());
+  }
+
+  /**
+   * adds the given consumer as a outside inventory click event.
+   *
+   * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Page whenOutsideClick(@NotNull final Consumer<OutsideClickEvent> consumer,
+                                @NotNull final Predicate<OutsideClickEvent> requirement) {
+    return this.whenOutsideClick(consumer, Collections.singletonList(requirement));
   }
 
   /**
@@ -594,6 +677,19 @@ public interface Page {
    * adds the given consumer as a tick event.
    *
    * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Page whenTick(@NotNull final Consumer<TickEvent> consumer, @NotNull final Predicate<TickEvent> requirement) {
+    return this.whenTick(consumer, Collections.singletonList(requirement));
+  }
+
+  /**
+   * adds the given consumer as a tick event.
+   *
+   * @param consumer the consumer to add.
    * @param requirements the requirements to add.
    *
    * @return {@code this}, for chained calls.
@@ -614,6 +710,20 @@ public interface Page {
   @NotNull
   default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer) {
     return this.whenUpdate(consumer, Collections.emptyList());
+  }
+
+  /**
+   * adds the given consumer as a update event.
+   *
+   * @param consumer the consumer to add.
+   * @param requirement the requirement to add.
+   *
+   * @return {@code this}, for chained calls.
+   */
+  @NotNull
+  default Page whenUpdate(@NotNull final Consumer<UpdateEvent> consumer,
+                          @NotNull final Predicate<UpdateEvent> requirement) {
+    return this.handle(UpdateEvent.class, consumer, Collections.singletonList(requirement));
   }
 
   /**
