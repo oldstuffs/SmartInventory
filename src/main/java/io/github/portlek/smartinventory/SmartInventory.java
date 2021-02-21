@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -67,11 +68,11 @@ public interface SmartInventory {
   /**
    * all listener to register.
    */
-  Function<SmartInventory, List<Listener>> LISTENERS = inventory -> Arrays.asList(
+  Function<Consumer<UUID>, List<Listener>> LISTENERS = function -> Arrays.asList(
     new InventoryClickListener(),
     new InventoryOpenListener(),
-    new InventoryCloseListener(inventory::stopTick),
-    new PlayerQuitListener(inventory::stopTick),
+    new InventoryCloseListener(function),
+    new PlayerQuitListener(function),
     new PluginDisableListener(),
     new InventoryDragListener());
 
@@ -231,7 +232,7 @@ public interface SmartInventory {
    * initiates the manager.
    */
   default void init() {
-    SmartInventory.LISTENERS.apply(this).forEach(listener ->
+    SmartInventory.LISTENERS.apply(this::stopTick).forEach(listener ->
       Bukkit.getPluginManager().registerEvents(listener, this.getPlugin()));
   }
 
