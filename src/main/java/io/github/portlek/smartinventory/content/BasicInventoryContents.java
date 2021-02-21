@@ -32,6 +32,7 @@ import io.github.portlek.smartinventory.Pagination;
 import io.github.portlek.smartinventory.SlotIterator;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.util.SlotPos;
+import io.github.portlek.smartinventory.util.TitleUpdater;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -204,6 +205,11 @@ public final class BasicInventoryContents implements InventoryContents {
   public InventoryContents setProperty(@NotNull final String name, @NotNull final Object value) {
     this.properties.put(name, value);
     return this;
+  }
+
+  @Override
+  public void updateTitle(@NotNull final String newTitle) {
+    TitleUpdater.updateInventory(this.player, newTitle);
   }
 
   /**
