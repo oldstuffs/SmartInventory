@@ -1096,4 +1096,11 @@ public interface InventoryContents {
     }
     return position;
   }
+
+  /**
+   * updates the title of the player's page.
+   *
+   * @param newTitle the new title to update.
+   */
+  void updateTitle(@NotNull String newTitle);
 }
