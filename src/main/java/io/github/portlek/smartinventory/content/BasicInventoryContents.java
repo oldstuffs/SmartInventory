@@ -118,6 +118,9 @@ public final class BasicInventoryContents implements InventoryContents {
   @Nullable
   @Override
   public <T> T getProperty(@NotNull final String name) {
+    if (!this.properties.containsKey(name)) {
+      return null;
+    }
     //noinspection unchecked
     return (T) this.properties.get(name);
   }
