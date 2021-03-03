@@ -74,6 +74,12 @@ public final class IcDragEvent implements DragEvent {
 
   @NotNull
   @Override
+  public InventoryDragEvent getEvent() {
+    return this.event;
+  }
+
+  @NotNull
+  @Override
   public Optional<ItemStack> newcursor() {
     return Optional.ofNullable(this.event.getCursor());
   }

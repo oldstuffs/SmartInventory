@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.bukkit.event.inventory.DragType;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,6 +40,14 @@ public interface DragEvent extends IconEvent {
 
   @NotNull
   DragType drag();
+
+  /**
+   * obtains the event.
+   *
+   * @return event.
+   */
+  @NotNull
+  InventoryDragEvent getEvent();
 
   @NotNull
   Optional<ItemStack> newcursor();

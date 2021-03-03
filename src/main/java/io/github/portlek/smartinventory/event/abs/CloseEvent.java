@@ -25,6 +25,16 @@
 
 package io.github.portlek.smartinventory.event.abs;
 
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.jetbrains.annotations.NotNull;
+
 public interface CloseEvent extends PageEvent {
 
+  /**
+   * obtains the event.
+   *
+   * @return event.
+   */
+  @NotNull
+  InventoryCloseEvent getEvent();
 }

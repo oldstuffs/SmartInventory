@@ -66,4 +66,10 @@ public final class PgBottomClickEvent implements BottomClickEvent {
   public InventoryContents contents() {
     return this.contents;
   }
+
+  @NotNull
+  @Override
+  public InventoryClickEvent getEvent() {
+    return this.event;
+  }
 }

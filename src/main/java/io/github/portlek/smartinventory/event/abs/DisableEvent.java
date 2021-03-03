@@ -25,6 +25,16 @@
 
 package io.github.portlek.smartinventory.event.abs;
 
+import org.bukkit.event.server.PluginDisableEvent;
+import org.jetbrains.annotations.NotNull;
+
 public interface DisableEvent extends PageEvent {
 
+  /**
+   * obtains the event.
+   *
+   * @return event.
+   */
+  @NotNull
+  PluginDisableEvent getEvent();
 }

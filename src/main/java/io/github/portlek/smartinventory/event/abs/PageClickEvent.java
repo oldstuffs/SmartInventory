@@ -25,6 +25,16 @@
 
 package io.github.portlek.smartinventory.event.abs;
 
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.jetbrains.annotations.NotNull;
+
 public interface PageClickEvent extends PageEvent {
 
+  /**
+   * obtains the event.
+   *
+   * @return event.
+   */
+  @NotNull
+  InventoryClickEvent getEvent();
 }

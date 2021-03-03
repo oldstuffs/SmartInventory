@@ -25,6 +25,16 @@
 
 package io.github.portlek.smartinventory.event.abs;
 
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
+
 public interface QuitEvent extends PageEvent {
 
+  /**
+   * obtains the event.
+   *
+   * @return event.
+   */
+  @NotNull
+  PlayerQuitEvent getEvent();
 }

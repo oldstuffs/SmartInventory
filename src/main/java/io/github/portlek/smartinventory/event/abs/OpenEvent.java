@@ -25,6 +25,16 @@
 
 package io.github.portlek.smartinventory.event.abs;
 
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.jetbrains.annotations.NotNull;
+
 public interface OpenEvent extends PageEvent {
 
+  /**
+   * obtains the event.
+   *
+   * @return event.
+   */
+  @NotNull
+  InventoryOpenEvent getEvent();
 }

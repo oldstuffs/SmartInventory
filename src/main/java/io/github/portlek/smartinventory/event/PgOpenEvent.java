@@ -66,4 +66,10 @@ public final class PgOpenEvent implements OpenEvent {
   public InventoryContents contents() {
     return this.contents;
   }
+
+  @NotNull
+  @Override
+  public InventoryOpenEvent getEvent() {
+    return this.event;
+  }
 }
