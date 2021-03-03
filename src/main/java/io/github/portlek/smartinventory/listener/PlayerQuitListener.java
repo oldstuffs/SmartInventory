@@ -62,7 +62,7 @@ public final class PlayerQuitListener implements Listener {
   @EventHandler
   public void onPlayerQuit(final PlayerQuitEvent event) {
     SmartInventory.getHolder(event.getPlayer()).ifPresent(holder -> {
-      holder.getPage().accept(new PlyrQuitEvent(holder.getContents()));
+      holder.getPage().accept(new PlyrQuitEvent(holder.getContents(), event));
       this.stopTickFunction.accept(event.getPlayer().getUniqueId());
     });
   }

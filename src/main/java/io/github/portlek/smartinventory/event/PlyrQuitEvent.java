@@ -27,6 +27,7 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.QuitEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
 public final class PlyrQuitEvent implements QuitEvent {
@@ -34,13 +35,26 @@ public final class PlyrQuitEvent implements QuitEvent {
   @NotNull
   private final InventoryContents contents;
 
-  public PlyrQuitEvent(@NotNull final InventoryContents contents) {
+  /**
+   * the event.
+   */
+  @NotNull
+  private final PlayerQuitEvent event;
+
+  public PlyrQuitEvent(@NotNull final InventoryContents contents, @NotNull final PlayerQuitEvent event) {
     this.contents = contents;
+    this.event = event;
   }
 
   @NotNull
   @Override
   public InventoryContents contents() {
     return this.contents;
+  }
+
+  @NotNull
+  @Override
+  public PlayerQuitEvent getEvent() {
+    return this.event;
   }
 }

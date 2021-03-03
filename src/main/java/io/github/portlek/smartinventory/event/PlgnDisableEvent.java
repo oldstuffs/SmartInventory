@@ -27,6 +27,7 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.DisableEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.jetbrains.annotations.NotNull;
 
 public final class PlgnDisableEvent implements DisableEvent {
@@ -34,13 +35,26 @@ public final class PlgnDisableEvent implements DisableEvent {
   @NotNull
   private final InventoryContents contents;
 
-  public PlgnDisableEvent(@NotNull final InventoryContents contents) {
+  /**
+   * the event.
+   */
+  @NotNull
+  private final PluginDisableEvent event;
+
+  public PlgnDisableEvent(@NotNull final InventoryContents contents, @NotNull final PluginDisableEvent event) {
     this.contents = contents;
+    this.event = event;
   }
 
   @NotNull
   @Override
   public InventoryContents contents() {
     return this.contents;
+  }
+
+  @NotNull
+  @Override
+  public PluginDisableEvent getEvent() {
+    return this.event;
   }
 }

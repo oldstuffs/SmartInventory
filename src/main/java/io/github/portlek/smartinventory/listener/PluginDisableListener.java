@@ -46,7 +46,7 @@ public final class PluginDisableListener implements Listener {
   public void onPluginDisable(final PluginDisableEvent event) {
     SmartInventory.getHolders().forEach(holder -> {
       final Page page = holder.getPage();
-      page.accept(new PlgnDisableEvent(holder.getContents()));
+      page.accept(new PlgnDisableEvent(holder.getContents(), event));
       page.close(holder.getPlayer());
     });
   }

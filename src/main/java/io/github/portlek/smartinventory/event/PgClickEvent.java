@@ -66,4 +66,10 @@ public final class PgClickEvent implements PageClickEvent {
   public InventoryContents contents() {
     return this.contents;
   }
+
+  @NotNull
+  @Override
+  public InventoryClickEvent getEvent() {
+    return this.event;
+  }
 }

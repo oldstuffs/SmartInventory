@@ -89,6 +89,12 @@ public final class IcClickEvent implements ClickEvent {
     return Optional.ofNullable(this.event.getCursor());
   }
 
+  @NotNull
+  @Override
+  public InventoryClickEvent getEvent() {
+    return this.event;
+  }
+
   @Override
   public int row() {
     return this.event.getSlot() / 9;

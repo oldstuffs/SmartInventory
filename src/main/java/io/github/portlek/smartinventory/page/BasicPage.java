@@ -45,6 +45,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -194,7 +195,7 @@ public final class BasicPage implements Page {
   @Override
   public void close(@NotNull final Player player) {
     SmartInventory.getHolder(player).ifPresent(holder -> {
-      this.accept(new PgCloseEvent(holder.getContents()));
+      this.accept(new PgCloseEvent(holder.getContents(), new InventoryCloseEvent(player.getOpenInventory())));
       this.inventory().stopTick(player.getUniqueId());
       this.source.unsubscribe(this.provider());
       holder.setActive(false);
