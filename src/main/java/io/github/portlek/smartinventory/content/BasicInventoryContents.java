@@ -33,6 +33,7 @@ import io.github.portlek.smartinventory.SlotIterator;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.util.SlotPos;
 import io.github.portlek.smartinventory.util.TitleUpdater;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -116,21 +117,10 @@ public final class BasicInventoryContents implements InventoryContents {
     return this.contents.clone();
   }
 
-  @Nullable
-  @Override
-  public <T> T getProperty(@NotNull final String name) {
-    if (!this.properties.containsKey(name)) {
-      return null;
-    }
-    //noinspection unchecked
-    return (T) this.properties.get(name);
-  }
-
   @NotNull
   @Override
-  public <T> T getPropertyOrDefault(@NotNull final String name, @NotNull final T def) {
-    //noinspection unchecked
-    return (T) this.properties.getOrDefault(name, def);
+  public Map<String, Object> getProperties() {
+    return Collections.unmodifiableMap(this.properties);
   }
 
   @Override
@@ -220,9 +210,8 @@ public final class BasicInventoryContents implements InventoryContents {
    * @param item the item to update.
    */
   private void update(final int row, final int column, @Nullable final ItemStack item) {
-    final Page page = this.page();
-    if (SmartInventory.getOpenedPlayers(page).contains(this.player())) {
-      this.getTopInventory().setItem(page.column() * row + column, item);
+    if (SmartInventory.getOpenedPlayers(this.page).contains(this.player())) {
+      this.getTopInventory().setItem(this.page.column() * row + column, item);
     }
   }
 }

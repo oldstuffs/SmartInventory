@@ -31,6 +31,7 @@ import io.github.portlek.smartinventory.util.Pattern;
 import io.github.portlek.smartinventory.util.SlotPos;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.ObjIntConsumer;
@@ -707,6 +708,14 @@ public interface InventoryContents {
   }
 
   /**
+   * obtains the properties.
+   *
+   * @return properties.
+   */
+  @NotNull
+  Map<String, Object> getProperties();
+
+  /**
    * gets the value of the property with the given name.
    *
    * @param name the property's name.
@@ -714,7 +723,14 @@ public interface InventoryContents {
    *
    * @return the property's value.
    */
-  @Nullable <T> T getProperty(@NotNull String name);
+  @Nullable
+  default <T> T getProperty(@NotNull final String name) {
+    if (!this.getProperties().containsKey(name)) {
+      return null;
+    }
+    //noinspection unchecked
+    return (T) this.getProperties().get(name);
+  }
 
   /**
    * gets the value of the property with the given name,
@@ -726,7 +742,11 @@ public interface InventoryContents {
    *
    * @return the property's value, or the given default value.
    */
-  @NotNull <T> T getPropertyOrDefault(@NotNull String name, @NotNull T def);
+  @NotNull
+  default <T> T getPropertyOrDefault(@NotNull final String name, @NotNull final T def) {
+    //noinspection unchecked
+    return (T) this.getProperties().getOrDefault(name, def);
+  }
 
   /**
    * gets player's top of the inventory.
@@ -995,7 +1015,7 @@ public interface InventoryContents {
    * re open the current page.
    */
   default void reopen() {
-    this.page().open(this.player());
+    this.page().open(this.player(), this.getProperties());
   }
 
   /**
