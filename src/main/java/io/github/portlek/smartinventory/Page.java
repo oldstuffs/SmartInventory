@@ -298,7 +298,7 @@ public interface Page {
    * @return a new {@link Inventory} instance.
    */
   @NotNull
-  Inventory open(@NotNull Player player, int page, @NotNull Map<String, Object> properties, final boolean close);
+  Inventory open(@NotNull Player player, int page, @NotNull Map<String, Object> properties, boolean close);
 
   /**
    * obtains tha parent page of {@code this}.
@@ -327,7 +327,7 @@ public interface Page {
   InventoryProvider provider();
 
   /**
-   * sets the provider to the given provider
+   * sets the provider to the given provider.
    *
    * @param provider the provider to set.
    *

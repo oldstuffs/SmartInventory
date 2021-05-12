@@ -35,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that handles and runs the given consumer after checking the requirements.
+ *
+ * @param <T> type of the event.
  */
 public interface Handle<T extends SmartEvent> extends Consumer<T>, Type<T> {
 

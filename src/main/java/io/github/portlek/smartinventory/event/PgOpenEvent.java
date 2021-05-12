@@ -27,28 +27,35 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.OpenEvent;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents page open events.
+ */
+@RequiredArgsConstructor
 public final class PgOpenEvent implements OpenEvent {
 
+  /**
+   * the contents.
+   */
   @NotNull
   private final InventoryContents contents;
 
+  /**
+   * the event.
+   */
   @NotNull
   private final InventoryOpenEvent event;
 
+  /**
+   * the plugin.
+   */
   @NotNull
   private final Plugin plugin;
-
-  public PgOpenEvent(@NotNull final Plugin plugin, @NotNull final InventoryOpenEvent event,
-                     @NotNull final InventoryContents contents) {
-    this.plugin = plugin;
-    this.event = event;
-    this.contents = contents;
-  }
 
   @Override
   public void cancel() {

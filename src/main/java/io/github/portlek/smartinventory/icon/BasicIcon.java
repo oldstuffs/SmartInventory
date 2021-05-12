@@ -32,6 +32,7 @@ import io.github.portlek.smartinventory.event.abs.IconEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * an implementation for {@link Icon}.
  */
+@RequiredArgsConstructor
 public final class BasicIcon implements Icon {
 
   /**
@@ -70,18 +72,9 @@ public final class BasicIcon implements Icon {
   @NotNull
   private ItemStack item;
 
-  /**
-   * ctor.
-   *
-   * @param item the item.
-   */
-  public BasicIcon(@NotNull final ItemStack item) {
-    this.item = item;
-  }
-
   @Override
   public <T extends IconEvent> void accept(@NotNull final T event) {
-    final InventoryContents contents = event.contents();
+    final var contents = event.contents();
     if (this.canSee.test(contents) && this.canUse.test(contents)) {
       this.handles.stream()
         .filter(target -> target.type().isAssignableFrom(event.getClass()))

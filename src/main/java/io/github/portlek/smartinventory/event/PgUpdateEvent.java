@@ -27,16 +27,20 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.UpdateEvent;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents page update events.
+ */
+@RequiredArgsConstructor
 public final class PgUpdateEvent implements UpdateEvent {
 
+  /**
+   * the contents.
+   */
   @NotNull
   private final InventoryContents contents;
-
-  public PgUpdateEvent(@NotNull final InventoryContents contents) {
-    this.contents = contents;
-  }
 
   @NotNull
   @Override

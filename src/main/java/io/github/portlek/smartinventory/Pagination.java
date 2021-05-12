@@ -59,7 +59,7 @@ public interface Pagination {
    */
   @NotNull
   default Pagination addToIterator(@NotNull final SlotIterator iterator) {
-    for (final Icon item : this.getPageIcons()) {
+    for (final var item : this.getPageIcons()) {
       iterator.next().set(item);
       if (iterator.ended()) {
         break;

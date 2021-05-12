@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -87,15 +88,15 @@ public final class Pattern<T> {
    */
   public Pattern(final boolean wrapAround, @NotNull final String... lines) {
     Preconditions.checkArgument(lines.length > 0, "The given pattern lines must not be empty.");
-    final int count = lines[0].length();
+    final var count = lines[0].length();
     this.lines = new String[lines.length];
-    for (int i = 0; i < lines.length; i++) {
-      final String line = lines[i];
+    IntStream.range(0, lines.length).forEach(i -> {
+      final var line = lines[i];
       Preconditions.checkNotNull(line, "The given pattern line %s cannot be null.", i);
       Preconditions.checkArgument(line.length() == count,
         "The given pattern line %s does not match the first line character count.", i);
       this.lines[i] = lines[i];
-    }
+    });
     this.wrapAround = wrapAround;
   }
 
@@ -125,9 +126,9 @@ public final class Pattern<T> {
    */
   @NotNull
   public List<SlotPos> findAllKeys(final char character) {
-    final List<SlotPos> positions = new ArrayList<>();
-    for (int row = 0; row < this.getRowCount(); row++) {
-      for (int column = 0; column < this.getColumnCount(); column++) {
+    final var positions = new ArrayList<SlotPos>();
+    for (var row = 0; row < this.getRowCount(); row++) {
+      for (var column = 0; column < this.getColumnCount(); column++) {
         if (this.lines[row].charAt(column) == character) {
           positions.add(SlotPos.of(row, column));
         }
@@ -146,8 +147,8 @@ public final class Pattern<T> {
    */
   @NotNull
   public Optional<SlotPos> findKey(final char character) {
-    for (int row = 0; row < this.getRowCount(); row++) {
-      for (int column = 0; column < this.getColumnCount(); column++) {
+    for (var row = 0; row < this.getRowCount(); row++) {
+      for (var column = 0; column < this.getColumnCount(); column++) {
         if (this.lines[row].charAt(column) == character) {
           return Optional.of(SlotPos.of(row, column));
         }
@@ -166,7 +167,7 @@ public final class Pattern<T> {
   }
 
   /**
-   * returns the default value set via {@link #setDefault(Object)}
+   * returns the default value set via {@link #setDefault(Object)}.
    *
    * @return The default value.
    */
@@ -189,7 +190,7 @@ public final class Pattern<T> {
    */
   @NotNull
   public Optional<T> getObject(final int index) {
-    final int count = this.getColumnCount();
+    final var count = this.getColumnCount();
     return this.getObject(index / count, index % count);
   }
 
@@ -228,8 +229,8 @@ public final class Pattern<T> {
    */
   @NotNull
   public Optional<T> getObject(final int row, final int column) {
-    int rowCache = row;
-    int columnCache = column;
+    var rowCache = row;
+    var columnCache = column;
     if (this.wrapAround) {
       rowCache %= this.getRowCount();
       if (rowCache < 0) {

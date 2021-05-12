@@ -28,8 +28,16 @@ package io.github.portlek.smartinventory.event.abs;
 import io.github.portlek.smartinventory.Icon;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * an interface to determine icon events.
+ */
 public interface IconEvent extends SmartEvent {
 
+  /**
+   * obtains the icon.
+   *
+   * @return icon.
+   */
   @NotNull
   Icon icon();
 }

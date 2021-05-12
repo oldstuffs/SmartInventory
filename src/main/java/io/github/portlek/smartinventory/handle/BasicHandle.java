@@ -27,10 +27,10 @@ package io.github.portlek.smartinventory.handle;
 
 import io.github.portlek.smartinventory.Handle;
 import io.github.portlek.smartinventory.event.abs.SmartEvent;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -38,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> type of the event.
  */
+@RequiredArgsConstructor
 public final class BasicHandle<T extends SmartEvent> implements Handle<T> {
 
   /**
@@ -57,20 +58,6 @@ public final class BasicHandle<T extends SmartEvent> implements Handle<T> {
    */
   @NotNull
   private final List<Predicate<T>> requirements;
-
-  /**
-   * ctor.
-   *
-   * @param clazz the clazz.
-   * @param consumer the consumer.
-   * @param requirements the requirements.
-   */
-  public BasicHandle(@NotNull final Class<T> clazz, @NotNull final Consumer<T> consumer,
-                     @NotNull final List<Predicate<T>> requirements) {
-    this.clazz = clazz;
-    this.consumer = consumer;
-    this.requirements = Collections.unmodifiableList(requirements);
-  }
 
   @Override
   public void accept(@NotNull final T t) {

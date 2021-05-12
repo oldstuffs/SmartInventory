@@ -29,7 +29,6 @@ import io.github.portlek.observer.Source;
 import io.github.portlek.observer.source.BasicSource;
 import io.github.portlek.smartinventory.Handle;
 import io.github.portlek.smartinventory.InventoryContents;
-import io.github.portlek.smartinventory.InventoryOpener;
 import io.github.portlek.smartinventory.InventoryProvider;
 import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;
@@ -44,6 +43,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -54,6 +54,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * an implementation for {@link Page}.
  */
+@RequiredArgsConstructor
 public final class BasicPage implements Page {
 
   /**
@@ -139,17 +140,6 @@ public final class BasicPage implements Page {
    */
   @NotNull
   private String title = "Smart Inventory";
-
-  /**
-   * ctor.
-   *
-   * @param inventory the inventory.
-   * @param provider the provider.
-   */
-  public BasicPage(@NotNull final SmartInventory inventory, @NotNull final InventoryProvider provider) {
-    this.inventory = inventory;
-    this.provider = provider;
-  }
 
   /**
    * ctor.
@@ -254,15 +244,15 @@ public final class BasicPage implements Page {
     if (close) {
       this.close(player);
     }
-    final InventoryOpener opener = this.inventory().findOpener(this.type).orElseThrow(() ->
+    final var opener = this.inventory().findOpener(this.type).orElseThrow(() ->
       new IllegalStateException("No opener found for the inventory type " + this.type.name()));
     this.source.subscribe(this.provider());
-    final InventoryContents contents = new BasicInventoryContents(this, player);
+    final var contents = new BasicInventoryContents(this, player);
     contents.pagination().page(page);
     properties.forEach(contents::setProperty);
     this.accept(new PgInitEvent(contents));
     this.provider().init(contents);
-    final Inventory opened = opener.open(contents);
+    final var opened = opener.open(contents);
     if (this.tickEnable()) {
       this.inventory().tick(player.getUniqueId(), this);
     }

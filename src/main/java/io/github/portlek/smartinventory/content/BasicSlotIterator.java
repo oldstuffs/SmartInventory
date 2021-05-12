@@ -190,7 +190,7 @@ public final class BasicSlotIterator implements SlotIterator {
                                        final int columnOffset) {
     this.blacklistPatternRowOffset = rowOffset;
     this.blacklistPatternColumnOffset = columnOffset;
-    if (!pattern.getDefaultValue().isPresent()) {
+    if (pattern.getDefaultValue().isEmpty()) {
       pattern.setDefault(false);
     }
     this.blacklistPattern = pattern;
@@ -216,17 +216,19 @@ public final class BasicSlotIterator implements SlotIterator {
 
   @NotNull
   @Override
-  public SlotIterator endPosition(int row, int column) {
+  public SlotIterator endPosition(final int row, final int column) {
+    var tempRow = row;
+    var tempColumn = column;
     if (row < 0) {
-      row = this.contents.page().row() - 1;
+      tempRow = this.contents.page().row() - 1;
     }
-    if (column < 0) {
-      column = this.contents.page().column() - 1;
+    if (tempColumn < 0) {
+      tempColumn = this.contents.page().column() - 1;
     }
-    Preconditions.checkArgument(row * column >= this.startRow * this.startColumn,
+    Preconditions.checkArgument(tempRow * tempColumn >= this.startRow * this.startColumn,
       "The end position needs to be after the start of the slot iterator");
-    this.endRow = row;
-    this.endColumn = column;
+    this.endRow = tempRow;
+    this.endColumn = tempColumn;
     return this;
   }
 
@@ -342,29 +344,42 @@ public final class BasicSlotIterator implements SlotIterator {
                                   final int columnOffset) {
     this.patternRowOffset = rowOffset;
     this.patternColumnOffset = columnOffset;
-    if (!pattern.getDefaultValue().isPresent()) {
+    if (pattern.getDefaultValue().isEmpty()) {
       pattern.setDefault(false);
     }
     this.pattern = pattern;
     return this;
   }
 
+  /**
+   * checks if the item can place.
+   *
+   * @return {@code true} if the item can place the current location.
+   */
   private boolean canPlace() {
-    final AtomicBoolean patternAllows = new AtomicBoolean(true);
+    final var patternAllows = new AtomicBoolean(true);
     Optional.ofNullable(this.pattern).ifPresent(booleanPattern ->
       patternAllows.set(this.checkPattern(booleanPattern, this.patternRowOffset, this.patternColumnOffset)));
-    final AtomicBoolean blacklistPatternAllows = new AtomicBoolean(true);
+    final var blacklistPatternAllows = new AtomicBoolean(true);
     Optional.ofNullable(this.blacklistPattern).ifPresent(booleanPattern ->
       blacklistPatternAllows.set(!this.checkPattern(booleanPattern, this.blacklistPatternRowOffset, this.blacklistPatternColumnOffset)));
     return !this.blacklisted.contains(SlotPos.of(this.row, this.column)) &&
-      (this.allowOverride || !this.get().isPresent()) &&
+      (this.allowOverride || this.get().isEmpty()) &&
       patternAllows.get() &&
       blacklistPatternAllows.get();
   }
 
+  /**
+   * checks the pattern.
+   *
+   * @param pattern the pattern to check.
+   * @param rowOffset the raw offset to check.
+   * @param columnOffset the column offset to check.
+   *
+   * @return {@code true} if the checking was successful.
+   */
   private boolean checkPattern(@NotNull final Pattern<Boolean> pattern, final int rowOffset, final int columnOffset) {
-    final Optional<Boolean> object = pattern.getObject(
-      this.row() - rowOffset, this.column() - columnOffset);
+    final var object = pattern.getObject(this.row() - rowOffset, this.column() - columnOffset);
     if (pattern.isWrapAround()) {
       return object.orElse(false);
     }

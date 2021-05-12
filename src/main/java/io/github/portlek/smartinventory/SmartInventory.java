@@ -233,14 +233,18 @@ public interface SmartInventory {
    *
    * @param openers the openers to register.
    */
-  void registerOpeners(@NotNull InventoryOpener... openers);
+  default void registerOpeners(@NotNull final InventoryOpener... openers) {
+    this.getOpeners().addAll(Arrays.asList(openers));
+  }
 
   /**
    * removes given uniqueId of the ticking task.
    *
    * @param uniqueId the uniqueId to set.
    */
-  void removeTask(@NotNull UUID uniqueId);
+  default void removeTask(@NotNull final UUID uniqueId) {
+    this.getTasks().remove(uniqueId);
+  }
 
   /**
    * sets the given player of the ticking task to the given task.
@@ -248,7 +252,9 @@ public interface SmartInventory {
    * @param uniqueId the unique id to set.
    * @param task the task to set.
    */
-  void setTask(@NotNull UUID uniqueId, @NotNull BukkitRunnable task);
+  default void setTask(@NotNull final UUID uniqueId, @NotNull final BukkitRunnable task) {
+    this.getTasks().put(uniqueId, task);
+  }
 
   /**
    * stops the ticking of the given uniqueId.
@@ -293,5 +299,7 @@ public interface SmartInventory {
    *
    * @param openers the openers to unregister.
    */
-  void unregisterOpeners(@NotNull InventoryOpener... openers);
+  default void unregisterOpeners(@NotNull final InventoryOpener... openers) {
+    this.getOpeners().removeAll(Arrays.asList(openers));
+  }
 }

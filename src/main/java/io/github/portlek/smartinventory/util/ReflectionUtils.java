@@ -45,7 +45,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Crypto Morin
  * @version 2.0.0
  */
-public class ReflectionUtils {
+public final class ReflectionUtils {
 
   /**
    * We use reflection mainly to avoid writing a new class for version barrier.
@@ -57,21 +57,36 @@ public class ReflectionUtils {
    */
   public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 
-  public static final String CRAFTBUKKIT = "org.bukkit.craftbukkit." + ReflectionUtils.VERSION + '.';
+  /**
+   * the craft bukkit.
+   */
+  public static final String CRAFT_BUKKIT = "org.bukkit.craftbukkit." + ReflectionUtils.VERSION + '.';
 
+  /**
+   * the nms.
+   */
   public static final String NMS = "net.minecraft.server." + ReflectionUtils.VERSION + '.';
 
+  /**
+   * the get handle.
+   */
   private static final MethodHandle GET_HANDLE;
 
+  /**
+   * the player connection.
+   */
   private static final MethodHandle PLAYER_CONNECTION;
 
+  /**
+   * the send packet.
+   */
   private static final MethodHandle SEND_PACKET;
 
   static {
-    final Class<?> entityPlayer = ReflectionUtils.getNMSClass("EntityPlayer");
-    final Class<?> craftPlayer = ReflectionUtils.getCraftClass("entity.CraftPlayer");
-    final Class<?> playerConnection = ReflectionUtils.getNMSClass("PlayerConnection");
-    final MethodHandles.Lookup lookup = MethodHandles.lookup();
+    final var entityPlayer = ReflectionUtils.getNMSClass("EntityPlayer");
+    final var craftPlayer = ReflectionUtils.getCraftClass("entity.CraftPlayer");
+    final var playerConnection = ReflectionUtils.getNMSClass("PlayerConnection");
+    final var lookup = MethodHandles.lookup();
     MethodHandle sendPacket = null;
     MethodHandle getHandle = null;
     MethodHandle connection = null;
@@ -87,6 +102,9 @@ public class ReflectionUtils {
     GET_HANDLE = getHandle;
   }
 
+  /**
+   * ctor.
+   */
   private ReflectionUtils() {
   }
 
@@ -102,7 +120,7 @@ public class ReflectionUtils {
   @Nullable
   public static Class<?> getCraftClass(@NotNull final String name) {
     try {
-      return Class.forName(ReflectionUtils.CRAFTBUKKIT + name);
+      return Class.forName(ReflectionUtils.CRAFT_BUKKIT + name);
     } catch (final ClassNotFoundException ex) {
       ex.printStackTrace();
       return null;
@@ -160,10 +178,10 @@ public class ReflectionUtils {
    */
   public static void sendPacketSync(@NotNull final Player player, @NotNull final Object... packets) {
     try {
-      final Object handle = ReflectionUtils.GET_HANDLE.invoke(player);
-      final Object connection = ReflectionUtils.PLAYER_CONNECTION.invoke(handle);
+      final var handle = ReflectionUtils.GET_HANDLE.invoke(player);
+      final var connection = ReflectionUtils.PLAYER_CONNECTION.invoke(handle);
       if (connection != null) {
-        for (final Object packet : packets) {
+        for (final var packet : packets) {
           ReflectionUtils.SEND_PACKET.invoke(connection, packet);
         }
       }

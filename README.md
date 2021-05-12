@@ -3,12 +3,11 @@
 [![idea](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 
 ![master](https://github.com/portlek/SmartInventory/workflows/build/badge.svg)
-![Maven Central](https://img.shields.io/maven-central/v/io.github.portlek/SmartInventory?label=version)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.portlek/SmartInventory?label=version)](https://repo1.maven.org/maven2/io/github/portlek/SmartInventory/)
 
 ## How to use
 
 ```xml
-
 <dependency>
   <groupId>io.github.portlek</groupId>
   <artifactId>SmartInventory</artifactId>
@@ -26,14 +25,14 @@ implementation("io.github.portlek:SmartInventory:${version}")
 
 ```java
 final class Main extends JavaPlugin {
-  
+
   private final SmartInventory inventory = new BasicSmartInventory(this);
 
   @Override
   public void onEnable() {
-    inventory.init();
-    new SomeClassesThatNeedSmartInventory(inventory).foo();
-    new SomeOtherClasses(inventory).foo();
+    this.inventory.init();
+    new SomeClassesThatNeedSmartInventory(this.inventory).foo();
+    new SomeOtherClasses(this.inventory).foo();
   }
 }
 ```

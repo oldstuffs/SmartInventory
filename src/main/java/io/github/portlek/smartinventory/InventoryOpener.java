@@ -41,9 +41,9 @@ public interface InventoryOpener {
    * @param contents the contents to fill.
    */
   default void fill(@NotNull final Inventory inventory, @NotNull final InventoryContents contents) {
-    final Icon[][] items = contents.all();
-    for (int row = 0; row < items.length; row++) {
-      for (int column = 0; column < items[row].length; column++) {
+    final var items = contents.all();
+    for (var row = 0; row < items.length; row++) {
+      for (var column = 0; column < items[row].length; column++) {
         if (items[row][column] != null) {
           inventory.setItem(9 * row + column, items[row][column].calculateItem(contents));
         }

@@ -27,11 +27,19 @@ package io.github.portlek.smartinventory.event;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.QuitEvent;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents player quit events.
+ */
+@RequiredArgsConstructor
 public final class PlyrQuitEvent implements QuitEvent {
 
+  /**
+   * the contents.
+   */
   @NotNull
   private final InventoryContents contents;
 
@@ -40,11 +48,6 @@ public final class PlyrQuitEvent implements QuitEvent {
    */
   @NotNull
   private final PlayerQuitEvent event;
-
-  public PlyrQuitEvent(@NotNull final InventoryContents contents, @NotNull final PlayerQuitEvent event) {
-    this.contents = contents;
-    this.event = event;
-  }
 
   @NotNull
   @Override

@@ -28,6 +28,9 @@ package io.github.portlek.smartinventory.event.abs;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * an interface to determine close evet.
+ */
 public interface CloseEvent extends PageEvent {
 
   /**

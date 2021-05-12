@@ -33,11 +33,24 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * an interface to determine drag events.
+ */
 public interface DragEvent extends IconEvent {
 
+  /**
+   * obtains the added.
+   *
+   * @return added.
+   */
   @NotNull
   Map<Integer, ItemStack> added();
 
+  /**
+   * obtains the drag.
+   *
+   * @return drag.
+   */
   @NotNull
   DragType drag();
 
@@ -49,9 +62,19 @@ public interface DragEvent extends IconEvent {
   @NotNull
   InventoryDragEvent getEvent();
 
+  /**
+   * obtains the new cursor.
+   *
+   * @return new cursor.
+   */
   @NotNull
-  Optional<ItemStack> newcursor();
+  Optional<ItemStack> newCursor();
 
+  /**
+   * obtains the slots.
+   *
+   * @return slots.
+   */
   @NotNull
   Set<Integer> slots();
 }
