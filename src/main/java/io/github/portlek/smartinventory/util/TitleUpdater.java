@@ -115,13 +115,13 @@ public final class TitleUpdater {
   private static Field windowIdField;
 
   static {
-    TitleUpdater.CRAFT_PLAYER_CLASS = ReflectionUtils.getCraftClass("entity.CraftPlayer");
-    TitleUpdater.CHAT_MESSAGE_CLASS = ReflectionUtils.getNMSClass("ChatMessage");
-    TitleUpdater.PACKET_PLAY_OUT_OPEN_WINDOW_CLASS = ReflectionUtils.getNMSClass("PacketPlayOutOpenWindow");
-    TitleUpdater.I_CHAT_BASE_COMPONENT_CLASS = ReflectionUtils.getNMSClass("IChatBaseComponent");
-    TitleUpdater.CONTAINERS_CLASS = TitleUpdater.useContainers() ? ReflectionUtils.getNMSClass("Containers") : null;
-    TitleUpdater.ENTITY_PLAYER_CLASS = ReflectionUtils.getNMSClass("EntityPlayer");
-    TitleUpdater.CONTAINER_CLASS = ReflectionUtils.getNMSClass("Container");
+    CRAFT_PLAYER_CLASS = ReflectionUtils.getCraftClass("entity.CraftPlayer");
+    CHAT_MESSAGE_CLASS = ReflectionUtils.getNMSClass("ChatMessage");
+    PACKET_PLAY_OUT_OPEN_WINDOW_CLASS = ReflectionUtils.getNMSClass("PacketPlayOutOpenWindow");
+    I_CHAT_BASE_COMPONENT_CLASS = ReflectionUtils.getNMSClass("IChatBaseComponent");
+    CONTAINERS_CLASS = TitleUpdater.useContainers() ? ReflectionUtils.getNMSClass("Containers") : null;
+    ENTITY_PLAYER_CLASS = ReflectionUtils.getNMSClass("EntityPlayer");
+    CONTAINER_CLASS = ReflectionUtils.getNMSClass("Container");
     try {
       TitleUpdater.getHandle = TitleUpdater.CRAFT_PLAYER_CLASS.getMethod("getHandle");
       TitleUpdater.getBukkitView = TitleUpdater.CONTAINER_CLASS.getMethod("getBukkitView");
