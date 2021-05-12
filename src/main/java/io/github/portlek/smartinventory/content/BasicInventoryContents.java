@@ -39,6 +39,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +48,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * an implementation for {@link InventoryContents}.
  */
+@RequiredArgsConstructor
 public final class BasicInventoryContents implements InventoryContents {
 
   /**
@@ -88,27 +90,13 @@ public final class BasicInventoryContents implements InventoryContents {
   private final Map<String, Object> properties = new HashMap<>();
 
   /**
-   * ctpr.
-   *
-   * @param page the page.
-   * @param player the player.
-   * @param contents the contents.
-   */
-  public BasicInventoryContents(@NotNull final Page page, @NotNull final Player player,
-                                @NotNull final Icon[][] contents) {
-    this.page = page;
-    this.player = player;
-    this.contents = contents.clone();
-  }
-
-  /**
    * ctor.
    *
    * @param page the page.
    * @param player the player
    */
   public BasicInventoryContents(@NotNull final Page page, @NotNull final Player player) {
-    this(page, player, new Icon[page.row()][page.column()]);
+    this(new Icon[page.row()][page.column()], page, player);
   }
 
   @NotNull
@@ -138,7 +126,7 @@ public final class BasicInventoryContents implements InventoryContents {
   @Override
   public SlotIterator newIterator(@NotNull final String id, @NotNull final SlotIterator.Type type,
                                   final int startRow, final int startColumn) {
-    final SlotIterator iterator = this.newIterator(type, startRow, startColumn);
+    final var iterator = this.newIterator(type, startRow, startColumn);
     this.iterators.put(id, iterator);
     return iterator;
   }

@@ -28,6 +28,9 @@ package io.github.portlek.smartinventory.event.abs;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * an interface to determine disable.
+ */
 public interface DisableEvent extends PageEvent {
 
   /**

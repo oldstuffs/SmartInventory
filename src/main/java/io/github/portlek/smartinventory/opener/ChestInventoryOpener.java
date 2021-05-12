@@ -27,7 +27,6 @@ package io.github.portlek.smartinventory.opener;
 
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.InventoryOpener;
-import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.holder.SmartInventoryHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
@@ -42,7 +41,7 @@ public final class ChestInventoryOpener implements InventoryOpener {
   @NotNull
   @Override
   public Inventory open(@NotNull final InventoryContents contents) {
-    final Page page = contents.page();
+    final var page = contents.page();
     if (page.column() != 9) {
       throw new IllegalArgumentException(
         String.format("The column count for the chest inventory must be 9, found: %s.", page.column()));
@@ -51,9 +50,9 @@ public final class ChestInventoryOpener implements InventoryOpener {
       throw new IllegalArgumentException(
         String.format("The row count for the chest inventory must be between 1 and 6, found: %s", page.row()));
     }
-    final SmartInventoryHolder holder = new SmartInventoryHolder(contents);
+    final var holder = new SmartInventoryHolder(contents);
     holder.setActive(true);
-    final Inventory handle = Bukkit.createInventory(holder, page.row() * page.column(), page.title());
+    final var handle = Bukkit.createInventory(holder, page.row() * page.column(), page.title());
     this.fill(handle, contents);
     contents.player().openInventory(handle);
     return handle;

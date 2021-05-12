@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration name="Build the Project" default="false" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration name="Build The Project" default="false" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings"/>
       <option name="myRunnerSettings"/>
@@ -12,6 +12,7 @@
             <list>
               <option value="clean"/>
               <option value="install"/>
+              <option value="-Pcheckstyle"/>
             </list>
           </option>
           <option name="pomFileName"/>

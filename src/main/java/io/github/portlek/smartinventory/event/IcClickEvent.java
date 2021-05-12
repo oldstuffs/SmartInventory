@@ -29,6 +29,7 @@ import io.github.portlek.smartinventory.Icon;
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.event.abs.ClickEvent;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
@@ -38,27 +39,35 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents icon click events.
+ */
+@RequiredArgsConstructor
 public final class IcClickEvent implements ClickEvent {
 
+  /**
+   * the contents.
+   */
   @NotNull
   private final InventoryContents contents;
 
+  /**
+   * the event.
+   */
   @NotNull
   private final InventoryClickEvent event;
 
+  /**
+   * the icon.
+   */
   @NotNull
   private final Icon icon;
 
+  /**
+   * the plugin.
+   */
   @NotNull
   private final Plugin plugin;
-
-  public IcClickEvent(@NotNull final Plugin plugin, @NotNull final InventoryClickEvent event,
-                      @NotNull final InventoryContents contents, @NotNull final Icon icon) {
-    this.plugin = plugin;
-    this.event = event;
-    this.contents = contents;
-    this.icon = icon;
-  }
 
   @NotNull
   @Override

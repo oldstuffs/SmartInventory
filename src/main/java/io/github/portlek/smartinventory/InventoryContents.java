@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.ObjIntConsumer;
+import java.util.stream.IntStream;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -68,9 +69,9 @@ public interface InventoryContents {
    */
   @NotNull
   default InventoryContents add(@NotNull final Icon item) {
-    final Icon[][] all = this.all();
-    for (int row = 0; row < all.length; row++) {
-      for (int column = 0; column < all[0].length; column++) {
+    final var all = this.all();
+    for (var row = 0; row < all.length; row++) {
+      for (var column = 0; column < all[0].length; column++) {
         if (all[row][column] == null) {
           this.set(row, column, item);
           return this;
@@ -111,8 +112,8 @@ public interface InventoryContents {
   @NotNull
   default InventoryContents applyRect(final int fromRow, final int fromColumn, final int toRow, final int toColumn,
                                       @NotNull final ObjIntConsumer<Integer> apply) {
-    for (int row = fromRow; row <= toRow; row++) {
-      for (int column = fromColumn; column <= toColumn; column++) {
+    for (var row = fromRow; row <= toRow; row++) {
+      for (var column = fromColumn; column <= toColumn; column++) {
         apply.accept(row, column);
       }
     }
@@ -151,9 +152,9 @@ public interface InventoryContents {
    */
   @NotNull
   default InventoryContents fill(@NotNull final Icon item) {
-    final Icon[][] all = this.all();
-    for (int row = 0; row < all.length; row++) {
-      for (int column = 0; column < all[row].length; column++) {
+    final var all = this.all();
+    for (var row = 0; row < all.length; row++) {
+      for (var column = 0; column < all[row].length; column++) {
         this.set(row, column, item);
       }
     }
@@ -183,13 +184,12 @@ public interface InventoryContents {
    */
   @NotNull
   default InventoryContents fillColumn(final int column, @NotNull final Icon item) {
-    final Icon[][] all = this.all();
+    final var all = this.all();
     if (column < 0 || column >= all[0].length) {
       return this;
     }
-    for (int row = 0; row < all.length; row++) {
-      this.set(row, column, item);
-    }
+    IntStream.range(0, all.length).forEach(row ->
+      this.set(row, column, item));
     return this;
   }
 
@@ -202,10 +202,10 @@ public interface InventoryContents {
    */
   @NotNull
   default InventoryContents fillEmpties(@NotNull final Icon item) {
-    final Icon[][] all = this.all();
-    for (int row = 0; row < all.length; row++) {
-      for (int column = 0; column < all[row].length; column++) {
-        final Icon icon = all[row][column];
+    final var all = this.all();
+    for (var row = 0; row < all.length; row++) {
+      for (var column = 0; column < all[row].length; column++) {
+        final var icon = all[row][column];
         if (icon == null || icon.getItem().getType() == Material.AIR) {
           this.set(row, column, item);
         }
@@ -248,7 +248,7 @@ public interface InventoryContents {
    */
   @NotNull
   default InventoryContents fillPattern(@NotNull final Pattern<Icon> pattern, final int startIndex) {
-    final int count = this.page().column();
+    final var count = this.page().column();
     return this.fillPattern(pattern, startIndex / count, startIndex % count);
   }
 
@@ -270,10 +270,10 @@ public interface InventoryContents {
   @NotNull
   default InventoryContents fillPattern(@NotNull final Pattern<Icon> pattern, final int startRow,
                                         final int startColumn) {
-    for (int row = 0; row < pattern.getRowCount(); row++) {
-      for (int column = 0; column < pattern.getColumnCount(); column++) {
-        final int finalRow = startRow + row;
-        final int finalColumn = startColumn + column;
+    for (var row = 0; row < pattern.getRowCount(); row++) {
+      for (var column = 0; column < pattern.getColumnCount(); column++) {
+        final var finalRow = startRow + row;
+        final var finalColumn = startColumn + column;
         pattern.getObject(row, column).ifPresent(icon ->
           this.set(finalRow, finalColumn, icon));
       }
@@ -350,8 +350,8 @@ public interface InventoryContents {
   @NotNull
   default InventoryContents fillPatternRepeating(@NotNull final Pattern<Icon> pattern, final int startIndex,
                                                  final int endIndex) {
-    final int columnCount = this.page().column();
-    final boolean maxSize = endIndex < 0;
+    final var columnCount = this.page().column();
+    final var maxSize = endIndex < 0;
     if (maxSize) {
       return this.fillPatternRepeating(pattern, startIndex / columnCount, startIndex % columnCount,
         -1, -1);
@@ -400,12 +400,12 @@ public interface InventoryContents {
       "The start row needs to be lower than the end row");
     Preconditions.checkArgument(startColumn < endColumn,
       "The start column needs to be lower than the end column");
-    final int rowDelta = endRow - startRow;
-    final int columnDelta = endColumn - startColumn;
-    for (int row = 0; row <= rowDelta; row++) {
-      for (int column = 0; column <= columnDelta; column++) {
-        final int finalRow = startRow + row;
-        final int finalColumn = startColumn + column;
+    final var rowDelta = endRow - startRow;
+    final var columnDelta = endColumn - startColumn;
+    for (var row = 0; row <= rowDelta; row++) {
+      for (var column = 0; column <= columnDelta; column++) {
+        final var finalRow = startRow + row;
+        final var finalColumn = startColumn + column;
         pattern.getObject(row, column).ifPresent(icon ->
           this.set(finalRow, finalColumn, icon));
       }
@@ -460,7 +460,7 @@ public interface InventoryContents {
    */
   @NotNull
   default InventoryContents fillRect(final int fromIndex, final int toIndex, @NotNull final Icon item) {
-    final int count = this.page().column();
+    final var count = this.page().column();
     return this.fillRect(
       fromIndex / count, fromIndex % count,
       toIndex / count, toIndex % count,
@@ -520,13 +520,12 @@ public interface InventoryContents {
    */
   @NotNull
   default InventoryContents fillRow(final int row, @NotNull final Icon item) {
-    final Icon[][] all = this.all();
+    final var all = this.all();
     if (row < 0 || row >= all.length) {
       return this;
     }
-    for (int column = 0; column < all[row].length; column++) {
-      this.set(row, column, item);
-    }
+    IntStream.range(0, all[row].length).forEach(column ->
+      this.set(row, column, item));
     return this;
   }
 
@@ -541,7 +540,7 @@ public interface InventoryContents {
    */
   @NotNull
   default InventoryContents fillSquare(final int fromIndex, final int toIndex, @NotNull final Icon item) {
-    final int count = this.page().column();
+    final var count = this.page().column();
     return this.fillSquare(
       fromIndex / count, fromIndex % count,
       toIndex / count, toIndex % count,
@@ -601,10 +600,10 @@ public interface InventoryContents {
    */
   @NotNull
   default Optional<SlotPos> findItem(@NotNull final ItemStack item) {
-    final Icon[][] all = this.all();
-    for (int row = 0; row < all.length; row++) {
-      for (int column = 0; column < all[0].length; column++) {
-        final Icon icon = all[row][column];
+    final var all = this.all();
+    for (var row = 0; row < all.length; row++) {
+      for (var column = 0; column < all[0].length; column++) {
+        final var icon = all[row][column];
         if (icon != null && item.isSimilar(icon.calculateItem(this))) {
           return Optional.of(SlotPos.of(row, column));
         }
@@ -637,11 +636,11 @@ public interface InventoryContents {
    */
   @NotNull
   default Optional<SlotPos> firstEmpty() {
-    final Icon[][] all = this.all();
-    for (int row = 0; row < all.length; row++) {
-      for (int column = 0; column < all[0].length; column++) {
-        if (!this.get(row, column).isPresent()) {
-          return Optional.of(new SlotPos(row, column));
+    final var all = this.all();
+    for (var row = 0; row < all.length; row++) {
+      for (var column = 0; column < all[0].length; column++) {
+        if (this.get(row, column).isEmpty()) {
+          return Optional.of(SlotPos.of(row, column));
         }
       }
     }
@@ -659,7 +658,7 @@ public interface InventoryContents {
    */
   @NotNull
   default Optional<Icon> get(final int index) {
-    final int count = this.page().column();
+    final var count = this.page().column();
     return this.get(index / count, index % count);
   }
 
@@ -674,7 +673,7 @@ public interface InventoryContents {
    */
   @NotNull
   default Optional<Icon> get(final int row, final int column) {
-    final Icon[][] all = this.all();
+    final var all = this.all();
     if (row < 0 || row >= all.length) {
       return Optional.empty();
     }
@@ -910,10 +909,10 @@ public interface InventoryContents {
    * @param item the item as an ItemStack that shall be removed from the inventory.
    */
   default void removeAll(@NotNull final ItemStack item) {
-    final Icon[][] all = this.all();
-    for (int row = 0; row < all.length; row++) {
-      for (int column = 0; column < all[row].length; column++) {
-        final Icon icon = all[row][column];
+    final var all = this.all();
+    for (var row = 0; row < all.length; row++) {
+      for (var column = 0; column < all[row].length; column++) {
+        final var icon = all[row][column];
         if (icon != null && item.isSimilar(icon.getItem())) {
           this.set(row, column, null);
         }
@@ -943,17 +942,17 @@ public interface InventoryContents {
    * @param amount the amount that shall be removed.
    */
   default void removeAmount(@NotNull final ItemStack item, int amount) {
-    final Icon[][] all = this.all();
-    for (int row = 0; row < all.length; row++) {
-      for (int column = 0; column < all[row].length; column++) {
-        final Icon icon = all[row][column];
+    final var all = this.all();
+    for (var row = 0; row < all.length; row++) {
+      for (var column = 0; column < all[row].length; column++) {
+        final var icon = all[row][column];
         if (icon != null && !item.isSimilar(icon.getItem())) {
           continue;
         }
         if (icon == null) {
           continue;
         }
-        final ItemStack foundStack = icon.getItem();
+        final var foundStack = icon.getItem();
         if (foundStack.getAmount() <= amount) {
           amount -= foundStack.getAmount();
           this.set(row, column, null);
@@ -961,7 +960,7 @@ public interface InventoryContents {
             return;
           }
         } else if (foundStack.getAmount() > amount) {
-          final ItemStack clonedStack = foundStack.clone();
+          final var clonedStack = foundStack.clone();
           clonedStack.setAmount(clonedStack.getAmount() - amount);
           this.set(row, column, icon.item(clonedStack));
           return;
@@ -1029,7 +1028,7 @@ public interface InventoryContents {
    */
   @NotNull
   default InventoryContents set(final int index, @Nullable final Icon item) {
-    final int columnCount = this.page().column();
+    final var columnCount = this.page().column();
     return this.set(index / columnCount, index % columnCount, item);
   }
 
@@ -1107,10 +1106,10 @@ public interface InventoryContents {
    */
   @NotNull
   default List<SlotPos> slots() {
-    final List<SlotPos> position = new ArrayList<>();
-    final Icon[][] all = this.all();
-    for (int row = 0; row < all.length; row++) {
-      for (int column = 0; column < all[0].length; column++) {
+    final var position = new ArrayList<SlotPos>();
+    final var all = this.all();
+    for (var row = 0; row < all.length; row++) {
+      for (var column = 0; column < all[0].length; column++) {
         position.add(SlotPos.of(row, column));
       }
     }

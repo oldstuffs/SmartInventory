@@ -28,6 +28,9 @@ package io.github.portlek.smartinventory.holder;
 import io.github.portlek.smartinventory.InventoryContents;
 import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartHolder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
@@ -36,6 +39,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * a class that implements {@link SmartHolder}.
  */
+@Getter
+@RequiredArgsConstructor
 public final class SmartInventoryHolder implements SmartHolder {
 
   /**
@@ -47,21 +52,13 @@ public final class SmartInventoryHolder implements SmartHolder {
   /**
    * the active.
    */
+  @Setter
   private boolean active = true;
-
-  /**
-   * ctor.
-   *
-   * @param contents the contents.
-   */
-  public SmartInventoryHolder(@NotNull final InventoryContents contents) {
-    this.contents = contents;
-  }
 
   @NotNull
   @Override
-  public InventoryContents getContents() {
-    return this.contents;
+  public Inventory getInventory() {
+    return this.contents.getTopInventory();
   }
 
   @NotNull
@@ -80,21 +77,5 @@ public final class SmartInventoryHolder implements SmartHolder {
   @Override
   public Plugin getPlugin() {
     return this.getPage().inventory().getPlugin();
-  }
-
-  @Override
-  public boolean isActive() {
-    return this.active;
-  }
-
-  @Override
-  public void setActive(final boolean active) {
-    this.active = active;
-  }
-
-  @NotNull
-  @Override
-  public Inventory getInventory() {
-    return this.contents.getTopInventory();
   }
 }

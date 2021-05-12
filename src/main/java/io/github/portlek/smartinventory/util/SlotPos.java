@@ -25,12 +25,20 @@
 
 package io.github.portlek.smartinventory.util;
 
-import java.util.Objects;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * represents the position (row + column) of a slot in an inventory.
  */
+@Getter
+@ToString
+@EqualsAndHashCode
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SlotPos {
 
   /**
@@ -44,18 +52,7 @@ public final class SlotPos {
   private final int row;
 
   /**
-   * ctor.
-   *
-   * @param row the row.
-   * @param column the column.
-   */
-  public SlotPos(final int row, final int column) {
-    this.row = row;
-    this.column = column;
-  }
-
-  /**
-   * creats a simple slot position instance.
+   * creates a simple slot position instance.
    *
    * @param row the row to create.
    * @param column the column to create.
@@ -64,50 +61,6 @@ public final class SlotPos {
    */
   @NotNull
   public static SlotPos of(final int row, final int column) {
-    return new SlotPos(row, column);
-  }
-
-  /**
-   * obtains the column row of {@code this}
-   *
-   * @return the column.
-   */
-  public int getColumn() {
-    return this.column;
-  }
-
-  /**
-   * obtains the row row of {@code this}
-   *
-   * @return the row.
-   */
-  public int getRow() {
-    return this.row;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(this.row, this.column);
-  }
-
-  @Override
-  public boolean equals(final Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || this.getClass() != obj.getClass()) {
-      return false;
-    }
-    final SlotPos slotPos = (SlotPos) obj;
-    return this.row == slotPos.row &&
-      this.column == slotPos.column;
-  }
-
-  @Override
-  public String toString() {
-    return "SlotPos{" +
-      "row=" + this.row +
-      ", column=" + this.column +
-      '}';
+    return new SlotPos(column, row);
   }
 }

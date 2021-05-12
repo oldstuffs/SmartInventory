@@ -28,12 +28,12 @@ package io.github.portlek.smartinventory.manager;
 import io.github.portlek.smartinventory.InventoryOpener;
 import io.github.portlek.smartinventory.SmartInventory;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +41,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * an implementation for {@link SmartInventory}.
  */
+@Getter
+@RequiredArgsConstructor
 public final class BasicSmartInventory implements SmartInventory {
 
   /**
@@ -65,52 +67,5 @@ public final class BasicSmartInventory implements SmartInventory {
     } catch (final ClassNotFoundException e) {
       e.printStackTrace();
     }
-  }
-
-  /**
-   * ctor.
-   *
-   * @param plugin the plugin.
-   */
-  public BasicSmartInventory(@NotNull final Plugin plugin) {
-    this.plugin = plugin;
-  }
-
-  @NotNull
-  @Override
-  public Collection<InventoryOpener> getOpeners() {
-    return Collections.unmodifiableCollection(this.openers);
-  }
-
-  @NotNull
-  @Override
-  public Plugin getPlugin() {
-    return this.plugin;
-  }
-
-  @NotNull
-  @Override
-  public Map<UUID, BukkitRunnable> getTasks() {
-    return Collections.unmodifiableMap(this.tasks);
-  }
-
-  @Override
-  public void registerOpeners(@NotNull final InventoryOpener... openers) {
-    this.openers.addAll(Arrays.asList(openers));
-  }
-
-  @Override
-  public void removeTask(@NotNull final UUID uniqueId) {
-    this.tasks.remove(uniqueId);
-  }
-
-  @Override
-  public void setTask(@NotNull final UUID uniqueId, @NotNull final BukkitRunnable task) {
-    this.tasks.put(uniqueId, task);
-  }
-
-  @Override
-  public void unregisterOpeners(@NotNull final InventoryOpener... openers) {
-    this.openers.removeAll(Arrays.asList(openers));
   }
 }

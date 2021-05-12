@@ -31,6 +31,7 @@ import io.github.portlek.smartinventory.event.abs.DragEvent;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.DragType;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -38,27 +39,35 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents icon drag events.
+ */
+@RequiredArgsConstructor
 public final class IcDragEvent implements DragEvent {
 
+  /**
+   * the contents.
+   */
   @NotNull
   private final InventoryContents contents;
 
+  /**
+   * the event.
+   */
   @NotNull
   private final InventoryDragEvent event;
 
+  /**
+   * the icon.
+   */
   @NotNull
   private final Icon icon;
 
+  /**
+   * the plugin.
+   */
   @NotNull
   private final Plugin plugin;
-
-  public IcDragEvent(@NotNull final Plugin plugin, @NotNull final InventoryDragEvent event,
-                     @NotNull final InventoryContents contents, @NotNull final Icon icon) {
-    this.plugin = plugin;
-    this.event = event;
-    this.contents = contents;
-    this.icon = icon;
-  }
 
   @NotNull
   @Override
@@ -80,7 +89,7 @@ public final class IcDragEvent implements DragEvent {
 
   @NotNull
   @Override
-  public Optional<ItemStack> newcursor() {
+  public Optional<ItemStack> newCursor() {
     return Optional.ofNullable(this.event.getCursor());
   }
 

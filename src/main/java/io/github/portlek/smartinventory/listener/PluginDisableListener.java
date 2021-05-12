@@ -25,7 +25,6 @@
 
 package io.github.portlek.smartinventory.listener;
 
-import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PlgnDisableEvent;
 import org.bukkit.event.EventHandler;
@@ -45,7 +44,7 @@ public final class PluginDisableListener implements Listener {
   @EventHandler
   public void onPluginDisable(final PluginDisableEvent event) {
     SmartInventory.getHolders().forEach(holder -> {
-      final Page page = holder.getPage();
+      final var page = holder.getPage();
       page.accept(new PlgnDisableEvent(holder.getContents(), event));
       page.close(holder.getPlayer());
     });

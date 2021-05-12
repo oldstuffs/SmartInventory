@@ -29,6 +29,7 @@ import io.github.portlek.smartinventory.SmartInventory;
 import io.github.portlek.smartinventory.event.PlyrQuitEvent;
 import java.util.UUID;
 import java.util.function.Consumer;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -37,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * a class that represents player quit listeners.
  */
+@RequiredArgsConstructor
 public final class PlayerQuitListener implements Listener {
 
   /**
@@ -44,15 +46,6 @@ public final class PlayerQuitListener implements Listener {
    */
   @NotNull
   private final Consumer<UUID> stopTickFunction;
-
-  /**
-   * ctor.
-   *
-   * @param stopTickFunction the stop tick function.
-   */
-  public PlayerQuitListener(@NotNull final Consumer<UUID> stopTickFunction) {
-    this.stopTickFunction = stopTickFunction;
-  }
 
   /**
    * listens the player quit event.
