@@ -47,37 +47,37 @@ public final class TitleUpdater {
   /**
    * the chat message class.
    */
-  private final static Class<?> CHAT_MESSAGE_CLASS;
+  private static final Class<?> CHAT_MESSAGE_CLASS;
 
   /**
    * the container class.
    */
-  private final static Class<?> CONTAINERS_CLASS;
+  private static final Class<?> CONTAINERS_CLASS;
 
   /**
    * the container class.
    */
-  private final static Class<?> CONTAINER_CLASS;
+  private static final Class<?> CONTAINER_CLASS;
 
   /**
    * the craft player class.
    */
-  private final static Class<?> CRAFT_PLAYER_CLASS;
+  private static final Class<?> CRAFT_PLAYER_CLASS;
 
   /**
    * the entity player class.
    */
-  private final static Class<?> ENTITY_PLAYER_CLASS;
+  private static final Class<?> ENTITY_PLAYER_CLASS;
 
   /**
    * the i chat base component class.
    */
-  private final static Class<?> I_CHAT_BASE_COMPONENT_CLASS;
+  private static final Class<?> I_CHAT_BASE_COMPONENT_CLASS;
 
   /**
    * the packet play out open windows class.
    */
-  private final static Class<?> PACKET_PLAY_OUT_OPEN_WINDOW_CLASS;
+  private static final Class<?> PACKET_PLAY_OUT_OPEN_WINDOW_CLASS;
 
   /**
    * the active container field.
@@ -115,13 +115,13 @@ public final class TitleUpdater {
   private static Field windowIdField;
 
   static {
-    CRAFT_PLAYER_CLASS = ReflectionUtils.getCraftClass("entity.CraftPlayer");
-    CHAT_MESSAGE_CLASS = ReflectionUtils.getNMSClass("ChatMessage");
-    PACKET_PLAY_OUT_OPEN_WINDOW_CLASS = ReflectionUtils.getNMSClass("PacketPlayOutOpenWindow");
-    I_CHAT_BASE_COMPONENT_CLASS = ReflectionUtils.getNMSClass("IChatBaseComponent");
-    CONTAINERS_CLASS = TitleUpdater.useContainers() ? ReflectionUtils.getNMSClass("Containers") : null;
-    ENTITY_PLAYER_CLASS = ReflectionUtils.getNMSClass("EntityPlayer");
-    CONTAINER_CLASS = ReflectionUtils.getNMSClass("Container");
+    TitleUpdater.CRAFT_PLAYER_CLASS = ReflectionUtils.getCraftClass("entity.CraftPlayer");
+    TitleUpdater.CHAT_MESSAGE_CLASS = ReflectionUtils.getNMSClass("ChatMessage");
+    TitleUpdater.PACKET_PLAY_OUT_OPEN_WINDOW_CLASS = ReflectionUtils.getNMSClass("PacketPlayOutOpenWindow");
+    TitleUpdater.I_CHAT_BASE_COMPONENT_CLASS = ReflectionUtils.getNMSClass("IChatBaseComponent");
+    TitleUpdater.CONTAINERS_CLASS = TitleUpdater.useContainers() ? ReflectionUtils.getNMSClass("Containers") : null;
+    TitleUpdater.ENTITY_PLAYER_CLASS = ReflectionUtils.getNMSClass("EntityPlayer");
+    TitleUpdater.CONTAINER_CLASS = ReflectionUtils.getNMSClass("Container");
     try {
       TitleUpdater.getHandle = TitleUpdater.CRAFT_PLAYER_CLASS.getMethod("getHandle");
       TitleUpdater.getBukkitView = TitleUpdater.CONTAINER_CLASS.getMethod("getBukkitView");
